@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Fcg.Users.API/Fcg.Users.API.csproj" Id="18f858b5-2735-48e3-bac5-a9f612ea9ae8" />
+    <Project Path="src/Fcg.Users.Application/Fcg.Users.Application.csproj" Id="e0d0992c-3334-47fb-9a47-ee5dee03e0c5" />
+    <Project Path="src/Fcg.Users.Domain/Fcg.Users.Domain.csproj" Id="bd00d9a3-4cd9-4e48-bf93-c427b6930ba2" />
+    <Project Path="src/Fcg.Users.Infrastructure/Fcg.Users.Infrastructure.csproj" Id="c9f392f4-e446-4c74-bdd3-cb0b3393c8a7" />
+  </Folder>
+  <Folder Name="/tests/" />
+</Solution>
