@@ -1,13 +1,13 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/Fcg.Users.API/Fcg.Users.API.csproj" Id="18f858b5-2735-48e3-bac5-a9f612ea9ae8" />
-    <Project Path="src/Fcg.Users.Application/Fcg.Users.Application.csproj" Id="e0d0992c-3334-47fb-9a47-ee5dee03e0c5" />
-    <Project Path="src/Fcg.Users.Domain/Fcg.Users.Domain.csproj" Id="bd00d9a3-4cd9-4e48-bf93-c427b6930ba2" />
-    <Project Path="src/Fcg.Users.Infrastructure/Fcg.Users.Infrastructure.csproj" Id="c9f392f4-e446-4c74-bdd3-cb0b3393c8a7" />
+    <Project Path="src/Fcg.Pagamentos.API/Fcg.Pagamentos.API.csproj" Id="b012224a-576c-47e4-90b7-09d3dee2a7e7" />
+    <Project Path="src/Fcg.Usuarios.Application/Fcg.Usuarios.Application.csproj" Id="8b9af2d2-6719-47a3-bab3-eb197aa30237" />
+    <Project Path="src/Fcg.Usuarios.Domain/Fcg.Usuarios.Domain.csproj" Id="77900710-121b-4e6e-b91b-b84755c6a5c1" />
+    <Project Path="src/Fcg.Usuarios.Infrastructure/Fcg.Usuarios.Infrastructure.csproj" Id="b39ec448-0d65-4c45-b5c2-9b1a217df6a6" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/Fcg.Users.Application.UnitTests/Fcg.Users.Application.UnitTests.csproj" Id="99cfb0c1-c680-456f-bde0-22c56c4087dc" />
-    <Project Path="tests/Fcg.Users.Domain.Tests/Fcg.Users.Domain.Tests.csproj" Id="1c43e102-6cbf-413b-9674-4ef4fa873503" />
-    <Project Path="tests/Fcg.Users.Infrastructure.Integration/Fcg.Users.Infrastructure.Integration.csproj" Id="384982d0-b018-41c1-bd21-6b120b736ced" />
+    <Project Path="tests/Fcg.Usuarios.Application.Tests/Fcg.Usuarios.Application.Tests.csproj" Id="fa43c366-4cb4-4a4d-8ec6-3aa7d47633e8" />
+    <Project Path="tests/Fcg.Usuarios.Domain.Tests/Fcg.Usuarios.Domain.Tests.csproj" Id="76206c43-5fca-4c9f-8f8f-3c2c3ed12b7f" />
+    <Project Path="tests/Fcg.Usuarios.Infrastructure.Integration/Fcg.Usuarios.Infrastructure.Integration.csproj" Id="6d6a17bc-44fa-4a00-9570-f0d74a9fff34" />
   </Folder>
 </Solution>
