@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fcg.Usuarios.Infrastructure.Persistance
 {
-    public class ApplicationDbContext : DbContext
+    public class UsuarioDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public UsuarioDbContext(DbContextOptions<UsuarioDbContext> options) : base(options)
         {
         }
 
@@ -13,7 +13,7 @@ namespace Fcg.Usuarios.Infrastructure.Persistance
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(UsuarioDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
         }
     }
