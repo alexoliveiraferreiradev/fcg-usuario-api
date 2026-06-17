@@ -1,6 +1,6 @@
 ﻿using Fcg.Usuarios.Domain.Enum;
 
-namespace Fcg.Usuarios.Application.Features.Usuarios
+namespace Fcg.Usuarios.Application.Features.Usuarios.Responses
 {
     public class UsuarioResponse
     {
@@ -10,6 +10,6 @@ namespace Fcg.Usuarios.Application.Features.Usuarios
         public bool Ativo { get; set; }
         public TipoUsuario PerfilUsuario {  get; set; }
         public DateTime DataAlteracao { get; set; }
-        public MotivoDesativacao? MotivoDesativacao { get; private set; }
+        public MotivoDesativacao? MotivoDesativacao { get;  set; }
     }
 }

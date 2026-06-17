@@ -1,7 +1,7 @@
 ﻿using Fcg.Usuarios.Application.Common.Interfaces;
 using Fcg.Usuarios.Application.Dtos;
 using Fcg.Usuarios.Application.Features.Token;
-using Fcg.Usuarios.Application.Features.Usuarios;
+using Fcg.Usuarios.Application.Features.Usuarios.Responses;
 using Fcg.Usuarios.Domain.Enum;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

@@ -1,4 +1,5 @@
-﻿using Fcg.Usuarios.Domain.Common;
+﻿using Fcg.Usuarios.Application.Features.Usuarios.Responses;
+using Fcg.Usuarios.Domain.Common;
 using Fcg.Usuarios.Domain.Common.Exceptions;
 using Fcg.Usuarios.Domain.Common.Interfaces;
 using Fcg.Usuarios.Domain.Constants;

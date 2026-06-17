@@ -1,4 +1,4 @@
-﻿using Fcg.Usuarios.Application.Features.Usuarios;
+﻿using Fcg.Usuarios.Application.Features.Usuarios.Responses;
 using MediatR;
 
 namespace Fcg.Usuarios.Application.Features.Usuarios.Queries.ObterUsuarioPorId

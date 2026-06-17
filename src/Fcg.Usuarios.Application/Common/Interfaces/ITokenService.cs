@@ -1,5 +1,5 @@
 ﻿using Fcg.Usuarios.Application.Features.Token;
-using Fcg.Usuarios.Application.Features.Usuarios;
+using Fcg.Usuarios.Application.Features.Usuarios.Responses;
 
 namespace Fcg.Usuarios.Application.Common.Interfaces
 {
