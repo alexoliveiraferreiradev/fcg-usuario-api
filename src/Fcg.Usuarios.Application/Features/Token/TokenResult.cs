@@ -1,6 +1,4 @@
-﻿using Fcg.Usuarios.Application.Dtos;
-
-namespace Fcg.Usuarios.Application.Features.Token
+﻿namespace Fcg.Usuarios.Application.Features.Token
 {
     public class TokenResult
     {
