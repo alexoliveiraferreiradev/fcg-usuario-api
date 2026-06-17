@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/Fcg.Pagamentos.API/Fcg.Usuarios.API.csproj" Id="b012224a-576c-47e4-90b7-09d3dee2a7e7" />
+    <Project Path="src/Fcg.Usuarios.API/Fcg.Usuario.API.csproj" Id="b012224a-576c-47e4-90b7-09d3dee2a7e7" />
     <Project Path="src/Fcg.Usuarios.Application/Fcg.Usuarios.Application.csproj" Id="8b9af2d2-6719-47a3-bab3-eb197aa30237" />
     <Project Path="src/Fcg.Usuarios.Domain/Fcg.Usuarios.Domain.csproj" Id="77900710-121b-4e6e-b91b-b84755c6a5c1" />
     <Project Path="src/Fcg.Usuarios.Infrastructure/Fcg.Usuarios.Infrastructure.csproj" Id="b39ec448-0d65-4c45-b5c2-9b1a217df6a6" />
