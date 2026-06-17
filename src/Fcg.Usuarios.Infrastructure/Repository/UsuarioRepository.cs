@@ -32,7 +32,7 @@ namespace Fcg.Usuarios.Infrastructure.Repository
         {
             return await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
         }
-
+               
         public async Task SaveChanges()
         {
             await _dbContext.SaveChangesAsync();
