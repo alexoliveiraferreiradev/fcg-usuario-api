@@ -10,8 +10,6 @@ namespace Fcg.Usuarios.Domain.ValueObjects
         public Senha(string hash)
         {
             AssertionConcern.AssertArgumentEmpty(hash, MensagensDominio.UsuarioSenhaObrigatoria);
-            AssertionConcern.AssertArgumentLength(hash, 8, 60, MensagensDominio.SenhaTamanhoInvalido);
-            AssertionConcern.AssertArgumentPasswordStrenght(hash, MensagensDominio.UsuarioSenhaFraca);
             Hash = hash;
         }
 
