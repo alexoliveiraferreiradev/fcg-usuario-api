@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Fcg.Usuarios.Applicatio.Services.Interfaces;
 using Fcg.Usuarios.Application.Dtos;
+using Fcg.Usuarios.Application.Features.Usuarios;
 using Fcg.Usuarios.Domain.Common;
 using Fcg.Usuarios.Domain.Common.Exceptions;
 using Fcg.Usuarios.Domain.Common.Interfaces;

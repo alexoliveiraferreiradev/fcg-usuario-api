@@ -1,6 +1,7 @@
 ﻿
 
 using Fcg.Usuarios.Application.Dtos;
+using Fcg.Usuarios.Application.Features.Usuarios;
 
 namespace Fcg.Usuarios.Applicatio.Services.Interfaces
 {

@@ -1,6 +1,6 @@
 ﻿using Fcg.Usuarios.Domain.Enum;
 
-namespace Fcg.Usuarios.Application.Dtos
+namespace Fcg.Usuarios.Application.Features.Usuarios
 {
     public class UsuarioResponse
     {
