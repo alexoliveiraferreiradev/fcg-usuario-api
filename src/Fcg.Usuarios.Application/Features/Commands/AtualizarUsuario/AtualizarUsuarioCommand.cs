@@ -1,4 +1,4 @@
-using Fcg.Usuarios.Application.Dtos;
+using Fcg.Usuarios.Application.Features.Usuarios;
 using MediatR;
 
 namespace Fcg.Usuarios.Application.Features.Commands.AtualizarUsuario
