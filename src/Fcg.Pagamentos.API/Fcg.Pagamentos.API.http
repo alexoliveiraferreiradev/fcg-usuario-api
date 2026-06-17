@@ -1,6 +1,0 @@
-@Fcg.Pagamentos.API_HostAddress = http://localhost:5082
-
-GET {{Fcg.Pagamentos.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

@@ -4,11 +4,10 @@ namespace Fcg.Usuarios.Domain.Repositories.Interfaces
 {
     public interface IUsuarioRepository 
     {
-        Task Adicionar(Usuario usuario);
-        Task Atualizar(Usuario usuario);
-        Task<Usuario> ObterPorId(Guid id);
-        Task<IEnumerable<Usuario>> ObterTodos();
+        void Adicionar(Usuario usuario);
+        void Atualizar(Usuario usuario);
         Task SaveChanges();
+        Task<Usuario> ObterPorId(Guid id);
         Task<Usuario?> ObterPorEmail(string email);
         Task<bool> VerificaEmailCadastrado(string emailCadastrado);
         Task<bool> VerificaMaisDeUmAdminCadastrado();
