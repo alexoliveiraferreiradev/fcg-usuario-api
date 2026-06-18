@@ -21,7 +21,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Queries.ObterTodosUsuarios
                         Id, 
                         NomeUsuario AS Nome, 
                         EmailUsuario AS Email, 
-                        Ativo, -- Faltava aqui!
+                        Ativo,
                         Perfil AS PerfilUsuario,
                         DataAlteracao,
                         MotivoDesativacao
