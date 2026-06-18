@@ -1,4 +1,4 @@
-﻿using Fcg.Usuarios.Domain.Entitites;
+using Fcg.Usuarios.Domain.Entitites;
 using Fcg.Usuarios.Domain.Enum;
 using Fcg.Usuarios.Domain.Repositories.Interfaces;
 using Fcg.Usuarios.Infrastructure.Persistance;
@@ -15,7 +15,7 @@ namespace Fcg.Usuarios.Infrastructure.Repository
         }
         public void Adicionar(Usuario usuario)
         {
-            _dbContext.Usuarios.AddAsync(usuario);   
+            _dbContext.Usuarios.Add(usuario);   
         }
 
         public void Atualizar(Usuario usuario)
@@ -28,7 +28,7 @@ namespace Fcg.Usuarios.Infrastructure.Repository
             return await _dbContext.Usuarios.AsNoTracking().FirstOrDefaultAsync(p => p.EmailUsuario.Valor.ToLower() == email.ToLower());
         }
 
-        public async Task<Usuario> ObterPorId(Guid id)
+        public async Task<Usuario?> ObterPorId(Guid id)
         {
             return await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
         }
@@ -57,7 +57,7 @@ namespace Fcg.Usuarios.Infrastructure.Repository
         public async Task<bool> VerificaNomeCadastradoParaAlteracao(Guid usuarioId, string nomeCadastrado)
         {
             return await _dbContext.Usuarios
-                       .AnyAsync(x => x.EmailUsuario.Valor.ToLower() == nomeCadastrado.ToLower()
+                       .AnyAsync(x => x.NomeUsuario.Valor.ToLower() == nomeCadastrado.ToLower()
                         && x.Id != usuarioId);
         }
     }
