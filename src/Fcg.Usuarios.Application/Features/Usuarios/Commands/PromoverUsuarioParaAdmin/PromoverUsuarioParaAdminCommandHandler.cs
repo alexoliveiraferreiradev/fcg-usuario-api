@@ -1,4 +1,4 @@
-﻿using Fcg.Usuarios.Application.Features.Usuarios.Responses;
+using Fcg.Usuarios.Application.Features.Usuarios.Responses;
 using Fcg.Usuarios.Domain.Common.Exceptions;
 using Fcg.Usuarios.Domain.Constants;
 using Fcg.Usuarios.Domain.Enum;
@@ -30,7 +30,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.PromoverUsuarioPar
                 throw new DomainException(MensagensDominio.UsuarioPerfilRebaixarInvalido);
             }
 
-            usuario.PromoverPerfil(usuario);
+            usuario.PromoverPerfil();
 
             _usuarioRepository.Atualizar(usuario);
 
