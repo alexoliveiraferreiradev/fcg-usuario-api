@@ -1,4 +1,4 @@
-﻿using Fcg.Usuarios.Domain.Common;
+using Fcg.Usuarios.Domain.Common;
 using Fcg.Usuarios.Domain.Common.Exceptions;
 using Fcg.Usuarios.Domain.Constants;
 using Fcg.Usuarios.Domain.Enum;
@@ -37,19 +37,7 @@ namespace Fcg.Usuarios.Domain.Entitites
             ValidarEntidade();
         }
 
-        public Usuario(Email emailUsuario, Senha senhaUsuario)
-        {
-            EmailUsuario = emailUsuario;
-            Senha = senhaUsuario;
-            ValidarDadosEntradas();
-        }
 
-        public void ValidarDadosEntradas()
-        {
-            AssertionConcern.AssertArgumentNotNull(EmailUsuario, MensagensDominio.UsuarioEmailObrigatorio);
-            AssertionConcern.AssertArgumentNotNull(Senha, MensagensDominio.UsuarioSenhaObrigatoria);
-            Ativo = true;
-        }
 
         protected override void ValidarEntidade()
         {
@@ -104,9 +92,8 @@ namespace Fcg.Usuarios.Domain.Entitites
             Perfil = TipoUsuario.Jogador;
         }
 
-        public void PromoverPerfil(Usuario usuario)
+        public void PromoverPerfil()
         {
-            AssertionConcern.AssertArgumentNotNull(usuario, MensagensDominio.UsuarioNaoEncontrado);
             Perfil = TipoUsuario.Administrador;
             DataAlteracao = DateTime.UtcNow;
         }
