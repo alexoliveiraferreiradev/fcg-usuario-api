@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Fcg.Usuarios.Application.Features.Usuarios.Queries.ObterUsuarioPorId
 {
-    public record ObterUsuarioPorIdQuery : IRequest<UsuarioResponse>;
+    public record ObterUsuarioPorIdQuery(Guid Id) : IRequest<UsuarioResponse?>;
 }
