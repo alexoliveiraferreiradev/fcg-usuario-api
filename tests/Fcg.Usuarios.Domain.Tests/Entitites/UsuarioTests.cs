@@ -169,7 +169,7 @@ namespace Fcg.Usuarios.Domain.Tests.Entitites
         {
             // Arrange
             var usuario = new Usuario(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
-            usuario.PromoverPerfil(); // Vira Administrador
+            usuario.PromoverPerfil(); 
 
             // Act
             usuario.RebaixarPerfil();
