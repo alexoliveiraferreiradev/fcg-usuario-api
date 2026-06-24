@@ -1,9 +1,11 @@
-﻿using Fcg.Usuarios.Application.Common.Interfaces;
+﻿using Fcg.MessageContracts;
+using Fcg.Usuarios.Application.Common.Interfaces;
 using Fcg.Usuarios.Application.Features.Usuarios.Responses;
 using Fcg.Usuarios.Domain.Common.Exceptions;
 using Fcg.Usuarios.Domain.Common.Interfaces;
 using Fcg.Usuarios.Domain.Constants;
 using Fcg.Usuarios.Domain.Repositories.Interfaces;
+using MassTransit;
 using MediatR;
 
 namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.AutenticarUsuario
@@ -13,12 +15,15 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.AutenticarUsuario
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ITokenService _tokenService;
+        private readonly IPublishEndpoint _publishEndpoint;
+
         public AutenticarUsuarioCommandHandler(IUsuarioRepository usuarioRepository, IPasswordHasher passwordHasher,
-            ITokenService tokenService)
+            ITokenService tokenService, IPublishEndpoint publishEndpoint)
         {
             _usuarioRepository = usuarioRepository;
-            _passwordHasher = passwordHasher;   
-            _tokenService = tokenService;   
+            _passwordHasher = passwordHasher;
+            _tokenService = tokenService;
+            _publishEndpoint = publishEndpoint;
         }
         public async Task<LoginResponse> Handle(AutenticarUsuarioCommand request, CancellationToken cancellationToken)
         {
@@ -29,13 +34,13 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.AutenticarUsuario
             }
 
             if (!usuario.Ativo)
-            {               
+            {
                 throw new DomainException(MensagensDominio.UsuarioInativo);
             }
 
             bool senhaValida = _passwordHasher.VerifyPassword(request.Senha, usuario.Senha.Hash);
             if (!senhaValida)
-            {                
+            {
                 throw new DomainException(MensagensDominio.CrendenciasInvalidas);
             }
 

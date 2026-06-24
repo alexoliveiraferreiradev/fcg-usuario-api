@@ -1,4 +1,5 @@
-﻿using Fcg.Usuarios.Application.Common.Interfaces;
+﻿using Fcg.MessageContracts;
+using Fcg.Usuarios.Application.Common.Interfaces;
 using Fcg.Usuarios.Application.Features.Usuarios.Responses;
 using Fcg.Usuarios.Domain.Common;
 using Fcg.Usuarios.Domain.Common.Exceptions;
@@ -7,6 +8,7 @@ using Fcg.Usuarios.Domain.Constants;
 using Fcg.Usuarios.Domain.Entitites;
 using Fcg.Usuarios.Domain.Repositories.Interfaces;
 using Fcg.Usuarios.Domain.ValueObjects;
+using MassTransit;
 using MediatR;
 
 namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario
@@ -17,13 +19,16 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario
         private readonly IPasswordHasher _passwordHasher;
         private readonly ITokenService _tokenService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPublishEndpoint _publishEndpoint;
         public CadastrarUsuarioCommandHandler(IUsuarioRepository usuarioRepository,
-            IPasswordHasher passwordHasher, ITokenService tokenService,IUnitOfWork unitOfWork)
+            IPasswordHasher passwordHasher, ITokenService tokenService,IUnitOfWork unitOfWork,
+            IPublishEndpoint publishEndpoint)
         {
             _usuarioRepository = usuarioRepository;
             _passwordHasher = passwordHasher;   
             _tokenService = tokenService;   
             _unitOfWork= unitOfWork;    
+            _publishEndpoint = publishEndpoint;
         }
         public async Task<LoginResponse> Handle(CadastrarUsuarioCommand request, CancellationToken cancellationToken)
         {
@@ -52,6 +57,9 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario
             var usuario = new Usuario(nomeValueObject,emailValueObject,senhaCriptografada); 
 
             _usuarioRepository.Adicionar(usuario);
+
+            await _publishEndpoint.Publish(new UserCreatedEvent(usuario.Id, 
+                usuario.NomeUsuario.Valor, usuario.EmailUsuario.Valor));
 
             await _unitOfWork.CommitAsync();
 

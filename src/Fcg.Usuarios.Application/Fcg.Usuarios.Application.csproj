@@ -9,8 +9,8 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Dapper" Version="2.1.79" />
+    <PackageReference Include="MassTransit.Abstractions" Version="9.1.2" />
     <PackageReference Include="MediatR" Version="14.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.15" />
   </ItemGroup>
 
   <ItemGroup>
