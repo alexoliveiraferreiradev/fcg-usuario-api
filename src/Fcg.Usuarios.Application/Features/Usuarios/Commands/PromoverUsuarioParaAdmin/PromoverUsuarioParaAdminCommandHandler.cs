@@ -10,10 +10,12 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.PromoverUsuarioPar
     public class PromoverUsuarioParaAdminCommandHandler : IRequestHandler<PromoverUsuarioParaAdminCommand, UsuarioResponse>
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PromoverUsuarioParaAdminCommandHandler(IUsuarioRepository usuarioRepository)
+        public PromoverUsuarioParaAdminCommandHandler(IUsuarioRepository usuarioRepository, IUnitOfWork unitOfWork)
         {
             _usuarioRepository = usuarioRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<UsuarioResponse> Handle(PromoverUsuarioParaAdminCommand request, CancellationToken cancellationToken)
@@ -34,7 +36,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.PromoverUsuarioPar
 
             _usuarioRepository.Atualizar(usuario);
 
-            await _usuarioRepository.SaveChanges();
+            await _unitOfWork.CommitAsync();
 
             return new UsuarioResponse
             {

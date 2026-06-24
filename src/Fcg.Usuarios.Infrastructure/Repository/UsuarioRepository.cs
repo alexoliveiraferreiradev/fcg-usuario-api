@@ -32,11 +32,7 @@ namespace Fcg.Usuarios.Infrastructure.Repository
         {
             return await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
         }
-               
-        public async Task SaveChanges()
-        {
-            await _dbContext.SaveChangesAsync();
-        }
+            
 
         public async Task<bool> VerificaEmailCadastrado(string emailCadastrado)
         {

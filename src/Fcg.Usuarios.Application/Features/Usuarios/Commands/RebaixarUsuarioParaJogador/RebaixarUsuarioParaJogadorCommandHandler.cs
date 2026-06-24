@@ -10,9 +10,11 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.RebaixarUsuarioPar
     public class RebaixarUsuarioParaJogadorCommandHandler : IRequestHandler<RebaixarUsuarioParaJogadorCommand, UsuarioResponse>
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        public RebaixarUsuarioParaJogadorCommandHandler(IUsuarioRepository usuarioRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public RebaixarUsuarioParaJogadorCommandHandler(IUsuarioRepository usuarioRepository, IUnitOfWork unitOfWork    )
         {
-            _usuarioRepository = usuarioRepository; 
+            _usuarioRepository = usuarioRepository;
+            _unitOfWork = unitOfWork;
         }
         public async Task<UsuarioResponse> Handle(RebaixarUsuarioParaJogadorCommand request, CancellationToken cancellationToken)
         {
@@ -38,7 +40,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.RebaixarUsuarioPar
 
             _usuarioRepository.Atualizar(usuario);
 
-            await _usuarioRepository.SaveChanges();
+            await _unitOfWork.CommitAsync();
 
             return new UsuarioResponse
             {

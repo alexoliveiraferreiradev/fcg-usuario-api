@@ -12,11 +12,13 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.AtualizarUsuario
     public class AtualizarUsuarioCommandHandler : IRequestHandler<AtualizarUsuarioCommand, UsuarioResponse>
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IPasswordHasher _passwordHasher;
-        public AtualizarUsuarioCommandHandler(IUsuarioRepository usuarioRepository, IPasswordHasher passwordHasher)
+        public AtualizarUsuarioCommandHandler(IUsuarioRepository usuarioRepository, IPasswordHasher passwordHasher, IUnitOfWork unitOfWork)
         {
             _usuarioRepository = usuarioRepository; 
             _passwordHasher = passwordHasher;
+            _unitOfWork = unitOfWork;
         }
         public async Task<UsuarioResponse> Handle(AtualizarUsuarioCommand request, CancellationToken cancellationToken)
         {
@@ -44,7 +46,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.AtualizarUsuario
 
             _usuarioRepository.Atualizar(usuario);
 
-            await _usuarioRepository.SaveChanges();
+            await _unitOfWork.CommitAsync();
 
             return new UsuarioResponse
             {

@@ -16,12 +16,14 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ITokenService _tokenService;
+        private readonly IUnitOfWork _unitOfWork;
         public CadastrarUsuarioCommandHandler(IUsuarioRepository usuarioRepository,
-            IPasswordHasher passwordHasher, ITokenService tokenService)
+            IPasswordHasher passwordHasher, ITokenService tokenService,IUnitOfWork unitOfWork)
         {
             _usuarioRepository = usuarioRepository;
             _passwordHasher = passwordHasher;   
             _tokenService = tokenService;   
+            _unitOfWork= unitOfWork;    
         }
         public async Task<LoginResponse> Handle(CadastrarUsuarioCommand request, CancellationToken cancellationToken)
         {
@@ -51,7 +53,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario
 
             _usuarioRepository.Adicionar(usuario);
 
-            await _usuarioRepository.SaveChanges();
+            await _unitOfWork.CommitAsync();
 
             var usuarioResponse = new UsuarioResponse
             {

@@ -9,9 +9,11 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.DesativarUsuario
     public class DesativarUsuarioCommandHandler : IRequestHandler<DesativarUsuarioCommand>
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        public DesativarUsuarioCommandHandler(IUsuarioRepository usuarioRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public DesativarUsuarioCommandHandler(IUsuarioRepository usuarioRepository, IUnitOfWork unitOfWork)
         {
-            _usuarioRepository = usuarioRepository; 
+            _usuarioRepository = usuarioRepository;
+            _unitOfWork = unitOfWork;
         }
         public async Task Handle(DesativarUsuarioCommand request, CancellationToken cancellationToken)
         {
@@ -36,7 +38,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.DesativarUsuario
 
             usuarioDesativar.Desativar(request.MotivoDelecao);
 
-            await _usuarioRepository.SaveChanges();
+            await _unitOfWork.CommitAsync();
         }
     }
 }

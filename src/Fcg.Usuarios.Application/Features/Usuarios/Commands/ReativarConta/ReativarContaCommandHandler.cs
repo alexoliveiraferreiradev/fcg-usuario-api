@@ -8,9 +8,11 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.ReativarConta
     public class ReativarContaCommandHandler : IRequestHandler<ReativarContaCommand>
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        public ReativarContaCommandHandler(IUsuarioRepository usuarioRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public ReativarContaCommandHandler(IUsuarioRepository usuarioRepository, IUnitOfWork unitOfWork)
         {
             _usuarioRepository = usuarioRepository;
+            _unitOfWork = unitOfWork;
         }
         public async Task Handle(ReativarContaCommand request, CancellationToken cancellationToken)
         {
@@ -23,7 +25,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.ReativarConta
 
             _usuarioRepository.Atualizar(usuario);
 
-            await _usuarioRepository.SaveChanges();
+            await _unitOfWork.CommitAsync();
         }
     }
 }
