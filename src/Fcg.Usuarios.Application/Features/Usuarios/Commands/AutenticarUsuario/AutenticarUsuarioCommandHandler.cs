@@ -1,7 +1,6 @@
-﻿using Fcg.MessageContracts;
+﻿using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Usuarios.Application.Common.Interfaces;
 using Fcg.Usuarios.Application.Features.Usuarios.Responses;
-using Fcg.Usuarios.Domain.Common.Exceptions;
 using Fcg.Usuarios.Domain.Common.Interfaces;
 using Fcg.Usuarios.Domain.Constants;
 using Fcg.Usuarios.Domain.Repositories.Interfaces;
