@@ -3,7 +3,7 @@ using Fcg.Usuarios.Domain.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Fcg.Usuarios.Infrastructure.Mapping
+namespace Fcg.Usuarios.Infrastructure.Persistance.Mapping
 {
     public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
     {
