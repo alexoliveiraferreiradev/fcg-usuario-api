@@ -87,11 +87,11 @@ Conforme os requisitos do **Tech Challenge**, o fluxo de cadastro de novos usuá
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Cliente as Usuário / Cliente
-    participant API as Fcg.Usuarios.API (UsersAPI)
-    database DB as SQL Server (Fcg_Usuarios)
-    participant Broker as RabbitMQ (Message Broker)
-    participant Notif as Fcg.Notifications (NotificationsAPI)
+    actor Cliente as "Usuário / Cliente"
+    participant API as "Fcg.Usuarios.API (UsersAPI)"
+    database DB as "SQL Server (Fcg_Usuarios)"
+    participant Broker as "RabbitMQ (Message Broker)"
+    participant Notif as "Fcg.Notifications (NotificationsAPI)"
 
     Cliente->>API: HTTP POST /api/novaconta/cadastrar (Dados do Usuário)
     activate API
