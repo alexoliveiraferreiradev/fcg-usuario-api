@@ -34,15 +34,15 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario
         {
             var nomeValueObject = new Nome(request.Nome);
             var emailValueObject = new Email(request.Email);
-            if (await _usuarioRepository.VerificaEmailCadastrado(request.Email))
-            {
-                throw new DomainException(MensagensDominio.EmailJaCadastrado);
-            }
+            //if (await _usuarioRepository.VerificaEmailCadastrado(request.Email))
+            //{
+            //    throw new DomainException(MensagensDominio.EmailJaCadastrado);
+            //}
 
-            if (await _usuarioRepository.VerificaNomeCadastrado(request.Nome))
-            {
-                throw new DomainException(MensagensDominio.NomeUsuarioJaCadastrado);
-            }
+            //if (await _usuarioRepository.VerificaNomeCadastrado(request.Nome))
+            //{
+            //    throw new DomainException(MensagensDominio.NomeUsuarioJaCadastrado);
+            //}
 
             if (request.Senha != request.ConfirmacaoSenha)
                 throw new DomainException(MensagensDominio.UsuarioSenhaConfirmacaoDiferente);
@@ -56,12 +56,12 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario
 
             var usuario = new Usuario(nomeValueObject,emailValueObject,senhaCriptografada); 
 
-            _usuarioRepository.Adicionar(usuario);
+            //_usuarioRepository.Adicionar(usuario);
 
             await _publishEndpoint.Publish(new UserCreatedEvent(usuario.Id, 
                 usuario.NomeUsuario.Valor, usuario.EmailUsuario.Valor));
 
-            await _unitOfWork.CommitAsync();
+            //await _unitOfWork.CommitAsync();
 
             var usuarioResponse = new UsuarioResponse
             {
