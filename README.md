@@ -80,6 +80,38 @@ O microsserviço gerencia todo o ciclo de vida do usuário:
 
 ---
 
+## 📐 Fluxo de Integração (Tech Challenge)
+
+Conforme os requisitos do **Tech Challenge**, o fluxo de cadastro de novos usuários é orientado a eventos e se integra de forma assíncrona com o serviço de notificações:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Cliente as Usuário / Cliente
+    participant API as Fcg.Usuarios.API (UsersAPI)
+    database DB as SQL Server (Fcg_Usuarios)
+    participant Broker as RabbitMQ (Message Broker)
+    participant Notif as Fcg.Notifications (NotificationsAPI)
+
+    Cliente->>API: HTTP POST /api/novaconta/cadastrar (Dados do Usuário)
+    activate API
+    Note over API: Valida dados (Nome, Email, Senha)<br/>Criptografa a Senha (hash)
+    API->>DB: Salva Usuário no Banco (DbContext)
+    DB-->>API: Confirmação de Persistência (Commit)
+    
+    API->>Broker: Publica UserCreatedEvent (UserId, Nome, Email) via MassTransit
+    API-->>Cliente: Retorna HTTP 201 Created (Confirmação)
+    deactivate API
+
+    %% Comunicação Assíncrona
+    Broker->>Notif: Consome UserCreatedEvent
+    activate Notif
+    Note over Notif: Envia (Simula no console) e-mail de Boas-Vindas
+    deactivate Notif
+```
+
+---
+
 ## ⚙️ Configuração e Execução
 
 ### Pré-requisitos
