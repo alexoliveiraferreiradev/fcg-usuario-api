@@ -89,7 +89,7 @@ sequenceDiagram
     autonumber
     actor Cliente as "Usuário / Cliente"
     participant API as "Fcg.Usuarios.API (UsersAPI)"
-    database DB as "SQL Server (Fcg_Usuarios)"
+    participant DB as "SQL Server (Fcg_Usuarios)"
     participant Broker as "RabbitMQ (Message Broker)"
     participant Notif as "Fcg.Notifications (NotificationsAPI)"
 
