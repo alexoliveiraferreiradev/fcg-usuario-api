@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fcg.Usuarios.Application\Fcg.Usuarios.Application.csproj" />
     <ProjectReference Include="..\Fcg.Usuarios.Infrastructure\Fcg.Usuarios.Infrastructure.csproj" />
   </ItemGroup>
 
