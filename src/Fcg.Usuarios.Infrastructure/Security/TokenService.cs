@@ -1,3 +1,4 @@
+using Fcg.Core.WebApi.Security;
 using Fcg.Usuarios.Application.Common.Interfaces;
 using Fcg.Usuarios.Application.Features.Token;
 using Fcg.Usuarios.Application.Features.Usuarios.Responses;

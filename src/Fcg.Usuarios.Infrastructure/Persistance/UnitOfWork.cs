@@ -1,4 +1,4 @@
-﻿using Fcg.Usuarios.Domain.Repositories.Interfaces;
+﻿using Fcg.Core.Abstractions.Interfaces;
 
 namespace Fcg.Usuarios.Infrastructure.Persistance
 {
