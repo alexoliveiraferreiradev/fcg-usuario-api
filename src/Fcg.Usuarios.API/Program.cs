@@ -7,6 +7,7 @@ using Fcg.Usuarios.Domain.Repositories.Interfaces;
 using Fcg.Usuarios.Infrastructure.Persistance;
 using Fcg.Usuarios.Infrastructure.Repository;
 using Fcg.Usuarios.Infrastructure.Security;
+using FluentValidation;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -57,6 +58,9 @@ builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(CadastrarUsuarioCommand).Assembly);
 });
+
+// Registra automaticamente todos os Validators da camada de Application
+builder.Services.AddValidatorsFromAssembly(typeof(CadastrarUsuarioCommand).Assembly);
 
 
 builder.Services.AddScoped<IDbConnection>(sp=> sp.GetRequiredService<UsuarioDbContext>().Database.GetDbConnection());
