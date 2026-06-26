@@ -33,6 +33,12 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.PromoverUsuarioPar
                 throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
             }
 
+            if (request.Id == request.IdOperador)
+            {
+                _logger.LogWarning("Tentativa de autopromoção bloqueada. AdminId: {AdminId}", request.IdOperador);
+                throw new DomainException("Um administrador não pode promover a si próprio.");
+            }
+
             if (!usuario.Ativo)
             {
                 _logger.LogWarning("Falha na promoção. Usuário está inativo. UsuarioId: {UsuarioId}", request.Id);
@@ -51,7 +57,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.PromoverUsuarioPar
 
             await _unitOfWork.CommitAsync();
 
-            _logger.LogInformation("Usuário promovido para administrador com sucesso. UsuarioId: {UsuarioId}", request.Id);
+            _logger.LogWarning("[AUDITORIA] Usuário {TargetUserId} promovido a Administrador pelo operador {AdminId}.", request.Id, request.IdOperador);
 
             return new UsuarioResponse
             {

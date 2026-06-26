@@ -43,6 +43,8 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.AtualizarUsuario
                 throw new DomainException(MensagensDominio.NomeUsuarioJaCadastrado);
             }
 
+            if (request.SenhaUsuario != request.ConfirmacaoSenha) throw new DomainException(MensagensDominio.UsuarioSenhaConfirmacaoDiferente);
+
             var hashSenha = _passwordHasher.HashPassword(request.SenhaUsuario);
 
             var novaSenhaCriptografa = new Senha(request.SenhaUsuario,hashSenha);
