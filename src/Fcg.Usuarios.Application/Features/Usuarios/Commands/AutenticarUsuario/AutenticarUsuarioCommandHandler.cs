@@ -54,6 +54,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.AutenticarUsuario
 
             var usuarioResponse = new UsuarioResponse
             {
+                Id = usuario.Id,
                 Nome = usuario.NomeUsuario.Valor,
                 Email = usuario.EmailUsuario.Valor,
                 PerfilUsuario = usuario.Perfil

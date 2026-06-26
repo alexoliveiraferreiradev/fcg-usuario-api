@@ -19,8 +19,7 @@ namespace Fcg.Usuarios.Infrastructure.Security
             _jwtSettings  = jwtSettings.Value;
         }
         public async Task<TokenResult> GerarToken(UsuarioResponse usuario)
-        {
-            
+        {            
             var claims = await ObtemClaims(usuario);
             var acessToken = ObtemToken(claims);
             return new TokenResult
