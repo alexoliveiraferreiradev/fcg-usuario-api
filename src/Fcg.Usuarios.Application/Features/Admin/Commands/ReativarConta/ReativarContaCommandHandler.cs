@@ -5,7 +5,7 @@ using Fcg.Usuarios.Domain.Repositories.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.ReativarConta
+namespace Fcg.Usuarios.Application.Features.Admin.Commands.ReativarConta
 {
     public class ReativarContaCommandHandler : IRequestHandler<ReativarContaCommand>
     {

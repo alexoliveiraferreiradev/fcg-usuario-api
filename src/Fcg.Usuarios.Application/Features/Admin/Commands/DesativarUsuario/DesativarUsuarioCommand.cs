@@ -1,7 +1,7 @@
 using Fcg.Usuarios.Domain.Enum;
 using MediatR;
 
-namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.DesativarUsuario
+namespace Fcg.Usuarios.Application.Features.Admin.Commands.DesativarUsuario
 {
     public record DesativarUsuarioCommand(
         Guid Id,

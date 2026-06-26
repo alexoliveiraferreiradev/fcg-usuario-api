@@ -7,7 +7,7 @@ using Fcg.Usuarios.Domain.Repositories.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.PromoverUsuarioParaAdmin
+namespace Fcg.Usuarios.Application.Features.Admin.Commands.PromoverUsuarioParaAdmin
 {
     public class PromoverUsuarioParaAdminCommandHandler : IRequestHandler<PromoverUsuarioParaAdminCommand, UsuarioResponse>
     {

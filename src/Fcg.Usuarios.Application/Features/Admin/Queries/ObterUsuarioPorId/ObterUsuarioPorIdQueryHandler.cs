@@ -3,7 +3,7 @@ using Fcg.Usuarios.Application.Features.Usuarios.Responses;
 using MediatR;
 using System.Data;
 
-namespace Fcg.Usuarios.Application.Features.Usuarios.Queries.ObterUsuarioPorId
+namespace Fcg.Usuarios.Application.Features.Admin.Queries.ObterUsuarioPorId
 {
     public class ObterUsuarioPorIdQueryHandler : IRequestHandler<ObterUsuarioPorIdQuery, UsuarioResponse?>
     {

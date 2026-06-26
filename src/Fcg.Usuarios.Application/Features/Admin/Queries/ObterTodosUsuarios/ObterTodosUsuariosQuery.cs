@@ -1,7 +1,7 @@
 using Fcg.Usuarios.Application.Features.Usuarios.Responses;
 using MediatR;
 
-namespace Fcg.Usuarios.Application.Features.Usuarios.Queries.ObterTodosUsuarios
+namespace Fcg.Usuarios.Application.Features.Admin.Queries.ObterTodosUsuarios
 {
     public record ObterTodosUsuariosQuery : IRequest<IEnumerable<UsuarioResponse>>;
 }

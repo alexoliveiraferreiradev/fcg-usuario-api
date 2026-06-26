@@ -7,7 +7,7 @@ using Fcg.Usuarios.Domain.Repositories.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.RebaixarUsuarioParaJogador
+namespace Fcg.Usuarios.Application.Features.Admin.Commands.RebaixarUsuarioParaJogador
 {
     public class RebaixarUsuarioParaJogadorCommandHandler : IRequestHandler<RebaixarUsuarioParaJogadorCommand, UsuarioResponse>
     {
