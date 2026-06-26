@@ -1,4 +1,5 @@
 ﻿using Fcg.Usuarios.Domain.Entitites;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fcg.Usuarios.Infrastructure.Persistance
@@ -15,6 +16,9 @@ namespace Fcg.Usuarios.Infrastructure.Persistance
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(UsuarioDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
+            modelBuilder.AddInboxStateEntity();
+            modelBuilder.AddOutboxMessageEntity();
+            modelBuilder.AddOutboxStateEntity();
         }
     }
 }
