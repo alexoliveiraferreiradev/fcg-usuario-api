@@ -1,4 +1,5 @@
 using Fcg.Core.Abstractions.Interfaces;
+using Fcg.Usuario.API.Endpoint;
 using Fcg.Usuarios.Application.Common.Interfaces;
 using Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario;
 using Fcg.Usuarios.Domain.Common.Interfaces;
@@ -67,6 +68,8 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 var app = builder.Build();
 
+app.MapNovaContaEndpoints();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -83,6 +86,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapControllers();
+
 
 app.Run();
