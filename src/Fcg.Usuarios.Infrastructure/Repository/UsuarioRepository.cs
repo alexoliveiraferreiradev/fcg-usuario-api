@@ -1,3 +1,4 @@
+using Dapper;
 using Fcg.Usuarios.Domain.Entitites;
 using Fcg.Usuarios.Domain.Enum;
 using Fcg.Usuarios.Domain.Repositories.Interfaces;
@@ -25,7 +26,13 @@ namespace Fcg.Usuarios.Infrastructure.Repository
 
         public async Task<Usuario?> ObterPorEmail(string email)
         {
-            return await _dbContext.Usuarios.AsNoTracking().FirstOrDefaultAsync(p => p.EmailUsuario.Valor.ToLower() == email.ToLower());
+            var connection = _dbContext.Database.GetDbConnection();
+            var query = @"Select 
+                        Id,Nome,Email,Senha,Perfil,Ativo, 
+                        DataCadastro,DataAlteracao,MotivoDesativacao 
+                        from Usuarios where Email = @Email";
+            
+            return await connection.QueryFirstAsync<Usuario?>(query, new {Email = email});
         }
 
         public async Task<Usuario?> ObterPorId(Guid id)
@@ -37,6 +44,17 @@ namespace Fcg.Usuarios.Infrastructure.Repository
         public async Task<bool> VerificaEmailCadastrado(string emailCadastrado)
         {
             return await _dbContext.Usuarios.AnyAsync(x => x.EmailUsuario.Valor.ToLower() == emailCadastrado.ToLower());
+        }
+
+        public async Task<(bool EmailUsado, bool NomeUsado)> VerificaIndisponibilidade(string email, string nome)
+        {
+            var connection = _dbContext.Database.GetDbConnection();
+
+            var query = @" SELECT 
+            CAST(CASE WHEN EXISTS (SELECT 1 FROM Usuarios WHERE Email = @Email) THEN 1 ELSE 0 END AS BIT) AS EmailUsado,
+            CAST(CASE WHEN EXISTS (SELECT 1 FROM Usuarios WHERE Nome = @Nome) THEN 1 ELSE 0 END AS BIT) AS NomeUsado";
+                        
+            return await connection.QueryFirstOrDefaultAsync<(bool EmailUsado, bool NomeUsado)>(query, new { Email = email, Nome = nome });
         }
 
         public async Task<bool> VerificaMaisDeUmAdminCadastrado()
@@ -52,9 +70,13 @@ namespace Fcg.Usuarios.Infrastructure.Repository
 
         public async Task<bool> VerificaNomeCadastradoParaAlteracao(Guid usuarioId, string nomeCadastrado)
         {
-            return await _dbContext.Usuarios
-                       .AnyAsync(x => x.NomeUsuario.Valor.ToLower() == nomeCadastrado.ToLower()
-                        && x.Id != usuarioId);
+            var connection = _dbContext.Database.GetDbConnection();
+
+            var query = "SELECT CAST(CASE WHEN EXISTS (SELECT 1 FROM Usuarios WHERE Nome = @Nome and Id!= @IdUsuario) THEN 1 ELSE 0 END AS BIT) AS NomeUsado";
+
+            return await connection.QueryFirstOrDefaultAsync<bool>(query, new { Nome = nomeCadastrado, IdUsuario = usuarioId }); 
         }
+
+        
     }
 }

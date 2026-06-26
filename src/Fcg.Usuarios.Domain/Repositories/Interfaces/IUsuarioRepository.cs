@@ -10,6 +10,7 @@ namespace Fcg.Usuarios.Domain.Repositories.Interfaces
         Task<Usuario?> ObterPorEmail(string email);
         Task<bool> VerificaEmailCadastrado(string emailCadastrado);
         Task<bool> VerificaMaisDeUmAdminCadastrado();
+        Task<(bool EmailUsado, bool NomeUsado)> VerificaIndisponibilidade(string email, string nome);
         Task<bool> VerificaNomeCadastrado(string nomeCadastrado);
         Task<bool> VerificaNomeCadastradoParaAlteracao(Guid usuarioId, string nomeCadastrado);
     }
