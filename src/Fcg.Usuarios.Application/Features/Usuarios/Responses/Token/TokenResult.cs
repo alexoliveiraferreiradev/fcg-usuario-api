@@ -1,4 +1,4 @@
-﻿namespace Fcg.Usuarios.Application.Features.Token
+﻿namespace Fcg.Usuarios.Application.Features.Usuarios.Responses.Token
 {
     public class TokenResult
     {

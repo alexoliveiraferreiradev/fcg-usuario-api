@@ -1,4 +1,4 @@
-﻿using Fcg.Usuarios.Application.Features.Token;
+﻿using Fcg.Usuarios.Application.Features.Usuarios.Responses.Token;
 using Fcg.Usuarios.Domain.Enum;
 
 namespace Fcg.Usuarios.Application.Features.Usuarios.Responses
