@@ -1,6 +1,4 @@
 ﻿using Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario;
-using Fcg.Usuarios.Application.Features.Usuarios.Responses;
-using Fcg.Usuarios.Domain.Entitites;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +22,7 @@ namespace Fcg.Usuario.API.Endpoint
 
                 return Results.Created();
             })
-            .Produces(StatusCodes.Status201Created) 
+            .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest);
         }
     }

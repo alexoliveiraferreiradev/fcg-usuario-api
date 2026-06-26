@@ -1,8 +1,6 @@
 ﻿using Fcg.Usuarios.Application.Features.Usuarios.Commands.AutenticarUsuario;
-using Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario;
 using Fcg.Usuarios.Application.Features.Usuarios.Responses;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fcg.Usuario.API.Endpoint
@@ -13,7 +11,7 @@ namespace Fcg.Usuario.API.Endpoint
         {
             var group = app.MapGroup("api/login").AllowAnonymous().WithTags("Login");
 
-            group.MapPost("Login", async (
+            group.MapPost("login", async (
                 [FromBody] AutenticarUsuarioCommand command,
                 [FromServices] ISender mediator,
                 CancellationToken cancellationToken) =>
@@ -25,7 +23,6 @@ namespace Fcg.Usuario.API.Endpoint
 
                 return Results.Ok(response);
             })
-            .AllowAnonymous()
             .Produces<LoginResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound);
