@@ -1,8 +1,9 @@
-﻿using Fcg.Core.Abstractions.Common.Exceptions;
+using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Usuarios.Domain.Constants;
 using Fcg.Usuarios.Domain.Repositories.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.DesativarUsuario
 {
@@ -10,35 +11,31 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.DesativarUsuario
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public DesativarUsuarioCommandHandler(IUsuarioRepository usuarioRepository, IUnitOfWork unitOfWork)
+        private readonly ILogger<DesativarUsuarioCommandHandler> _logger;
+
+        public DesativarUsuarioCommandHandler(IUsuarioRepository usuarioRepository, IUnitOfWork unitOfWork, ILogger<DesativarUsuarioCommandHandler> logger)
         {
             _usuarioRepository = usuarioRepository;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
         public async Task Handle(DesativarUsuarioCommand request, CancellationToken cancellationToken)
         {
-            if (request.IdOperador == request.Id)
-            {
-                throw new DomainException(MensagensDominio.OperacaoDesativarInvalida);
-            }
-
-            var adminOperador = await _usuarioRepository.ObterPorId(request.IdOperador);
-
-            if (adminOperador == null)
-            {
-                throw new DomainException(MensagensDominio.AdminNaoEncontrado);
-            }
+            _logger.LogInformation("Iniciando processo de desativação de usuário por um operador. UsuarioId: {UsuarioId}, OperadorId: {OperadorId}", request.Id, request.IdOperador);
 
             var usuarioDesativar = await _usuarioRepository.ObterPorId(request.Id);
 
             if (usuarioDesativar == null)
             {
+                _logger.LogWarning("Falha na desativação. Usuário alvo não encontrado. UsuarioId: {UsuarioId}", request.Id);
                 throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
             }
 
             usuarioDesativar.Desativar(request.MotivoDelecao);
 
             await _unitOfWork.CommitAsync();
+
+            _logger.LogInformation("Usuário desativado com sucesso pelo operador. UsuarioId: {UsuarioId}, OperadorId: {OperadorId}, Motivo: {Motivo}", request.Id, request.IdOperador, request.MotivoDelecao);
         }
     }
 }
