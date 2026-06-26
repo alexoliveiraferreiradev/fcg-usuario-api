@@ -1,6 +1,5 @@
 using Dapper;
 using Fcg.Usuarios.Domain.Entitites;
-using Fcg.Usuarios.Domain.Enum;
 using Fcg.Usuarios.Domain.Repositories.Interfaces;
 using Fcg.Usuarios.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
@@ -26,13 +25,9 @@ namespace Fcg.Usuarios.Infrastructure.Repository
 
         public async Task<Usuario?> ObterPorEmail(string email)
         {
-            var connection = _dbContext.Database.GetDbConnection();
-            var query = @"Select 
-                        Id,Nome,Email,Senha,Perfil,Ativo, 
-                        DataCadastro,DataAlteracao,MotivoDesativacao 
-                        from Usuarios where Email = @Email";
-            
-            return await connection.QueryFirstAsync<Usuario?>(query, new {Email = email});
+            return await _dbContext.Usuarios
+                 .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.EmailUsuario.Valor == email);
         }
 
         public async Task<Usuario?> ObterPorId(Guid id)
@@ -40,11 +35,6 @@ namespace Fcg.Usuarios.Infrastructure.Repository
             return await _dbContext.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
         }
             
-
-        public async Task<bool> VerificaEmailCadastrado(string emailCadastrado)
-        {
-            return await _dbContext.Usuarios.AnyAsync(x => x.EmailUsuario.Valor.ToLower() == emailCadastrado.ToLower());
-        }
 
         public async Task<(bool EmailUsado, bool NomeUsado)> VerificaIndisponibilidade(string email, string nome)
         {
@@ -59,15 +49,14 @@ namespace Fcg.Usuarios.Infrastructure.Repository
 
         public async Task<bool> VerificaMaisDeUmAdminCadastrado()
         {
-            return await _dbContext.Usuarios
-        .CountAsync(x => x.Perfil == TipoUsuario.Administrador && x.Ativo) > 1;
+            var connection = _dbContext.Database.GetDbConnection();
+
+            var query = @"SELECT CAST(CASE WHEN (SELECT COUNT(1) FROM Usuarios WHERE Perfil = 1) > 1 THEN 1 ELSE 0 END AS BIT)";
+
+            return await connection.QueryFirstOrDefaultAsync<bool>(query);
         }
 
-        public async Task<bool> VerificaNomeCadastrado(string nomeCadastrado)
-        {
-            return await _dbContext.Usuarios.AnyAsync(x => x.NomeUsuario.Valor.ToLower() == nomeCadastrado.ToLower());
-        }
-
+       
         public async Task<bool> VerificaNomeCadastradoParaAlteracao(Guid usuarioId, string nomeCadastrado)
         {
             var connection = _dbContext.Database.GetDbConnection();
