@@ -1,24 +1,34 @@
-﻿using Fcg.Usuarios.Domain.Common.Exceptions;
+using Fcg.Core.Abstractions.Common.Exceptions;
+using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Usuarios.Domain.Constants;
 using Fcg.Usuarios.Domain.Enum;
 using Fcg.Usuarios.Domain.Repositories.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.DesativarConta
 {
     public class DesativarContaCommandHandler : IRequestHandler<DesativarContaCommand>
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        public DesativarContaCommandHandler(IUsuarioRepository usuarioRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<DesativarContaCommandHandler> _logger;
+
+        public DesativarContaCommandHandler(IUsuarioRepository usuarioRepository, IUnitOfWork unitOfWork, ILogger<DesativarContaCommandHandler> logger)
         {
-            _usuarioRepository = usuarioRepository; 
+            _usuarioRepository = usuarioRepository;
+            _unitOfWork = unitOfWork;
+            _logger = logger;
         }
         public async Task Handle(DesativarContaCommand request, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Iniciando processo de desativação de conta. UsuarioId: {UsuarioId}", request.Id);
+
             var usuario = await _usuarioRepository.ObterPorId(request.Id);
 
             if (usuario == null)
             {                
+                _logger.LogWarning("Falha na desativação. Usuário não encontrado no banco de dados. UsuarioId: {UsuarioId}", request.Id);
                 throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
             }
 
@@ -27,6 +37,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.DesativarConta
                 var existeOutroAdmin = await _usuarioRepository.VerificaMaisDeUmAdminCadastrado();
                 if (!existeOutroAdmin)
                 {             
+                    _logger.LogWarning("Falha na desativação. Não é possível desativar o único administrador cadastrado. UsuarioId: {UsuarioId}", request.Id);
                     throw new DomainException(MensagensDominio.OperacaoDesativarAdminInvalida);
                 }
             }
@@ -34,7 +45,9 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.DesativarConta
 
             _usuarioRepository.Atualizar(usuario);
 
-            await _usuarioRepository.SaveChanges();
+            await _unitOfWork.CommitAsync();
+
+            _logger.LogInformation("Conta do usuário desativada com sucesso. UsuarioId: {UsuarioId}", request.Id);
         }
     }
 }

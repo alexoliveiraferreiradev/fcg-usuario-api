@@ -1,4 +1,5 @@
-﻿using Fcg.Usuarios.Domain.Common;
+﻿using Fcg.Core.Abstractions.Common;
+using Fcg.Usuarios.Domain.Common;
 using Fcg.Usuarios.Domain.Constants;
 
 namespace Fcg.Usuarios.Domain.ValueObjects

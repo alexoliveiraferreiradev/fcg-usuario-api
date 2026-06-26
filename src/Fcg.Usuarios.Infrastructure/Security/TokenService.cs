@@ -1,6 +1,7 @@
+using Fcg.Core.WebApi.Security;
 using Fcg.Usuarios.Application.Common.Interfaces;
-using Fcg.Usuarios.Application.Features.Token;
 using Fcg.Usuarios.Application.Features.Usuarios.Responses;
+using Fcg.Usuarios.Application.Features.Usuarios.Responses.Token;
 using Fcg.Usuarios.Domain.Enum;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -18,8 +19,7 @@ namespace Fcg.Usuarios.Infrastructure.Security
             _jwtSettings  = jwtSettings.Value;
         }
         public async Task<TokenResult> GerarToken(UsuarioResponse usuario)
-        {
-            
+        {            
             var claims = await ObtemClaims(usuario);
             var acessToken = ObtemToken(claims);
             return new TokenResult

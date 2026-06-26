@@ -6,12 +6,10 @@ namespace Fcg.Usuarios.Domain.Repositories.Interfaces
     {
         void Adicionar(Usuario usuario);
         void Atualizar(Usuario usuario);
-        Task SaveChanges();
         Task<Usuario?> ObterPorId(Guid id);
-        Task<Usuario?> ObterPorEmail(string email);
-        Task<bool> VerificaEmailCadastrado(string emailCadastrado);
+        Task<Usuario?> ObterPorEmail(string email);        
         Task<bool> VerificaMaisDeUmAdminCadastrado();
-        Task<bool> VerificaNomeCadastrado(string nomeCadastrado);
+        Task<(bool EmailUsado, bool NomeUsado)> VerificaIndisponibilidade(string email, string nome);        
         Task<bool> VerificaNomeCadastradoParaAlteracao(Guid usuarioId, string nomeCadastrado);
     }
 }

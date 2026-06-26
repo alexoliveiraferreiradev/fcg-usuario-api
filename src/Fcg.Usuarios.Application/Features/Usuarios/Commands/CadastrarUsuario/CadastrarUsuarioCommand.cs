@@ -8,5 +8,5 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario
         string Email,
         string Senha,
         string ConfirmacaoSenha
-    ) : IRequest<LoginResponse>;
+    ) : IRequest<Guid>;
 }

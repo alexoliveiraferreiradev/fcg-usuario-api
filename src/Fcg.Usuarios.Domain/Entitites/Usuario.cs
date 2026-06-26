@@ -1,5 +1,5 @@
-using Fcg.Usuarios.Domain.Common;
-using Fcg.Usuarios.Domain.Common.Exceptions;
+using Fcg.Core.Abstractions.Common;
+using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Usuarios.Domain.Constants;
 using Fcg.Usuarios.Domain.Enum;
 using Fcg.Usuarios.Domain.ValueObjects;
