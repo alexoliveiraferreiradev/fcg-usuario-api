@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Fcg.Usuario.API.Endpoint
+namespace Fcg.Usuario.API.Endpoint.Usuario
 {
     public static class DesativarContaEndpoint
     {

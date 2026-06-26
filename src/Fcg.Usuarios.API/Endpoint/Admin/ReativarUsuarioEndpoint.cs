@@ -1,11 +1,11 @@
-﻿using Fcg.Usuarios.Application.Features.Usuarios.Commands.ReativarConta;
+﻿using Fcg.Usuarios.Application.Features.Admin.Commands.ReativarConta;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Fcg.Usuario.API.Endpoint
+namespace Fcg.Usuario.API.Endpoint.Admin
 {
-    public static class ReativarContaEndpoint
+    public static class ReativarUsuarioEndpoint
     {
         public static void MapReativarContaEndpoints(this IEndpointRouteBuilder app)
         {

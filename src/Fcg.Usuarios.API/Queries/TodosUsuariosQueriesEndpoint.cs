@@ -1,19 +1,17 @@
-﻿using Fcg.Usuarios.Application.Features.Usuarios.Queries.ObterTodosUsuarios;
+﻿using Fcg.Usuarios.Application.Features.Admin.Queries.ObterTodosUsuarios;
 using Fcg.Usuarios.Application.Features.Usuarios.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fcg.Usuario.API.Queries
 {
-    public static class UsuarioQueriesEndpoints
+    public static class TodosUsuariosQueriesEndpoint
     {
         public static void MapListaUsuarioEndpoints(this IEndpointRouteBuilder app)
         {
             var group = app.MapGroup("/api/usuarios").RequireAuthorization().WithTags("Gerencimanto de Usuários");
 
             group.MapGet("obtem-todos", async (
-                [FromQuery] int? pagina,
-                [FromQuery] int? limite,
                 [FromServices] ISender mediator,
                 CancellationToken CancellationToken) =>
             {

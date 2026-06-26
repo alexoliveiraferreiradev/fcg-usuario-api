@@ -1,9 +1,9 @@
-﻿using Fcg.Usuarios.Application.Features.Usuarios.Commands.RebaixarUsuarioParaJogador;
+﻿using Fcg.Usuarios.Application.Features.Admin.Commands.RebaixarUsuarioParaJogador;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Fcg.Usuario.API.Endpoint
+namespace Fcg.Usuario.API.Endpoint.Admin
 {
     public static class RebaixarUsuarioEndpoint
     {

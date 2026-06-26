@@ -1,5 +1,7 @@
 using Fcg.Core.Abstractions.Interfaces;
-using Fcg.Usuario.API.Endpoint;
+using Fcg.Usuario.API.Endpoint.Admin;
+using Fcg.Usuario.API.Endpoint.Usuario;
+using Fcg.Usuario.API.Queries;
 using Fcg.Usuarios.Application.Common.Interfaces;
 using Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario;
 using Fcg.Usuarios.Domain.Common.Interfaces;
@@ -7,6 +9,7 @@ using Fcg.Usuarios.Domain.Repositories.Interfaces;
 using Fcg.Usuarios.Infrastructure.Persistance;
 using Fcg.Usuarios.Infrastructure.Repository;
 using Fcg.Usuarios.Infrastructure.Security;
+using Fcg.Core.WebApi.Security;
 using FluentValidation;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +19,6 @@ using System.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
-
 
 builder.Services.AddSwaggerGen(options=> {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -59,8 +60,10 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(CadastrarUsuarioCommand).Assembly);
 });
 
-// Registra automaticamente todos os Validators da camada de Application
+
 builder.Services.AddValidatorsFromAssembly(typeof(CadastrarUsuarioCommand).Assembly);
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
 
 builder.Services.AddScoped<IDbConnection>(sp=> sp.GetRequiredService<UsuarioDbContext>().Database.GetDbConnection());
@@ -73,6 +76,17 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 var app = builder.Build();
 
 app.MapNovaContaEndpoints();
+app.MapAutenticarEndpoints();
+app.MapDesativarContaEndpoints();
+app.MapAtualizaContaEndpoints();
+
+app.MapDesativarUsuarioEndpoints(); 
+app.MapPromoverContaEndpoints();
+app.MapReativarContaEndpoints();
+app.MapRabaixarContaEndpoints();
+app.MapListaUsuarioEndpoints();
+app.MapObtemUsuarioEndpoints();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

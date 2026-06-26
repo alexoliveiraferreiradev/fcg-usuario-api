@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Fcg.Usuario.API.Endpoint
+namespace Fcg.Usuario.API.Endpoint.Usuario
 {
     public static class AtualizarContaEndpoint
     {
@@ -39,7 +39,8 @@ namespace Fcg.Usuario.API.Endpoint
             .Produces<UsuarioResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status404NotFound);
+            .Produces(StatusCodes.Status404NotFound)
+            .AddEndpointFilter<ValidationFilter<AtualizarUsuarioCommand>>(); 
         }
     }
 }
