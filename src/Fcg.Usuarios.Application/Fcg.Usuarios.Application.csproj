@@ -8,7 +8,9 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="Dapper" Version="2.1.79" />   
+    <PackageReference Include="Dapper" Version="2.1.79" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />   
     <PackageReference Include="MassTransit.Abstractions" Version="9.1.2" />
     <PackageReference Include="MediatR" Version="14.1.0" />
   </ItemGroup>
