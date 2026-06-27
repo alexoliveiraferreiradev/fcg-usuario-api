@@ -47,11 +47,13 @@ builder.Services.AddMassTransit(x =>
     x.AddEntityFrameworkOutbox<UsuarioDbContext>(o =>
     {
         o.UseSqlServer();
+        o.UseBusOutbox();
     });
 
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(builder.Configuration.GetConnectionString("RabbitMq"));
+        cfg.ConfigureEndpoints(context);
     });
 });
 
