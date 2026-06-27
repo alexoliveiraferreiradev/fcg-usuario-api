@@ -1,7 +1,6 @@
 using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Usuario.API.Endpoint.Admin;
 using Fcg.Usuario.API.Endpoint.Usuario;
-using Fcg.Usuario.API.Queries;
 using Fcg.Usuarios.Application.Common.Interfaces;
 using Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario;
 using Fcg.Usuarios.Domain.Common.Interfaces;
@@ -77,18 +76,14 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 var app = builder.Build();
 
-app.MapNovaContaEndpoints();
-app.MapAutenticarEndpoints();
-app.MapDesativarContaEndpoints();
-app.MapAtualizaContaEndpoints();
+#region Conta - Jogador/Admin
+app.MapAcessoUsuarioEndpoint();
+app.MapGerenciaContaEndpoints();
+#endregion 
 
-app.MapDesativarUsuarioEndpoints(); 
-app.MapPromoverContaEndpoints();
-app.MapReativarContaEndpoints();
-app.MapRabaixarContaEndpoints();
-app.MapListaUsuarioEndpoints();
-app.MapObtemUsuarioEndpoints();
-
+#region Admin - Gerenciamento de Usuários
+app.MapGerenciaUsuarioEndpoints();
+#endregion
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
