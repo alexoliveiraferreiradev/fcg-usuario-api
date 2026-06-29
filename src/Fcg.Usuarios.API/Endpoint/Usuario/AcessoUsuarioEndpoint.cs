@@ -14,13 +14,11 @@ namespace Fcg.Usuario.API.Endpoint.Usuario
 
             group.MapPost("/login", AutenticarConta)
                 .Produces<LoginResponse>(StatusCodes.Status200OK)
-                .Produces(StatusCodes.Status404NotFound)
-                .AddEndpointFilter<ValidationFilter<AutenticarUsuarioCommand>>();
+                .Produces(StatusCodes.Status404NotFound);
 
             group.MapPost("/cadastrar", CadastrarConta)
                 .Produces(StatusCodes.Status201Created)
-                .Produces(StatusCodes.Status400BadRequest)
-                .AddEndpointFilter<ValidationFilter<CadastrarUsuarioCommand>>();
+                .Produces(StatusCodes.Status400BadRequest);
         }
 
         private static async Task<IResult> AutenticarConta(

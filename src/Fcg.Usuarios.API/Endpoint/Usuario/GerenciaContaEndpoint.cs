@@ -18,8 +18,7 @@ namespace Fcg.Usuario.API.Endpoint.Usuario
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status400BadRequest)
                 .Produces(StatusCodes.Status401Unauthorized)
-                .Produces(StatusCodes.Status404NotFound)
-                .AddEndpointFilter<ValidationFilter<AtualizarUsuarioCommand>>();
+                .Produces(StatusCodes.Status404NotFound);
          
             group.MapPut("desativar-conta", DesativarConta)
                 .Produces(StatusCodes.Status401Unauthorized)
