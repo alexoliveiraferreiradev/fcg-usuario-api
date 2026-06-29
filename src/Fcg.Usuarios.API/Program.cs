@@ -65,6 +65,7 @@ builder.Services.AddValidatorsFromAssembly(typeof(CadastrarUsuarioCommand).Assem
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
+builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IDbConnection>(sp=> sp.GetRequiredService<UsuarioDbContext>().Database.GetDbConnection());
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
