@@ -3,7 +3,7 @@ using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Core.Abstractions.MessageContracts;
 using Fcg.Usuarios.Application.Common.Interfaces;
 using Fcg.Usuarios.Domain.Common.Interfaces;
-using Fcg.Usuarios.Domain.Constants;
+using Fcg.Core.Abstractions.Resources;
 using Fcg.Usuarios.Domain.Entitites;
 using Fcg.Usuarios.Domain.Repositories.Interfaces;
 using Fcg.Usuarios.Domain.ValueObjects;

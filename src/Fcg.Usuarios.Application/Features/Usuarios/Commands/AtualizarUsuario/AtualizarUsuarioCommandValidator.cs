@@ -1,5 +1,5 @@
 using FluentValidation;
-using Fcg.Usuarios.Domain.Constants;
+using Fcg.Core.Abstractions.Resources;
 
 namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.AtualizarUsuario
 {

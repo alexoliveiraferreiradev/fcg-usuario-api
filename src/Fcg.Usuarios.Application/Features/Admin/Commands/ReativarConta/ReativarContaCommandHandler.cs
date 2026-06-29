@@ -1,6 +1,6 @@
 using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
-using Fcg.Usuarios.Domain.Constants;
+using Fcg.Core.Abstractions.Resources;
 using Fcg.Usuarios.Domain.Repositories.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;

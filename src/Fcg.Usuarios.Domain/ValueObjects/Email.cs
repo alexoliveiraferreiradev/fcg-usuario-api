@@ -1,5 +1,5 @@
 ﻿using Fcg.Core.Abstractions.Common;
-using Fcg.Usuarios.Domain.Constants;
+using Fcg.Core.Abstractions.Resources;
 
 namespace Fcg.Usuarios.Domain.ValueObjects
 {

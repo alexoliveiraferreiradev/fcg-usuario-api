@@ -1,5 +1,5 @@
+using Fcg.Core.Abstractions.Resources;
 using FluentValidation;
-using Fcg.Usuarios.Domain.Constants;
 
 namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario
 {
