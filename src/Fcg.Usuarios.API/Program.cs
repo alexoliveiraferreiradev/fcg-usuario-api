@@ -1,14 +1,16 @@
+using Dapper;
 using Fcg.Core.Abstractions.Interfaces;
+using Fcg.Core.WebApi.Security;
 using Fcg.Usuario.API.Endpoint.Admin;
 using Fcg.Usuario.API.Endpoint.Usuario;
 using Fcg.Usuarios.Application.Common.Interfaces;
 using Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario;
 using Fcg.Usuarios.Domain.Common.Interfaces;
 using Fcg.Usuarios.Domain.Repositories.Interfaces;
+using Fcg.Usuarios.Infrastructure.DapperHandlers;
 using Fcg.Usuarios.Infrastructure.Persistance;
 using Fcg.Usuarios.Infrastructure.Repository;
 using Fcg.Usuarios.Infrastructure.Security;
-using Fcg.Core.WebApi.Security;
 using FluentValidation;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +64,10 @@ builder.Services.AddMediatR(cfg =>
 
 
 builder.Services.AddValidatorsFromAssembly(typeof(CadastrarUsuarioCommand).Assembly);
+
+SqlMapper.AddTypeHandler(new NomeTypeHandler());
+SqlMapper.AddTypeHandler(new EmailTypeHandler());
+SqlMapper.AddTypeHandler(new SenhaTypeHandler());
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
