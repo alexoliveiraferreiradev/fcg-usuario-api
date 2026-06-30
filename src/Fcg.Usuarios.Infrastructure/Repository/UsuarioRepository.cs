@@ -25,9 +25,20 @@ namespace Fcg.Usuarios.Infrastructure.Repository
 
         public async Task<Usuario?> ObterPorEmail(string email)
         {
-            return await _dbContext.Usuarios
-                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.EmailUsuario.Valor == email);
+            var connection = _dbContext.Database.GetDbConnection();
+            const string sql = @"SELECT 
+                                Id, 
+                                Nome as NomeUsuario,
+                                Email as EmailUsuario,
+                                Senha,
+                                Perfil,
+                                Ativo,
+                                DataCadastro,
+                                DataAlteracao,MotivoDesativacao
+                                from Usuarios where Email = @Email";
+
+
+            return await connection.QueryFirstOrDefaultAsync<Usuario>(sql,new {Email =  email});  
         }
 
         public async Task<Usuario?> ObterPorId(Guid id)
