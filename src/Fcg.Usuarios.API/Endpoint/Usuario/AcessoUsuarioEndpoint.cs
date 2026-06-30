@@ -10,7 +10,7 @@ namespace Fcg.Usuario.API.Endpoint.Usuario
     {
         public static void MapAcessoUsuarioEndpoint(this WebApplication app)
         {
-            var group = app.MapGroup("/api/usuario/acesso").WithTags("Autenticação do Usuário");
+            var group = app.MapGroup("/api/usuario").WithTags("Autenticação do Usuário");
 
             group.MapPost("/login", AutenticarConta)
                 .Produces<LoginResponse>(StatusCodes.Status200OK)
