@@ -22,13 +22,13 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.DesativarConta
         }
         public async Task Handle(DesativarContaCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Iniciando processo de desativação de conta. UsuarioId: {UsuarioId}", request.Id);
+            _logger.LogInformation("[UsuarioAPI] Iniciando processo de desativação de conta. UsuarioId: {UsuarioId}", request.Id);
 
             var usuario = await _usuarioRepository.ObterPorId(request.Id);
 
             if (usuario == null)
             {                
-                _logger.LogWarning("Falha na desativação. Usuário não encontrado no banco de dados. UsuarioId: {UsuarioId}", request.Id);
+                _logger.LogWarning("[UsuarioAPI] Falha na desativação. Usuário não encontrado no banco de dados. UsuarioId: {UsuarioId}", request.Id);
                 throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
             }
 
@@ -37,7 +37,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.DesativarConta
                 var existeOutroAdmin = await _usuarioRepository.VerificaMaisDeUmAdminCadastrado();
                 if (!existeOutroAdmin)
                 {             
-                    _logger.LogWarning("Falha na desativação. Não é possível desativar o único administrador cadastrado. UsuarioId: {UsuarioId}", request.Id);
+                    _logger.LogWarning("[UsuarioAPI] Falha na desativação. Não é possível desativar o único administrador cadastrado. UsuarioId: {UsuarioId}", request.Id);
                     throw new DomainException(MensagensDominio.OperacaoDesativarAdminInvalida);
                 }
             }
@@ -47,7 +47,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.DesativarConta
 
             await _unitOfWork.CommitAsync();
 
-            _logger.LogInformation("Conta do usuário desativada com sucesso. UsuarioId: {UsuarioId}", request.Id);
+            _logger.LogInformation("[UsuarioAPI] Conta do usuário desativada com sucesso. UsuarioId: {UsuarioId}", request.Id);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Fcg.Core.Abstractions.Common.Exceptions;
+using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Core.Abstractions.MessageContracts;
 using Fcg.Usuarios.Application.Common.Interfaces;
@@ -34,7 +34,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario
         }
         public async Task<Guid> Handle(CadastrarUsuarioCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Iniciando tentativa de cadastro de novo usuário. Email: {Email}", request.Email);
+            _logger.LogInformation("[UsuarioAPI] Iniciando tentativa de cadastro de novo usuário. Email: {Email}", request.Email);
             var nomeValueObject = new Nome(request.Nome);
             var emailValueObject = new Email(request.Email);
             var indisponivel = await _usuarioRepository.VerificaIndisponibilidade(request.Email, request.Nome);
@@ -55,9 +55,9 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.CadastrarUsuario
 
             await _unitOfWork.CommitAsync();
 
-            _logger.LogInformation("Usuário {UsuarioId} cadastrado com sucesso no banco de dados com o perfil base.", usuario.Id);
+            _logger.LogInformation("[UsuarioAPI] Usuário {UsuarioId} cadastrado com sucesso no banco de dados com o perfil base.", usuario.Id);
 
-            _logger.LogInformation("Processo de cadastro finalizado. Usuário {UsuarioId} pronto para login.", usuario.Id);
+            _logger.LogInformation("[UsuarioAPI] Processo de cadastro finalizado. Usuário {UsuarioId} pronto para login.", usuario.Id);
 
             return usuario.Id;
         }

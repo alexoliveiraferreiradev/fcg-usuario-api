@@ -28,18 +28,18 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.AtualizarUsuario
         }
         public async Task<UsuarioResponse> Handle(AtualizarUsuarioCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Iniciando processo de atualização de usuário. UsuarioId: {UsuarioId}", request.UsuarioId);
+            _logger.LogInformation("[UsuarioAPI] Iniciando processo de atualização de usuário. UsuarioId: {UsuarioId}", request.UsuarioId);
 
             var usuario = await _usuarioRepository.ObterPorId(request.UsuarioId);
             if (usuario == null) 
             {
-                _logger.LogWarning("Falha na atualização. Usuário não encontrado no banco de dados. UsuarioId: {UsuarioId}", request.UsuarioId);
+                _logger.LogWarning("[UsuarioAPI] Falha na atualização. Usuário não encontrado no banco de dados. UsuarioId: {UsuarioId}", request.UsuarioId);
                 throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
             }
 
             if (await _usuarioRepository.VerificaNomeCadastradoParaAlteracao(request.UsuarioId, request.NomeUsuario))
             {                
-                _logger.LogWarning("Falha na atualização. O nome de usuário '{NomeUsuario}' já está em uso por outra conta. UsuarioId: {UsuarioId}", request.NomeUsuario, request.UsuarioId);
+                _logger.LogWarning("[UsuarioAPI] Falha na atualização. O nome de usuário '{NomeUsuario}' já está em uso por outra conta. UsuarioId: {UsuarioId}", request.NomeUsuario, request.UsuarioId);
                 throw new DomainException(MensagensDominio.NomeUsuarioJaCadastrado);
             }
 
@@ -57,7 +57,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.AtualizarUsuario
 
             await _unitOfWork.CommitAsync();
 
-            _logger.LogInformation("Usuário atualizado com sucesso. UsuarioId: {UsuarioId}", request.UsuarioId);
+            _logger.LogInformation("[UsuarioAPI] Usuário atualizado com sucesso. UsuarioId: {UsuarioId}", request.UsuarioId);
 
             return new UsuarioResponse
             {

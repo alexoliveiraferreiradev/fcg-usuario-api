@@ -21,12 +21,12 @@ namespace Fcg.Usuarios.Application.Features.Admin.Commands.ReativarConta
         }
         public async Task Handle(ReativarContaCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Iniciando processo de reativação de conta. UsuarioId: {UsuarioId}", request.UsuarioId);
+            _logger.LogInformation("[UsuarioAPI] Iniciando processo de reativação de conta. UsuarioId: {UsuarioId}", request.UsuarioId);
 
             var usuario = await _usuarioRepository.ObterPorId(request.UsuarioId);
             if (usuario == null)
             {                
-                _logger.LogWarning("Falha na reativação. Usuário não encontrado no banco de dados. UsuarioId: {UsuarioId}", request.UsuarioId);
+                _logger.LogWarning("[UsuarioAPI] Falha na reativação. Usuário não encontrado no banco de dados. UsuarioId: {UsuarioId}", request.UsuarioId);
                 throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
             }
             usuario.Reativar();
@@ -35,7 +35,7 @@ namespace Fcg.Usuarios.Application.Features.Admin.Commands.ReativarConta
 
             await _unitOfWork.CommitAsync();
 
-            _logger.LogInformation("Conta reativada com sucesso. UsuarioId: {UsuarioId}", request.UsuarioId);
+            _logger.LogInformation("[UsuarioAPI] Conta reativada com sucesso. UsuarioId: {UsuarioId}", request.UsuarioId);
         }
     }
 }

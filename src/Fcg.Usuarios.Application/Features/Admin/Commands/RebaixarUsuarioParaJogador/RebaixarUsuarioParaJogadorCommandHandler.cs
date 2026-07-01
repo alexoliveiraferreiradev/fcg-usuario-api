@@ -23,11 +23,11 @@ namespace Fcg.Usuarios.Application.Features.Admin.Commands.RebaixarUsuarioParaJo
         }
         public async Task<UsuarioResponse> Handle(RebaixarUsuarioParaJogadorCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Iniciando processo de rebaixamento de usuário para jogador. UsuarioId: {UsuarioId}, OperadorId: {OperadorId}", request.Id, request.IdOperador);
+            _logger.LogInformation("[UsuarioAPI] Iniciando processo de rebaixamento de usuário para jogador. UsuarioId: {UsuarioId}, OperadorId: {OperadorId}", request.Id, request.IdOperador);
 
             if (request.Id == request.IdOperador)
             {                
-                _logger.LogWarning("Falha no rebaixamento. Um administrador não pode rebaixar a própria conta. OperadorId: {OperadorId}", request.IdOperador);
+                _logger.LogWarning("[UsuarioAPI] Falha no rebaixamento. Um administrador não pode rebaixar a própria conta. OperadorId: {OperadorId}", request.IdOperador);
                 throw new DomainException(MensagensDominio.OperacaoRebaixarInvalida);
             }
 
@@ -35,19 +35,19 @@ namespace Fcg.Usuarios.Application.Features.Admin.Commands.RebaixarUsuarioParaJo
 
             if (usuario == null)
             {
-                _logger.LogWarning("Falha no rebaixamento. Usuário alvo não encontrado. UsuarioId: {UsuarioId}", request.Id);
+                _logger.LogWarning("[UsuarioAPI] Falha no rebaixamento. Usuário alvo não encontrado. UsuarioId: {UsuarioId}", request.Id);
                 throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
             }
 
             if (!usuario.Ativo)
             {
-                _logger.LogWarning("Falha no rebaixamento. Usuário está inativo. UsuarioId: {UsuarioId}", request.Id);
+                _logger.LogWarning("[UsuarioAPI] Falha no rebaixamento. Usuário está inativo. UsuarioId: {UsuarioId}", request.Id);
                 throw new DomainException(MensagensDominio.UsuarioInativo);
             }
 
             if (usuario.Perfil.Equals(TipoUsuario.Jogador))
             {                
-                _logger.LogWarning("Falha no rebaixamento. O usuário alvo já é um jogador. UsuarioId: {UsuarioId}", request.Id);
+                _logger.LogWarning("[UsuarioAPI] Falha no rebaixamento. O usuário alvo já é um jogador. UsuarioId: {UsuarioId}", request.Id);
                 throw new DomainException(MensagensDominio.UsuarioPerfilRebaixarInvalido);
             }
 
@@ -57,7 +57,7 @@ namespace Fcg.Usuarios.Application.Features.Admin.Commands.RebaixarUsuarioParaJo
 
             await _unitOfWork.CommitAsync();
 
-            _logger.LogInformation("Usuário rebaixado para jogador com sucesso. UsuarioId: {UsuarioId}", request.Id);
+            _logger.LogInformation("[UsuarioAPI] Usuário rebaixado para jogador com sucesso. UsuarioId: {UsuarioId}", request.Id);
 
             return new UsuarioResponse
             {

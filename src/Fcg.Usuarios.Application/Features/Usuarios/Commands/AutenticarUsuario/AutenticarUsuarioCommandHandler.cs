@@ -1,4 +1,4 @@
-﻿using Fcg.Core.Abstractions.Common.Exceptions;
+using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Resources;
 using Fcg.Usuarios.Application.Common.Interfaces;
 using Fcg.Usuarios.Application.Features.Usuarios.Responses;
@@ -29,26 +29,26 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.AutenticarUsuario
         }
         public async Task<LoginResponse> Handle(AutenticarUsuarioCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Iniciando tentativa de autenticação para o e-mail {Email}.", request.Email);
+            _logger.LogInformation("[UsuarioAPI] Iniciando tentativa de autenticação para o e-mail {Email}.", request.Email);
 
             var usuario = await _usuarioRepository.ObterPorEmail(request.Email);
             if (usuario == null)
             {
-                _logger.LogWarning("Falha de autenticação: E-mail {Email} não encontrado no banco de dados.", request.Email);
+                _logger.LogWarning("[UsuarioAPI] Falha de autenticação: E-mail {Email} não encontrado no banco de dados.", request.Email);
 
                 throw new DomainException(MensagensDominio.CrendenciasInvalidas);
             }
 
             if (!usuario.Ativo)
             {
-                _logger.LogWarning("Falha de autenticação: A conta vinculada ao e-mail {Email} (ID: {UsuarioId}) encontra-se inativa.", request.Email, usuario.Id);
+                _logger.LogWarning("[UsuarioAPI] Falha de autenticação: A conta vinculada ao e-mail {Email} (ID: {UsuarioId}) encontra-se inativa.", request.Email, usuario.Id);
                 throw new DomainException(MensagensDominio.UsuarioInativo);
             }
 
             bool senhaValida = _passwordHasher.VerifyPassword(request.Senha, usuario.Senha.Hash);
             if (!senhaValida)
             {
-                _logger.LogWarning("Falha de autenticação: Senha inválida fornecida para o e-mail {Email} (ID: {UsuarioId}).", request.Email, usuario.Id);
+                _logger.LogWarning("[UsuarioAPI] Falha de autenticação: Senha inválida fornecida para o e-mail {Email} (ID: {UsuarioId}).", request.Email, usuario.Id);
                 throw new DomainException(MensagensDominio.CrendenciasInvalidas);
             }
 
@@ -62,7 +62,7 @@ namespace Fcg.Usuarios.Application.Features.Usuarios.Commands.AutenticarUsuario
 
             var tokenResult = await _tokenService.GerarToken(usuarioResponse);
 
-            _logger.LogInformation("Login realizado com sucesso. UsuarioId: {UserId}, Email: {Email}", usuario.Id, usuario.EmailUsuario.Valor);
+            _logger.LogInformation("[UsuarioAPI] Login realizado com sucesso. UsuarioId: {UserId}, Email: {Email}", usuario.Id, usuario.EmailUsuario.Valor);
 
             return new LoginResponse
             {
