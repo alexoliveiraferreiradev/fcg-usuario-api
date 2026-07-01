@@ -8,9 +8,9 @@ namespace Fcg.Usuarios.Domain.Tests.Entitites
 {
     public class UsuarioTests
     {
-        private Nome ObterNomeValido() => new Nome("John Doe");
-        private Email ObterEmailValido() => new Email("john.doe@email.com");
-        private Senha ObterSenhaValida() => new Senha("StrongPassword123!");
+        private Nome ObterNomeValido() => new Nome("Usuario Teste");
+        private Email ObterEmailValido() => new Email("usuairio.teste@email.com");
+        private Senha ObterSenhaValida() => new Senha("Senha@123");
 
         #region Construtor Tests
 
