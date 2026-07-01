@@ -24,30 +24,30 @@ namespace Fcg.Usuarios.Application.Features.Admin.Commands.PromoverUsuarioParaAd
 
         public async Task<UsuarioResponse> Handle(PromoverUsuarioParaAdminCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Iniciando processo de promoção de usuário para administrador. UsuarioId: {UsuarioId}", request.Id);
+            _logger.LogInformation("[UsuarioAPI] Iniciando processo de promoção de usuário para administrador. UsuarioId: {UsuarioId}", request.Id);
 
             var usuario = await _usuarioRepository.ObterPorId(request.Id);
             if (usuario == null)
             {
-                _logger.LogWarning("Falha na promoção. Usuário não encontrado. UsuarioId: {UsuarioId}", request.Id);
+                _logger.LogWarning("[UsuarioAPI] Falha na promoção. Usuário não encontrado. UsuarioId: {UsuarioId}", request.Id);
                 throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
             }
 
             if (request.Id == request.IdOperador)
             {
-                _logger.LogWarning("Tentativa de autopromoção bloqueada. AdminId: {AdminId}", request.IdOperador);
+                _logger.LogWarning("[UsuarioAPI] Tentativa de autopromoção bloqueada. AdminId: {AdminId}", request.IdOperador);
                 throw new DomainException("Um administrador não pode promover a si próprio.");
             }
 
             if (!usuario.Ativo)
             {
-                _logger.LogWarning("Falha na promoção. Usuário está inativo. UsuarioId: {UsuarioId}", request.Id);
+                _logger.LogWarning("[UsuarioAPI] Falha na promoção. Usuário está inativo. UsuarioId: {UsuarioId}", request.Id);
                 throw new DomainException(MensagensDominio.UsuarioInativo);
             }
 
             if (usuario.Perfil.Equals(TipoUsuario.Administrador))
             {
-                _logger.LogWarning("Falha na promoção. O usuário já é um administrador. UsuarioId: {UsuarioId}", request.Id);
+                _logger.LogWarning("[UsuarioAPI] Falha na promoção. O usuário já é um administrador. UsuarioId: {UsuarioId}", request.Id);
                 throw new DomainException(MensagensDominio.UsuarioPerfilRebaixarInvalido);
             }
 
@@ -57,7 +57,7 @@ namespace Fcg.Usuarios.Application.Features.Admin.Commands.PromoverUsuarioParaAd
 
             await _unitOfWork.CommitAsync();
 
-            _logger.LogWarning("[AUDITORIA] Usuário {TargetUserId} promovido a Administrador pelo operador {AdminId}.", request.Id, request.IdOperador);
+            _logger.LogWarning("[UsuarioAPI] [AUDITORIA] Usuário {TargetUserId} promovido a Administrador pelo operador {AdminId}.", request.Id, request.IdOperador);
 
             return new UsuarioResponse
             {

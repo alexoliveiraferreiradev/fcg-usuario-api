@@ -21,19 +21,19 @@ namespace Fcg.Usuarios.Application.Features.Admin.Commands.DesativarUsuario
         }
         public async Task Handle(DesativarUsuarioCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Iniciando processo de desativação de usuário por um operador. UsuarioId: {UsuarioId}, OperadorId: {OperadorId}", request.Id, request.IdOperador);
+            _logger.LogInformation("[UsuarioAPI] Iniciando processo de desativação de usuário por um operador. UsuarioId: {UsuarioId}, OperadorId: {OperadorId}", request.Id, request.IdOperador);
 
             var usuarioDesativar = await _usuarioRepository.ObterPorId(request.Id);
 
             if(request.Id == request.IdOperador)
             {
-                _logger.LogWarning("Tentativa de auto-inativação bloqueada para o operador {IdOperador}.", request.IdOperador);
+                _logger.LogWarning("[UsuarioAPI] Tentativa de auto-inativação bloqueada para o operador {IdOperador}.", request.IdOperador);
                 throw new DomainException(MensagensDominio.OperacaoDesativarInvalida);
             }
 
             if (usuarioDesativar == null)
             {
-                _logger.LogWarning("Falha na desativação. Usuário alvo não encontrado. UsuarioId: {UsuarioId}", request.Id);
+                _logger.LogWarning("[UsuarioAPI] Falha na desativação. Usuário alvo não encontrado. UsuarioId: {UsuarioId}", request.Id);
                 throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
             }
 
@@ -41,7 +41,7 @@ namespace Fcg.Usuarios.Application.Features.Admin.Commands.DesativarUsuario
 
             await _unitOfWork.CommitAsync();
 
-            _logger.LogWarning("Usuário desativado com sucesso pelo operador. UsuarioId: {UsuarioId}, OperadorId: {OperadorId}, Motivo: {Motivo}", request.Id, request.IdOperador, request.MotivoDelecao);
+            _logger.LogWarning("[UsuarioAPI] Usuário desativado com sucesso pelo operador. UsuarioId: {UsuarioId}, OperadorId: {OperadorId}, Motivo: {Motivo}", request.Id, request.IdOperador, request.MotivoDelecao);
         }
     }
 }
