@@ -9,25 +9,25 @@ namespace Fcg.Users.Application.Features.Users.Commands.CadastrarUser
         {
             
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage(MensagensDominio.UsuarioNomeObrigatorio)
-                .Length(3, 50).WithMessage(MensagensDominio.UsuarioTamanhoNomeInvalido);
+                .NotEmpty().WithMessage(DomainMessages.UserNameRequired)
+                .Length(3, 50).WithMessage(DomainMessages.UserNameLengthInvalid);
 
             
             RuleFor(x => x.Email)
-                .NotEmpty().WithMessage(MensagensDominio.UsuarioEmailObrigatorio)
-                .EmailAddress().WithMessage(MensagensDominio.EmailInvalido)
-                .Length(7, 100).WithMessage(MensagensDominio.EmailTamanhoInvalido);
+                .NotEmpty().WithMessage(DomainMessages.UserEmailRequired)
+                .EmailAddress().WithMessage(DomainMessages.EmailInvalid)
+                .Length(7, 100).WithMessage(DomainMessages.EmailLengthInvalid);
 
             
             RuleFor(x => x.Password)
-                .NotEmpty().WithMessage(MensagensDominio.UsuarioSenhaObrigatoria)
-                .MinimumLength(8).WithMessage(MensagensDominio.SenhaTamanhoInvalido)
-                .MaximumLength(60).WithMessage(MensagensDominio.SenhaTamanhoInvalido);
+                .NotEmpty().WithMessage(DomainMessages.UserPasswordRequired)
+                .MinimumLength(8).WithMessage(DomainMessages.PasswordLengthInvalid)
+                .MaximumLength(60).WithMessage(DomainMessages.PasswordLengthInvalid);
 
             
             RuleFor(x => x.ConfirmacaoSenha)
-                .NotEmpty().WithMessage(MensagensDominio.UsuarioConfirmacaoSenhaObrigatoria)
-                .Equal(x => x.Password).WithMessage(MensagensDominio.UsuarioSenhaConfirmacaoDiferente);
+                .NotEmpty().WithMessage(DomainMessages.UserPasswordConfirmationRequired)
+                .Equal(x => x.Password).WithMessage(DomainMessages.UserPasswordConfirmationMismatch);
         }
     }
 }

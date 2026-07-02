@@ -9,10 +9,10 @@ namespace Fcg.Users.Domain.ValueObjects
 
         public Email(string valor)
         {
-            AssertionConcern.AssertArgumentRealValues(valor, MensagensDominio.EmailNaoReal);
-            AssertionConcern.AssertArgumentEmpty(valor, MensagensDominio.UsuarioEmailObrigatorio);
-            AssertionConcern.AssertArgumentEmailFormat(valor, MensagensDominio.EmailInvalido);
-            AssertionConcern.AssertArgumentLength(valor, 7, 100, MensagensDominio.EmailTamanhoInvalido);
+            AssertionConcern.AssertArgumentRealValues(valor, DomainMessages.EmailNotReal);
+            AssertionConcern.AssertArgumentEmpty(valor, DomainMessages.UserEmailRequired);
+            AssertionConcern.AssertArgumentEmailFormat(valor, DomainMessages.EmailInvalid);
+            AssertionConcern.AssertArgumentLength(valor, 7, 100, DomainMessages.EmailLengthInvalid);
             Valor = valor;
         }
 

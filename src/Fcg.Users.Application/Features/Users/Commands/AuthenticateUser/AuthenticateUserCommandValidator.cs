@@ -8,11 +8,11 @@ namespace Fcg.Users.Application.Features.Users.Commands.AutenticarUser
         public AutenticarUserCommandValidator()
         {
             RuleFor(x => x.Email)
-                .NotEmpty().WithMessage(MensagensDominio.UsuarioEmailObrigatorio)
-                .EmailAddress().WithMessage(MensagensDominio.EmailInvalido);
+                .NotEmpty().WithMessage(DomainMessages.UserEmailRequired)
+                .EmailAddress().WithMessage(DomainMessages.EmailInvalid);
 
             RuleFor(x => x.Password)
-                .NotEmpty().WithMessage(MensagensDominio.UsuarioSenhaObrigatoria);
+                .NotEmpty().WithMessage(DomainMessages.UserPasswordRequired);
         }
     }
 }

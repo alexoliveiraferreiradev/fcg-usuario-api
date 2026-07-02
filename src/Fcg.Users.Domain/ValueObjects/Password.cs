@@ -9,13 +9,13 @@ namespace Fcg.Users.Domain.ValueObjects
 
         public Password(string hash)
         {
-            AssertionConcern.AssertArgumentEmpty(hash, MensagensDominio.UsuarioSenhaObrigatoria);
+            AssertionConcern.AssertArgumentEmpty(hash, DomainMessages.UserPasswordRequired);
             Hash = hash;
         }
         public Password(string Password,string hash)
         {          
-            AssertionConcern.AssertArgumentLength(Password, 8, 60, MensagensDominio.SenhaTamanhoInvalido);          
-            AssertionConcern.AssertArgumentEmpty(hash, MensagensDominio.UsuarioSenhaObrigatoria);
+            AssertionConcern.AssertArgumentLength(Password, 8, 60, DomainMessages.PasswordLengthInvalid);          
+            AssertionConcern.AssertArgumentEmpty(hash, DomainMessages.UserPasswordRequired);
             Hash = hash;
         }
 

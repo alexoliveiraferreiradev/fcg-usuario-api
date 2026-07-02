@@ -34,16 +34,16 @@ namespace Fcg.Users.Application.Features.Users.Commands.AtualizarUser
             if (User == null) 
             {
                 _logger.LogWarning("[UserAPI] Falha na atualização. Usuário não encontrado no banco de dados. UserId: {UserId}", request.UserId);
-                throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
+                throw new DomainException(DomainMessages.UserNotFound);
             }
 
             if (await _UserRepository.CheckNameInUseAsync(request.UserId, request.Name))
             {                
                 _logger.LogWarning("[UserAPI] Falha na atualização. O Name de usuário '{Name}' já está em uso por outra conta. UserId: {UserId}", request.Name, request.UserId);
-                throw new DomainException(MensagensDominio.NomeUsuarioJaCadastrado);
+                throw new DomainException(DomainMessages.UserNameAlreadyRegistered);
             }
 
-            if (request.password != request.ConfirmacaoSenha) throw new DomainException(MensagensDominio.UsuarioSenhaConfirmacaoDiferente);
+            if (request.password != request.ConfirmacaoSenha) throw new DomainException(DomainMessages.UserPasswordConfirmationMismatch);
 
             var hashSenha = _passwordHasher.HashPassword(request.password);
 

@@ -28,7 +28,7 @@ namespace Fcg.Users.Application.Features.Admin.Commands.RebaixarUserParaJogador
             if (request.Id == request.IdOperador)
             {                
                 _logger.LogWarning("[UserAPI] Falha no rebaixamento. Um Admin não pode rebaixar a própria conta. OperadorId: {OperadorId}", request.IdOperador);
-                throw new DomainException(MensagensDominio.OperacaoRebaixarInvalida);
+                throw new DomainException(DomainMessages.InvalidDemoteOperation);
             }
 
             var User = await _UserRepository.GetByIdAsync(request.Id);
@@ -36,19 +36,19 @@ namespace Fcg.Users.Application.Features.Admin.Commands.RebaixarUserParaJogador
             if (User == null)
             {
                 _logger.LogWarning("[UserAPI] Falha no rebaixamento. Usuário alvo não encontrado. UserId: {UserId}", request.Id);
-                throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
+                throw new DomainException(DomainMessages.UserNotFound);
             }
 
             if (!User.IsActive)
             {
                 _logger.LogWarning("[UserAPI] Falha no rebaixamento. Usuário está inativo. UserId: {UserId}", request.Id);
-                throw new DomainException(MensagensDominio.UsuarioInativo);
+                throw new DomainException(DomainMessages.UserMustBeActive);
             }
 
             if (User.Role.Equals(UserRole.Player))
             {                
                 _logger.LogWarning("[UserAPI] Falha no rebaixamento. O usuário alvo já é um Player. UserId: {UserId}", request.Id);
-                throw new DomainException(MensagensDominio.UsuarioPerfilRebaixarInvalido);
+                throw new DomainException(DomainMessages.UserProfileDemoteInvalid);
             }
 
             User.DemoteRole();

@@ -27,7 +27,7 @@ namespace Fcg.Users.Application.Features.Admin.Commands.ReativarConta
             if (User == null)
             {                
                 _logger.LogWarning("[UserAPI] Falha na reativação. Usuário não encontrado no banco de dados. UserId: {UserId}", request.UserId);
-                throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
+                throw new DomainException(DomainMessages.UserNotFound);
             }
             User.Reactivate();
 

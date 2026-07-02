@@ -9,19 +9,19 @@ namespace Fcg.Users.Application.Features.Users.Commands.AtualizarUser
         {
             
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage(MensagensDominio.UsuarioNomeObrigatorio)
-                .Length(3, 50).WithMessage(MensagensDominio.UsuarioTamanhoNomeInvalido);
+                .NotEmpty().WithMessage(DomainMessages.UserNameRequired)
+                .Length(3, 50).WithMessage(DomainMessages.UserNameLengthInvalid);
 
             
             RuleFor(x => x.password)
-                .NotEmpty().WithMessage(MensagensDominio.UsuarioSenhaObrigatoria)
-                .MinimumLength(8).WithMessage(MensagensDominio.SenhaTamanhoInvalido)
-                .MaximumLength(60).WithMessage(MensagensDominio.SenhaTamanhoInvalido);
+                .NotEmpty().WithMessage(DomainMessages.UserPasswordRequired)
+                .MinimumLength(8).WithMessage(DomainMessages.PasswordLengthInvalid)
+                .MaximumLength(60).WithMessage(DomainMessages.PasswordLengthInvalid);
 
             
             RuleFor(x => x.ConfirmacaoSenha)
-                .NotEmpty().WithMessage(MensagensDominio.UsuarioConfirmacaoSenhaObrigatoria)
-                .Equal(x => x.password).WithMessage(MensagensDominio.UsuarioSenhaConfirmacaoDiferente);
+                .NotEmpty().WithMessage(DomainMessages.UserPasswordConfirmationRequired)
+                .Equal(x => x.password).WithMessage(DomainMessages.UserPasswordConfirmationMismatch);
         }
     }
 }

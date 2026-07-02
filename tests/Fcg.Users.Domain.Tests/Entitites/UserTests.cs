@@ -46,7 +46,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
 
             // Act & Assert
             var excecao = Assert.Throws<DomainException>(() => new User(nomeNulo, email, Password));
-            Assert.Equal(MensagensDominio.UsuarioNomeObrigatorio, excecao.Message);
+            Assert.Equal(DomainMessages.UserNameRequired, excecao.Message);
         }
 
         #endregion
@@ -78,7 +78,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
 
             // Act & Assert
             var excecao = Assert.Throws<DomainException>(() => User.Deactivate(DeactivationReason.Inatividade));
-            Assert.Equal(MensagensDominio.UsuarioJaDesativado, excecao.Message);
+            Assert.Equal(DomainMessages.UserAlreadyDeactivated, excecao.Message);
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
 
             // Act & Assert
             var excecao = Assert.Throws<DomainException>(() => User.DeactivateAccount());
-            Assert.Equal(MensagensDominio.UsuarioJaDesativado, excecao.Message);
+            Assert.Equal(DomainMessages.UserAlreadyDeactivated, excecao.Message);
         }
 
         #endregion
@@ -141,7 +141,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
 
             // Act & Assert
             var excecao = Assert.Throws<DomainException>(() => User.Update(newName, newPassword));
-            Assert.Equal(MensagensDominio.UsuarioInativo, excecao.Message);
+            Assert.Equal(DomainMessages.UserMustBeActive, excecao.Message);
         }
 
         #endregion
@@ -184,7 +184,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
 
             // Act & Assert
             var excecao = Assert.Throws<DomainException>(() => User.DemoteRole());
-            Assert.Equal(MensagensDominio.UsuarioPerfilRebaixarInvalido, excecao.Message);
+            Assert.Equal(DomainMessages.UserProfileDemoteInvalid, excecao.Message);
         }
 
         #endregion
@@ -215,7 +215,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
 
             // Act & Assert
             var excecao = Assert.Throws<DomainException>(() => User.Reactivate());
-            Assert.Equal(MensagensDominio.UsuarioAtivo, excecao.Message);
+            Assert.Equal(DomainMessages.UserMustBeInactive, excecao.Message);
         }
 
         #endregion

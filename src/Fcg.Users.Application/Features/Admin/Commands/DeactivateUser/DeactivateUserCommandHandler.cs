@@ -28,13 +28,13 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DesativarUser
             if(request.Id == request.IdOperador)
             {
                 _logger.LogWarning("[UserAPI] Tentativa de auto-inativação bloqueada para o operador {IdOperador}.", request.IdOperador);
-                throw new DomainException(MensagensDominio.OperacaoDesativarInvalida);
+                throw new DomainException(DomainMessages.InvalidDeactivateOperation);
             }
 
             if (UserDesativar == null)
             {
                 _logger.LogWarning("[UserAPI] Falha na desativação. Usuário alvo não encontrado. UserId: {UserId}", request.Id);
-                throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
+                throw new DomainException(DomainMessages.UserNotFound);
             }
 
             UserDesativar.Deactivate(request.MotivoDelecao);

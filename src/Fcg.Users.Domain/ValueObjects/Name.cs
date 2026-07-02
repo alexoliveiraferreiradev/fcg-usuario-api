@@ -8,9 +8,9 @@ namespace Fcg.Users.Domain.ValueObjects
         public string Valor { get; }
         public Name(string valor)
         {
-            AssertionConcern.AssertArgumentRealValues(valor, MensagensDominio.NomeNaoReal);
-            AssertionConcern.AssertArgumentEmpty(valor, MensagensDominio.UsuarioNomeObrigatorio);
-            AssertionConcern.AssertArgumentLength(valor, 3, 50, MensagensDominio.UsuarioTamanhoNomeInvalido);
+            AssertionConcern.AssertArgumentRealValues(valor, DomainMessages.NameNotReal);
+            AssertionConcern.AssertArgumentEmpty(valor, DomainMessages.UserNameRequired);
+            AssertionConcern.AssertArgumentLength(valor, 3, 50, DomainMessages.UserNameLengthInvalid);
             Valor = valor;
         }
 

@@ -39,8 +39,8 @@ namespace Fcg.Users.Application.Features.Users.Commands.CadastrarUser
             var emailValueObject = new Email(request.Email);
             var indisponivel = await _UserRepository.CheckAvailabilityAsync(request.Email, request.Name);
             
-            if (indisponivel.EmailUsado) throw new DomainException(MensagensDominio.EmailJaCadastrado);
-            if (indisponivel.NomeUsado) throw new DomainException(MensagensDominio.NomeUsuarioJaCadastrado);
+            if (indisponivel.EmailUsado) throw new DomainException(DomainMessages.EmailAlreadyRegistered);
+            if (indisponivel.NomeUsado) throw new DomainException(DomainMessages.UserNameAlreadyRegistered);
             
             var hashSenha = _passwordHasher.HashPassword(request.Password);
 

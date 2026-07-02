@@ -47,12 +47,12 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
 
         [Theory]
         [InlineData("")]
-        [InlineData("emailinvalido")]
+        [InlineData("EmailInvalid")]
         [InlineData("a@b.c")] // Menor que 7 caracteres
-        public void Validate_DeveFalhar_QuandoEmailForInvalido(string emailInvalido)
+        public void Validate_DeveFalhar_QuandoEmailForInvalido(string EmailInvalid)
         {
             // Arrange
-            var command = new RegisterUserCommand("User Teste", emailInvalido, "SenhaForte123", "SenhaForte123");
+            var command = new RegisterUserCommand("User Teste", EmailInvalid, "SenhaForte123", "SenhaForte123");
 
             // Act
             var result = _validator.Validate(command);

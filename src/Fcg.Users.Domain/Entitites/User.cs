@@ -41,14 +41,14 @@ namespace Fcg.Users.Domain.Entitites
 
         protected override void ValidateEntity()
         {
-            AssertionConcern.AssertArgumentNotNull(Name, MensagensDominio.UsuarioNomeObrigatorio);
-            AssertionConcern.AssertArgumentNotNull(Email, MensagensDominio.UsuarioEmailObrigatorio);
-            AssertionConcern.AssertArgumentNotNull(Password, MensagensDominio.UsuarioSenhaObrigatoria);
+            AssertionConcern.AssertArgumentNotNull(Name, DomainMessages.UserNameRequired);
+            AssertionConcern.AssertArgumentNotNull(Email, DomainMessages.UserEmailRequired);
+            AssertionConcern.AssertArgumentNotNull(Password, DomainMessages.UserPasswordRequired);
         }
 
         public void Deactivate(DeactivationReason reason)
         {
-            if (!IsActive) throw new DomainException(MensagensDominio.UsuarioJaDesativado);
+            if (!IsActive) throw new DomainException(DomainMessages.UserAlreadyDeactivated);
 
             IsActive = false;
             UpdatedAt = DateTime.UtcNow;
@@ -56,7 +56,7 @@ namespace Fcg.Users.Domain.Entitites
         }
         public void DeactivateAccount()
         {
-            if (!IsActive) throw new DomainException(MensagensDominio.UsuarioJaDesativado);
+            if (!IsActive) throw new DomainException(DomainMessages.UserAlreadyDeactivated);
 
             IsActive = false;
             UpdatedAt = DateTime.UtcNow;
@@ -64,7 +64,7 @@ namespace Fcg.Users.Domain.Entitites
 
         public void Update(Name newName, Password newPassword)
         {
-            if (!IsActive) throw new DomainException(MensagensDominio.UsuarioInativo);
+            if (!IsActive) throw new DomainException(DomainMessages.UserMustBeActive);
 
             UpdateName(newName);
             ChangePassword(newPassword);
@@ -87,7 +87,7 @@ namespace Fcg.Users.Domain.Entitites
         public void DemoteRole()
         {
             if (Role != UserRole.Admin)
-                throw new DomainException(MensagensDominio.UsuarioPerfilRebaixarInvalido);
+                throw new DomainException(DomainMessages.UserProfileDemoteInvalid);
 
             Role = UserRole.Player;
         }
@@ -100,7 +100,7 @@ namespace Fcg.Users.Domain.Entitites
 
         public void Reactivate()
         {
-            if (IsActive) throw new DomainException(MensagensDominio.UsuarioAtivo);
+            if (IsActive) throw new DomainException(DomainMessages.UserMustBeInactive);
             IsActive = true;
             UpdatedAt = DateTime.UtcNow;
             DeactivationReason = null;

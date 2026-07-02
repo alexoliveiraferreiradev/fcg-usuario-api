@@ -29,7 +29,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.DeactivateAccount
             if (User == null)
             {                
                 _logger.LogWarning("[UserAPI] Falha na desativação. Usuário não encontrado no banco de dados. UserId: {UserId}", request.Id);
-                throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
+                throw new DomainException(DomainMessages.UserNotFound);
             }
 
             if (User.Role == UserRole.Admin)
@@ -38,7 +38,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.DeactivateAccount
                 if (!existeOutroAdmin)
                 {             
                     _logger.LogWarning("[UserAPI] Falha na desativação. Não é possível Deactivate o único Admin cadastrado. UserId: {UserId}", request.Id);
-                    throw new DomainException(MensagensDominio.OperacaoDesativarAdminInvalida);
+                    throw new DomainException(DomainMessages.InvalidDeactivateAdminOperation);
                 }
             }
             User.DeactivateAccount();

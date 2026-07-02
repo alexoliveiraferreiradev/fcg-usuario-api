@@ -30,7 +30,7 @@ namespace Fcg.Users.Application.Features.Admin.Commands.PromoverUserParaAdmin
             if (User == null)
             {
                 _logger.LogWarning("[UserAPI] Falha na promoção. Usuário não encontrado. UserId: {UserId}", request.Id);
-                throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
+                throw new DomainException(DomainMessages.UserNotFound);
             }
 
             if (request.Id == request.IdOperador)
@@ -42,13 +42,13 @@ namespace Fcg.Users.Application.Features.Admin.Commands.PromoverUserParaAdmin
             if (!User.IsActive)
             {
                 _logger.LogWarning("[UserAPI] Falha na promoção. Usuário está inativo. UserId: {UserId}", request.Id);
-                throw new DomainException(MensagensDominio.UsuarioInativo);
+                throw new DomainException(DomainMessages.UserMustBeActive);
             }
 
             if (User.Role.Equals(UserRole.Admin))
             {
                 _logger.LogWarning("[UserAPI] Falha na promoção. O usuário já é um Admin. UserId: {UserId}", request.Id);
-                throw new DomainException(MensagensDominio.UsuarioPerfilRebaixarInvalido);
+                throw new DomainException(DomainMessages.UserProfileDemoteInvalid);
             }
 
             User.PromoteRole();

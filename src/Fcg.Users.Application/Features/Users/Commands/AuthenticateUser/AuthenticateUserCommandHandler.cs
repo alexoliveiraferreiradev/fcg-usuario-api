@@ -36,20 +36,20 @@ namespace Fcg.Users.Application.Features.Users.Commands.AutenticarUser
             {
                 _logger.LogWarning("[UserAPI] Falha de autenticação: E-mail {Email} não encontrado no banco de dados.", request.Email);
 
-                throw new DomainException(MensagensDominio.CrendenciasInvalidas);
+                throw new DomainException(DomainMessages.InvalidCredentials);
             }
 
             if (!User.IsActive)
             {
                 _logger.LogWarning("[UserAPI] Falha de autenticação: A conta vinculada ao e-mail {Email} (ID: {UserId}) encontra-se inativa.", request.Email, User.Id);
-                throw new DomainException(MensagensDominio.UsuarioInativo);
+                throw new DomainException(DomainMessages.UserMustBeActive);
             }
 
             bool senhaValida = _passwordHasher.VerifyPassword(request.Password, User.Password.Hash);
             if (!senhaValida)
             {
                 _logger.LogWarning("[UserAPI] Falha de autenticação: Password inválida fornecida para o e-mail {Email} (ID: {UserId}).", request.Email, User.Id);
-                throw new DomainException(MensagensDominio.CrendenciasInvalidas);
+                throw new DomainException(DomainMessages.InvalidCredentials);
             }
 
             var UserResponse = new UserResponse
