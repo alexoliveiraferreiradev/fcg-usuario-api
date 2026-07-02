@@ -11,29 +11,29 @@ namespace Fcg.Users.Domain.Entitites
         protected User()
         {
         }
-        public Nome NomeUser { get; private set; }
+        public Name Name { get; private set; }
 
-        public Email EmailUser { get; private set; }
+        public Email Email { get; private set; }
 
-        public Senha Senha { get; private set; }
+        public Password Password { get; private set; }
 
-        public TipoUser Perfil { get; private set; }
-        public bool Ativo { get; private set; }
-        public DateTime DataCadastro { get; private set; }
-        public DateTime DataAlteracao { get; private set; }
-        public MotivoDesativacao? MotivoDesativacao { get; private set; }
+        public UserRole Role { get; private set; }
+        public bool IsActive { get; private set; }
+        public DateTime CreatedAt { get; private set; }
+        public DateTime UpdatedAt { get; private set; }
+        public DeactivationReason? DeactivationReason { get; private set; }
 
 
 
-        public User(Nome nomeUser, Email emailUser, Senha senhaUser)
+        public User(Name name, Email email, Password password)
         {
-            NomeUser = nomeUser;
-            EmailUser = emailUser;
-            Senha = senhaUser;
-            Perfil = TipoUser.Jogador;
-            Ativo = true;
-            DataCadastro = DateTime.UtcNow;
-            DataAlteracao = DataCadastro;
+            Name = name;
+            Email = email;
+            Password = password;
+            Role = UserRole.Player;
+            IsActive = true;
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = CreatedAt;
             ValidateEntity();
         }
 
@@ -41,69 +41,69 @@ namespace Fcg.Users.Domain.Entitites
 
         protected override void ValidateEntity()
         {
-            AssertionConcern.AssertArgumentNotNull(NomeUser, MensagensDominio.UsuarioNomeObrigatorio);
-            AssertionConcern.AssertArgumentNotNull(EmailUser, MensagensDominio.UsuarioEmailObrigatorio);
-            AssertionConcern.AssertArgumentNotNull(Senha, MensagensDominio.UsuarioSenhaObrigatoria);
+            AssertionConcern.AssertArgumentNotNull(Name, MensagensDominio.UsuarioNomeObrigatorio);
+            AssertionConcern.AssertArgumentNotNull(Email, MensagensDominio.UsuarioEmailObrigatorio);
+            AssertionConcern.AssertArgumentNotNull(Password, MensagensDominio.UsuarioSenhaObrigatoria);
         }
 
-        public void Desativar(MotivoDesativacao motivo)
+        public void Deactivate(DeactivationReason reason)
         {
-            if (!Ativo) throw new DomainException(MensagensDominio.UsuarioJaDesativado);
+            if (!IsActive) throw new DomainException(MensagensDominio.UsuarioJaDesativado);
 
-            Ativo = false;
-            DataAlteracao = DateTime.UtcNow;
-            MotivoDesativacao = motivo;
+            IsActive = false;
+            UpdatedAt = DateTime.UtcNow;
+            DeactivationReason = reason;
         }
-        public void DesativarConta()
+        public void DeactivateAccount()
         {
-            if (!Ativo) throw new DomainException(MensagensDominio.UsuarioJaDesativado);
+            if (!IsActive) throw new DomainException(MensagensDominio.UsuarioJaDesativado);
 
-            Ativo = false;
-            DataAlteracao = DateTime.UtcNow;
-        }
-
-        public void Atualizar(Nome novoNome, Senha novaSenha)
-        {
-            if (!Ativo) throw new DomainException(MensagensDominio.UsuarioInativo);
-
-            AtualizarNomeUser(novoNome);
-            AlterarSenha(novaSenha);
-            DataAlteracao = DateTime.UtcNow;
+            IsActive = false;
+            UpdatedAt = DateTime.UtcNow;
         }
 
-        public void AtualizarNomeUser(Nome nomeNovo)
+        public void Update(Name newName, Password newPassword)
         {
-            if (NomeUser == nomeNovo) return;
-            NomeUser = nomeNovo;
+            if (!IsActive) throw new DomainException(MensagensDominio.UsuarioInativo);
+
+            UpdateName(newName);
+            ChangePassword(newPassword);
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void UpdateName(Name newName)
+        {
+            if (Name == newName) return;
+            Name = newName;
         }
 
 
-        public void AlterarSenha(Senha novaSenha)
+        public void ChangePassword(Password newPassword)
         {
-            if (Senha == novaSenha) return;
-            Senha = novaSenha;
+            if (Password == newPassword) return;
+            Password = newPassword;
         }
 
-        public void RebaixarPerfil()
+        public void DemoteRole()
         {
-            if (Perfil != TipoUser.Administrador)
+            if (Role != UserRole.Admin)
                 throw new DomainException(MensagensDominio.UsuarioPerfilRebaixarInvalido);
 
-            Perfil = TipoUser.Jogador;
+            Role = UserRole.Player;
         }
 
-        public void PromoverPerfil()
+        public void PromoteRole()
         {
-            Perfil = TipoUser.Administrador;
-            DataAlteracao = DateTime.UtcNow;
+            Role = UserRole.Admin;
+            UpdatedAt = DateTime.UtcNow;
         }
 
-        public void Reativar()
+        public void Reactivate()
         {
-            if (Ativo) throw new DomainException(MensagensDominio.UsuarioAtivo);
-            Ativo = true;
-            DataAlteracao = DateTime.UtcNow;
-            MotivoDesativacao = null;
+            if (IsActive) throw new DomainException(MensagensDominio.UsuarioAtivo);
+            IsActive = true;
+            UpdatedAt = DateTime.UtcNow;
+            DeactivationReason = null;
         }
     }
 }

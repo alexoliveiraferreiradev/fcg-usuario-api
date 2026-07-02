@@ -59,15 +59,15 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddMediatR(cfg =>
 {
-    cfg.RegisterServicesFromAssembly(typeof(CadastrarUserCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(RegisterUserCommand).Assembly);
 });
 
 
-builder.Services.AddValidatorsFromAssembly(typeof(CadastrarUserCommand).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(RegisterUserCommand).Assembly);
 
-SqlMapper.AddTypeHandler(new NomeTypeHandler());
+SqlMapper.AddTypeHandler(new NameTypeHandler());
 SqlMapper.AddTypeHandler(new EmailTypeHandler());
-SqlMapper.AddTypeHandler(new SenhaTypeHandler());
+SqlMapper.AddTypeHandler(new PasswordTypeHandler());
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
@@ -82,7 +82,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
-#region Conta - Jogador/Admin
+#region Conta - Player/Admin
 app.MapAcessoUserEndpoint();
 app.MapGerenciaContaEndpoints();
 #endregion 

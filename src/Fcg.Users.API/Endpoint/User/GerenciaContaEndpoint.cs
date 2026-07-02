@@ -1,7 +1,7 @@
 ﻿using Fcg.Users.Application.Features.Users.Commands.AtualizarUser;
 using Fcg.Users.Application.Features.Users.Commands.AutenticarUser;
 using Fcg.Users.Application.Features.Users.Commands.CadastrarUser;
-using Fcg.Users.Application.Features.Users.Commands.DesativarConta;
+using Fcg.Users.Application.Features.Users.Commands.DeactivateAccount;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -14,20 +14,20 @@ namespace Fcg.User.API.Endpoint.User
         {
             var group = app.MapGroup("api/minha-conta").WithTags("Minha Conta").RequireAuthorization();
            
-            group.MapPut("atualizar", AtualizaConta)
+            group.MapPut("Update", AtualizaConta)
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status400BadRequest)
                 .Produces(StatusCodes.Status401Unauthorized)
                 .Produces(StatusCodes.Status404NotFound);
          
-            group.MapPut("desativar-conta", DesativarConta)
+            group.MapPut("Deactivate-conta", DeactivateAccount)
                 .Produces(StatusCodes.Status401Unauthorized)
                 .Produces(StatusCodes.Status204NoContent);
 
 
         }
         private static async Task<IResult> AtualizaConta(
-           [FromBody] AtualizarUserCommand command,
+           [FromBody] UpdateUserCommand command,
            [FromServices] ISender mediator,
            CancellationToken cancellationToken,
            ClaimsPrincipal user)
@@ -51,7 +51,7 @@ namespace Fcg.User.API.Endpoint.User
             return Results.Ok(response);
         }
 
-        private static async Task<IResult> DesativarConta(
+        private static async Task<IResult> DeactivateAccount(
             [FromBody] DesativarContaCommand command,
             [FromServices] ISender mediator,
             CancellationToken cancellationToken,

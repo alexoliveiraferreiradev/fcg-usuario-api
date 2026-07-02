@@ -10,6 +10,6 @@ namespace Fcg.Users.Application.Features.Users.Responses
         public string Id { get; set; }
         public string Email { get; set; }
         public IEnumerable<ClaimResponse> Claims { get; set; }
-        public TipoUser PerfilUser { get; set; }
+        public UserRole PerfilUser { get; set; }
     }
 }

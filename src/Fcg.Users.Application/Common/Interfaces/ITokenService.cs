@@ -5,6 +5,6 @@ namespace Fcg.Users.Application.Common.Interfaces
 {
     public interface ITokenService
     {
-        Task<TokenResult> GerarToken(UserResponse User);
+        Task<TokenResult> GenerateToken(UserResponse User);
     }
 }

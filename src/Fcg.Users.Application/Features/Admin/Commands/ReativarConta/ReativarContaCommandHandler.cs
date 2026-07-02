@@ -23,15 +23,15 @@ namespace Fcg.Users.Application.Features.Admin.Commands.ReativarConta
         {
             _logger.LogInformation("[UserAPI] Iniciando processo de reativação de conta. UserId: {UserId}", request.UserId);
 
-            var User = await _UserRepository.ObterPorId(request.UserId);
+            var User = await _UserRepository.GetByIdAsync(request.UserId);
             if (User == null)
             {                
                 _logger.LogWarning("[UserAPI] Falha na reativação. Usuário não encontrado no banco de dados. UserId: {UserId}", request.UserId);
                 throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
             }
-            User.Reativar();
+            User.Reactivate();
 
-            _UserRepository.Atualizar(User);
+            _UserRepository.Update(User);
 
             await _unitOfWork.CommitAsync();
 

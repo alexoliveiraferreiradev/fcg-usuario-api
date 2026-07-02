@@ -22,7 +22,7 @@ namespace Fcg.User.API.Endpoint.User
         }
 
         private static async Task<IResult> AutenticarConta(
-            [FromBody] AutenticarUserCommand command,
+            [FromBody] AuthenticateUserCommand command,
             [FromServices] ISender mediator,
             CancellationToken cancellationToken)
         {
@@ -35,7 +35,7 @@ namespace Fcg.User.API.Endpoint.User
         }
 
         private static async Task<IResult> CadastrarConta(
-             [FromBody] CadastrarUserCommand command,
+             [FromBody] RegisterUserCommand command,
              [FromServices] ISender sender,
              CancellationToken cancellationToken)
         {

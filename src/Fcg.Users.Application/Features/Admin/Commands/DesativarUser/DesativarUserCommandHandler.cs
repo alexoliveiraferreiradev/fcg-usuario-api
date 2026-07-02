@@ -23,7 +23,7 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DesativarUser
         {
             _logger.LogInformation("[UserAPI] Iniciando processo de desativação de usuário por um operador. UserId: {UserId}, OperadorId: {OperadorId}", request.Id, request.IdOperador);
 
-            var UserDesativar = await _UserRepository.ObterPorId(request.Id);
+            var UserDesativar = await _UserRepository.GetByIdAsync(request.Id);
 
             if(request.Id == request.IdOperador)
             {
@@ -37,11 +37,11 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DesativarUser
                 throw new DomainException(MensagensDominio.UsuarioNaoEncontrado);
             }
 
-            UserDesativar.Desativar(request.MotivoDelecao);
+            UserDesativar.Deactivate(request.MotivoDelecao);
 
             await _unitOfWork.CommitAsync();
 
-            _logger.LogWarning("[UserAPI] Usuário desativado com sucesso pelo operador. UserId: {UserId}, OperadorId: {OperadorId}, Motivo: {Motivo}", request.Id, request.IdOperador, request.MotivoDelecao);
+            _logger.LogWarning("[UserAPI] Usuário desativado com sucesso pelo operador. UserId: {UserId}, OperadorId: {OperadorId}, reason: {reason}", request.Id, request.IdOperador, request.MotivoDelecao);
         }
     }
 }

@@ -18,10 +18,10 @@ namespace Fcg.Users.Infrastructure.Security
         {
             _jwtSettings  = jwtSettings.Value;
         }
-        public async Task<TokenResult> GerarToken(UserResponse User)
+        public async Task<TokenResult> GenerateToken(UserResponse User)
         {            
-            var claims = await ObtemClaims(User);
-            var acessToken = ObtemToken(claims);
+            var claims = await GetClaims(User);
+            var acessToken = GetToken(claims);
             return new TokenResult
             {
                 AccessToken = acessToken,
@@ -30,17 +30,17 @@ namespace Fcg.Users.Infrastructure.Security
             };
         }
 
-        public async Task<IEnumerable<Claim>> ObtemClaims(UserResponse User)
+        public async Task<IEnumerable<Claim>> GetClaims(UserResponse User)
         {
             var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, User.Nome));
+            claims.Add(new Claim(ClaimTypes.Name, User.Name));
             claims.Add(new Claim(ClaimTypes.NameIdentifier, User.Id.ToString()));
             claims.Add(new Claim(ClaimTypes.Email, User.Email));
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Nbf, ToUnixEpochDate(DateTime.UtcNow).ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.UtcNow).ToString(), ClaimValueTypes.Integer64));
-            if (User.PerfilUser == TipoUser.Administrador) claims.Add(new Claim(ClaimTypes.Role, "AdminRole"));
-            if (User.PerfilUser == TipoUser.Jogador) claims.Add(new Claim(ClaimTypes.Role, "JogadorRole"));
+            if (User.PerfilUser == UserRole.Admin) claims.Add(new Claim(ClaimTypes.Role, "AdminRole"));
+            if (User.PerfilUser == UserRole.Player) claims.Add(new Claim(ClaimTypes.Role, "JogadorRole"));
             return claims;
         }
 
@@ -50,7 +50,7 @@ namespace Fcg.Users.Infrastructure.Security
             => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
 
 
-        public string ObtemToken(IEnumerable<Claim> claims)
+        public string GetToken(IEnumerable<Claim> claims)
         {
             var identityClaims = new ClaimsIdentity();
             identityClaims.AddClaims(claims);

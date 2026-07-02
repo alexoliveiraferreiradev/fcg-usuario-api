@@ -13,68 +13,68 @@ namespace Fcg.Users.Infrastructure.Repository
         {
             _dbContext = dbContext; 
         }
-        public void Adicionar(User User)
+        public void Add(User User)
         {
             _dbContext.Users.Add(User);   
         }
 
-        public void Atualizar(User User)
+        public void Update(User User)
         {
              _dbContext.Users.Update(User);
         }
 
-        public async Task<User?> ObterPorEmail(string email)
+        public async Task<User?> GetByEmailAsync(string email)
         {
             var connection = _dbContext.Database.GetDbConnection();
             const string sql = @"SELECT 
                                 Id, 
-                                Nome as NomeUser,
-                                Email as EmailUser,
-                                Senha,
-                                Perfil,
-                                Ativo,
-                                DataCadastro,
-                                DataAlteracao,MotivoDesativacao
+                                Name as Name,
+                                Email as Email,
+                                Password,
+                                Role,
+                                IsActive,
+                                CreatedAt,
+                                UpdatedAt,DeactivationReason
                                 from Users where Email = @Email";
 
 
             return await connection.QueryFirstOrDefaultAsync<User>(sql,new {Email =  email});  
         }
 
-        public async Task<User?> ObterPorId(Guid id)
+        public async Task<User?> GetByIdAsync(Guid id)
         {
             return await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
             
 
-        public async Task<(bool EmailUsado, bool NomeUsado)> VerificaIndisponibilidade(string email, string nome)
+        public async Task<(bool EmailUsado, bool NomeUsado)> CheckAvailabilityAsync(string email, string Name)
         {
             var connection = _dbContext.Database.GetDbConnection();
 
             var query = @" SELECT 
             CAST(CASE WHEN EXISTS (SELECT 1 FROM Users WHERE Email = @Email) THEN 1 ELSE 0 END AS BIT) AS EmailUsado,
-            CAST(CASE WHEN EXISTS (SELECT 1 FROM Users WHERE Nome = @Nome) THEN 1 ELSE 0 END AS BIT) AS NomeUsado";
+            CAST(CASE WHEN EXISTS (SELECT 1 FROM Users WHERE Name = @Name) THEN 1 ELSE 0 END AS BIT) AS NomeUsado";
                         
-            return await connection.QueryFirstOrDefaultAsync<(bool EmailUsado, bool NomeUsado)>(query, new { Email = email, Nome = nome });
+            return await connection.QueryFirstOrDefaultAsync<(bool EmailUsado, bool NomeUsado)>(query, new { Email = email, Name = Name });
         }
 
-        public async Task<bool> VerificaMaisDeUmAdminCadastrado()
+        public async Task<bool> HasMultipleAdminsAsync()
         {
             var connection = _dbContext.Database.GetDbConnection();
 
-            var query = @"SELECT CAST(CASE WHEN (SELECT COUNT(1) FROM Users WHERE Perfil = 1) > 1 THEN 1 ELSE 0 END AS BIT)";
+            var query = @"SELECT CAST(CASE WHEN (SELECT COUNT(1) FROM Users WHERE Role = 1) > 1 THEN 1 ELSE 0 END AS BIT)";
 
             return await connection.QueryFirstOrDefaultAsync<bool>(query);
         }
 
        
-        public async Task<bool> VerificaNomeCadastradoParaAlteracao(Guid UserId, string nomeCadastrado)
+        public async Task<bool> CheckNameInUseAsync(Guid UserId, string nomeCadastrado)
         {
             var connection = _dbContext.Database.GetDbConnection();
 
-            var query = "SELECT CAST(CASE WHEN EXISTS (SELECT 1 FROM Users WHERE Nome = @Nome and Id!= @IdUser) THEN 1 ELSE 0 END AS BIT) AS NomeUsado";
+            var query = "SELECT CAST(CASE WHEN EXISTS (SELECT 1 FROM Users WHERE Name = @Name and Id!= @IdUser) THEN 1 ELSE 0 END AS BIT) AS NomeUsado";
 
-            return await connection.QueryFirstOrDefaultAsync<bool>(query, new { Nome = nomeCadastrado, IdUser = UserId }); 
+            return await connection.QueryFirstOrDefaultAsync<bool>(query, new { Name = nomeCadastrado, IdUser = UserId }); 
         }
 
         

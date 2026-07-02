@@ -8,9 +8,9 @@ namespace Fcg.Users.Domain.Tests.Entitites
 {
     public class UserTests
     {
-        private Nome ObterNomeValido() => new Nome("User Teste");
+        private Name ObterNomeValido() => new Name("User Teste");
         private Email ObterEmailValido() => new Email("usuairio.teste@email.com");
-        private Senha ObterSenhaValida() => new Senha("Senha@123");
+        private Password ObterSenhaValida() => new Password("Password@123");
 
         #region Construtor Tests
 
@@ -18,55 +18,55 @@ namespace Fcg.Users.Domain.Tests.Entitites
         public void Construtor_ComDadosValidos_DeveCriarUserAtivoComPerfilJogador()
         {
             // Arrange
-            var nome = ObterNomeValido();
+            var Name = ObterNomeValido();
             var email = ObterEmailValido();
-            var senha = ObterSenhaValida();
+            var Password = ObterSenhaValida();
 
             // Act
-            var User = new User(nome, email, senha);
+            var User = new User(Name, email, Password);
 
             // Assert
-            Assert.Equal(nome, User.NomeUser);
-            Assert.Equal(email, User.EmailUser);
-            Assert.Equal(senha, User.Senha);
-            Assert.Equal(TipoUser.Jogador, User.Perfil);
-            Assert.True(User.Ativo);
-            Assert.Null(User.MotivoDesativacao);
-            Assert.True((DateTime.UtcNow - User.DataCadastro).TotalSeconds < 5);
-            Assert.Equal(User.DataCadastro, User.DataAlteracao);
+            Assert.Equal(Name, User.Name);
+            Assert.Equal(email, User.Email);
+            Assert.Equal(Password, User.Password);
+            Assert.Equal(UserRole.Player, User.Role);
+            Assert.True(User.IsActive);
+            Assert.Null(User.DeactivationReason);
+            Assert.True((DateTime.UtcNow - User.CreatedAt).TotalSeconds < 5);
+            Assert.Equal(User.CreatedAt, User.UpdatedAt);
         }
 
         [Fact]
         public void Construtor_SemNome_DeveLancarDomainException()
         {
             // Arrange
-            Nome nomeNulo = null!;
+            Name nomeNulo = null!;
             var email = ObterEmailValido();
-            var senha = ObterSenhaValida();
+            var Password = ObterSenhaValida();
 
             // Act & Assert
-            var excecao = Assert.Throws<DomainException>(() => new User(nomeNulo, email, senha));
+            var excecao = Assert.Throws<DomainException>(() => new User(nomeNulo, email, Password));
             Assert.Equal(MensagensDominio.UsuarioNomeObrigatorio, excecao.Message);
         }
 
         #endregion
 
-        #region Desativar Tests
+        #region Deactivate Tests
 
         [Fact]
         public void Desativar_ComMotivo_DeveDesativarEMarcarMotivo()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
-            var motivo = MotivoDesativacao.Inatividade;
+            var reason = DeactivationReason.Inatividade;
 
             // Act
-            User.Desativar(motivo);
+            User.Deactivate(reason);
 
             // Assert
-            Assert.False(User.Ativo);
-            Assert.Equal(motivo, User.MotivoDesativacao);
-            Assert.True((DateTime.UtcNow - User.DataAlteracao).TotalSeconds < 5);
+            Assert.False(User.IsActive);
+            Assert.Equal(reason, User.DeactivationReason);
+            Assert.True((DateTime.UtcNow - User.UpdatedAt).TotalSeconds < 5);
         }
 
         [Fact]
@@ -74,10 +74,10 @@ namespace Fcg.Users.Domain.Tests.Entitites
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
-            User.Desativar(MotivoDesativacao.SolicitacaoDoUser);
+            User.Deactivate(DeactivationReason.SolicitacaoDoUser);
 
             // Act & Assert
-            var excecao = Assert.Throws<DomainException>(() => User.Desativar(MotivoDesativacao.Inatividade));
+            var excecao = Assert.Throws<DomainException>(() => User.Deactivate(DeactivationReason.Inatividade));
             Assert.Equal(MensagensDominio.UsuarioJaDesativado, excecao.Message);
         }
 
@@ -88,12 +88,12 @@ namespace Fcg.Users.Domain.Tests.Entitites
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
 
             // Act
-            User.DesativarConta();
+            User.DeactivateAccount();
 
             // Assert
-            Assert.False(User.Ativo);
-            Assert.Null(User.MotivoDesativacao);
-            Assert.True((DateTime.UtcNow - User.DataAlteracao).TotalSeconds < 5);
+            Assert.False(User.IsActive);
+            Assert.Null(User.DeactivationReason);
+            Assert.True((DateTime.UtcNow - User.UpdatedAt).TotalSeconds < 5);
         }
 
         [Fact]
@@ -101,32 +101,32 @@ namespace Fcg.Users.Domain.Tests.Entitites
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
-            User.DesativarConta();
+            User.DeactivateAccount();
 
             // Act & Assert
-            var excecao = Assert.Throws<DomainException>(() => User.DesativarConta());
+            var excecao = Assert.Throws<DomainException>(() => User.DeactivateAccount());
             Assert.Equal(MensagensDominio.UsuarioJaDesativado, excecao.Message);
         }
 
         #endregion
 
-        #region Atualizar Tests
+        #region Update Tests
 
         [Fact]
         public void Atualizar_ComDadosValidos_DeveAtualizarCampos()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
-            var novoNome = new Nome("Jane Doe");
-            var novaSenha = new Senha("NewStrongPassword456!");
+            var newName = new Name("Jane Doe");
+            var newPassword = new Password("NewStrongPassword456!");
 
             // Act
-            User.Atualizar(novoNome, novaSenha);
+            User.Update(newName, newPassword);
 
             // Assert
-            Assert.Equal(novoNome, User.NomeUser);
-            Assert.Equal(novaSenha, User.Senha);
-            Assert.True((DateTime.UtcNow - User.DataAlteracao).TotalSeconds < 5);
+            Assert.Equal(newName, User.Name);
+            Assert.Equal(newPassword, User.Password);
+            Assert.True((DateTime.UtcNow - User.UpdatedAt).TotalSeconds < 5);
         }
 
         [Fact]
@@ -134,19 +134,19 @@ namespace Fcg.Users.Domain.Tests.Entitites
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
-            User.DesativarConta();
+            User.DeactivateAccount();
 
-            var novoNome = new Nome("Jane Doe");
-            var novaSenha = new Senha("NewStrongPassword456!");
+            var newName = new Name("Jane Doe");
+            var newPassword = new Password("NewStrongPassword456!");
 
             // Act & Assert
-            var excecao = Assert.Throws<DomainException>(() => User.Atualizar(novoNome, novaSenha));
+            var excecao = Assert.Throws<DomainException>(() => User.Update(newName, newPassword));
             Assert.Equal(MensagensDominio.UsuarioInativo, excecao.Message);
         }
 
         #endregion
 
-        #region Perfil Tests
+        #region Role Tests
 
         [Fact]
         public void PromoverPerfil_UserJogador_DeveAlterarPerfilParaAdministrador()
@@ -155,11 +155,11 @@ namespace Fcg.Users.Domain.Tests.Entitites
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
 
             // Act
-            User.PromoverPerfil();
+            User.PromoteRole();
 
             // Assert
-            Assert.Equal(TipoUser.Administrador, User.Perfil);
-            Assert.True((DateTime.UtcNow - User.DataAlteracao).TotalSeconds < 5);
+            Assert.Equal(UserRole.Admin, User.Role);
+            Assert.True((DateTime.UtcNow - User.UpdatedAt).TotalSeconds < 5);
         }
 
         [Fact]
@@ -167,13 +167,13 @@ namespace Fcg.Users.Domain.Tests.Entitites
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
-            User.PromoverPerfil(); 
+            User.PromoteRole(); 
 
             // Act
-            User.RebaixarPerfil();
+            User.DemoteRole();
 
             // Assert
-            Assert.Equal(TipoUser.Jogador, User.Perfil);
+            Assert.Equal(UserRole.Player, User.Role);
         }
 
         [Fact]
@@ -183,28 +183,28 @@ namespace Fcg.Users.Domain.Tests.Entitites
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
 
             // Act & Assert
-            var excecao = Assert.Throws<DomainException>(() => User.RebaixarPerfil());
+            var excecao = Assert.Throws<DomainException>(() => User.DemoteRole());
             Assert.Equal(MensagensDominio.UsuarioPerfilRebaixarInvalido, excecao.Message);
         }
 
         #endregion
 
-        #region Reativar Tests
+        #region Reactivate Tests
 
         [Fact]
         public void Reativar_UserInativo_DeveReativarELimparMotivo()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
-            User.Desativar(MotivoDesativacao.Inatividade);
+            User.Deactivate(DeactivationReason.Inatividade);
 
             // Act
-            User.Reativar();
+            User.Reactivate();
 
             // Assert
-            Assert.True(User.Ativo);
-            Assert.Null(User.MotivoDesativacao);
-            Assert.True((DateTime.UtcNow - User.DataAlteracao).TotalSeconds < 5);
+            Assert.True(User.IsActive);
+            Assert.Null(User.DeactivationReason);
+            Assert.True((DateTime.UtcNow - User.UpdatedAt).TotalSeconds < 5);
         }
 
         [Fact]
@@ -214,7 +214,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
 
             // Act & Assert
-            var excecao = Assert.Throws<DomainException>(() => User.Reativar());
+            var excecao = Assert.Throws<DomainException>(() => User.Reactivate());
             Assert.Equal(MensagensDominio.UsuarioAtivo, excecao.Message);
         }
 

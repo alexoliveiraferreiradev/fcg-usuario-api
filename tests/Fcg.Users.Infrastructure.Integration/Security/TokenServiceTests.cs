@@ -38,13 +38,13 @@ namespace Fcg.Users.Infrastructure.Integration.Security
             var User = new UserResponse
             {
                 Id = Guid.NewGuid(),
-                Nome = "Admin Teste",
+                Name = "Admin Teste",
                 Email = "admin@teste.com",
-                PerfilUser = TipoUser.Administrador
+                PerfilUser = UserRole.Admin
             };
 
             // Act
-            var claims = await _tokenService.ObtemClaims(User);
+            var claims = await _tokenService.GetClaims(User);
 
             // Assert
             claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == "AdminRole");
@@ -57,13 +57,13 @@ namespace Fcg.Users.Infrastructure.Integration.Security
             var User = new UserResponse
             {
                 Id = Guid.NewGuid(),
-                Nome = "Jogador Teste",
-                Email = "jogador@teste.com",
-                PerfilUser = TipoUser.Jogador
+                Name = "Player Teste",
+                Email = "Player@teste.com",
+                PerfilUser = UserRole.Player
             };
 
             // Act
-            var claims = await _tokenService.ObtemClaims(User);
+            var claims = await _tokenService.GetClaims(User);
 
             // Assert
             claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == "JogadorRole");
@@ -77,16 +77,16 @@ namespace Fcg.Users.Infrastructure.Integration.Security
             var User = new UserResponse
             {
                 Id = UserId,
-                Nome = "User Teste",
+                Name = "User Teste",
                 Email = "User@teste.com",
-                PerfilUser = TipoUser.Jogador
+                PerfilUser = UserRole.Player
             };
 
             // Act
-            var claims = await _tokenService.ObtemClaims(User);
+            var claims = await _tokenService.GetClaims(User);
 
             // Assert
-            claims.Should().Contain(c => c.Type == ClaimTypes.Name && c.Value == User.Nome);
+            claims.Should().Contain(c => c.Type == ClaimTypes.Name && c.Value == User.Name);
             claims.Should().Contain(c => c.Type == ClaimTypes.NameIdentifier && c.Value == User.Id.ToString());
             claims.Should().Contain(c => c.Type == ClaimTypes.Email && c.Value == User.Email);
         }
@@ -98,13 +98,13 @@ namespace Fcg.Users.Infrastructure.Integration.Security
             var User = new UserResponse
             {
                 Id = Guid.NewGuid(),
-                Nome = "User JWT",
+                Name = "User JWT",
                 Email = "jwt@teste.com",
-                PerfilUser = TipoUser.Administrador
+                PerfilUser = UserRole.Admin
             };
 
             // Act
-            var result = await _tokenService.GerarToken(User);
+            var result = await _tokenService.GenerateToken(User);
 
             // Assert
             result.Should().NotBeNull();

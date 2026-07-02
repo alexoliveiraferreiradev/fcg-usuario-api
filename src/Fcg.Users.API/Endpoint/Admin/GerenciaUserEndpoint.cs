@@ -17,7 +17,7 @@ namespace Fcg.User.API.Endpoint.Admin
         public static void MapGerenciaUserEndpoints(this IEndpointRouteBuilder app)
         {
             var group = app.MapGroup("api/admin").WithTags("Gerenciamento de Usuários").RequireAuthorization();
-            group.MapPut("desativar-User/{id:guid}", DesativaUser)
+            group.MapPut("Deactivate-User/{id:guid}", DesativaUser)
                  .Produces(StatusCodes.Status204NoContent)
                  .Produces(StatusCodes.Status400BadRequest)
                  .Produces(StatusCodes.Status401Unauthorized);
@@ -28,12 +28,12 @@ namespace Fcg.User.API.Endpoint.Admin
                  .Produces(StatusCodes.Status401Unauthorized)
                  .Produces(StatusCodes.Status400BadRequest);
 
-            group.MapPut("reativar-jogador/{id:guid}", ReativaUser)
+            group.MapPut("Reactivate-Player/{id:guid}", ReativaUser)
                  .Produces(StatusCodes.Status204NoContent)
                  .Produces(StatusCodes.Status401Unauthorized)
                  .Produces(StatusCodes.Status400BadRequest);
 
-            group.MapPut("rebaixar-jogador/{id:guid}", RebaixarUser)
+            group.MapPut("rebaixar-Player/{id:guid}", RebaixarUser)
                  .Produces(StatusCodes.Status204NoContent)
                  .Produces(StatusCodes.Status400BadRequest);
 
@@ -50,7 +50,7 @@ namespace Fcg.User.API.Endpoint.Admin
         private static async Task<IResult> DesativaUser(
            [FromRoute] Guid id,
            [FromServices] ISender sender,
-           [FromBody] MotivoDesativacao motivoDesativacao,
+           [FromBody] DeactivationReason DeactivationReason,
            ClaimsPrincipal user,
            CancellationToken cancellationToken)
         {
@@ -62,7 +62,7 @@ namespace Fcg.User.API.Endpoint.Admin
 
             var currentUserId = Guid.Parse(currentUserIdClaim);
 
-            var desativarUserCommand = new DesativarUserCommand(id, currentUserId, motivoDesativacao);
+            var desativarUserCommand = new DesativarUserCommand(id, currentUserId, DeactivationReason);
 
             await sender.Send(desativarUserCommand, cancellationToken);
 
@@ -127,7 +127,7 @@ namespace Fcg.User.API.Endpoint.Admin
                 return Results.BadRequest("Você não possui permissão para rebaixar a própria conta enquanto logado");
             }
 
-            var rebaixarJogadorCommand = new RebaixarUserParaJogadorCommand(id, currentUserId);
+            var rebaixarJogadorCommand = new DemoteUserToPlayerCommand(id, currentUserId);
 
             await sender.Send(rebaixarJogadorCommand, cancellationToken);
 
@@ -138,7 +138,7 @@ namespace Fcg.User.API.Endpoint.Admin
             [FromServices] ISender sender,
              CancellationToken CancellationToken)
         {
-            var query = new ObterTodosUsersQuery();
+            var query = new GetAllUsersQuery();
             var Users = await sender.Send(query, CancellationToken);
 
             if (Users == null || !Users.Any())
@@ -152,7 +152,7 @@ namespace Fcg.User.API.Endpoint.Admin
             [FromServices] ISender sender,
             CancellationToken CancellationToken)
         {
-            var query = new ObterUserPorIdQuery(id);
+            var query = new GetUserByIdQuery(id);
             var User = await sender.Send(query, CancellationToken);
             if (User == null)
                 return Results.Ok(Enumerable.Empty<UserResponse>());
