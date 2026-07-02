@@ -6,7 +6,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
     public record UpdateUserCommand(
         Guid UserId,
         string Name,
-        string password,
-        string ConfirmacaoSenha
+        string Password,
+        string ConfirmPassword
     ) : IRequest<UserResponse>;
 }

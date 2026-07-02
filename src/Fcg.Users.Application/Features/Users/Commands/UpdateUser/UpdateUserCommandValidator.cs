@@ -13,15 +13,15 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
                 .Length(3, 50).WithMessage(DomainMessages.UserNameLengthInvalid);
 
             
-            RuleFor(x => x.password)
+            RuleFor(x => x.Password)
                 .NotEmpty().WithMessage(DomainMessages.UserPasswordRequired)
                 .MinimumLength(8).WithMessage(DomainMessages.PasswordLengthInvalid)
                 .MaximumLength(60).WithMessage(DomainMessages.PasswordLengthInvalid);
 
             
-            RuleFor(x => x.ConfirmacaoSenha)
+            RuleFor(x => x.ConfirmPassword)
                 .NotEmpty().WithMessage(DomainMessages.UserPasswordConfirmationRequired)
-                .Equal(x => x.password).WithMessage(DomainMessages.UserPasswordConfirmationMismatch);
+                .Equal(x => x.Password).WithMessage(DomainMessages.UserPasswordConfirmationMismatch);
         }
     }
 }

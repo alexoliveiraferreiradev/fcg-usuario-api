@@ -6,6 +6,6 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DeactiveUser
     public record DeactivateUserCommand(
         Guid Id,
         Guid IdOperador,
-        DeactivationReason MotivoDelecao
+        DeactivationReason ReasonDeactivation
     ) : IRequest;
 }

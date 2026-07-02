@@ -40,12 +40,10 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
                 _logger.LogWarning("[UserAPI] Falha na atualização. O Name de usuário '{Name}' já está em uso por outra conta. UserId: {UserId}", request.Name, request.UserId);
                 throw new DomainException(DomainMessages.UserNameAlreadyRegistered);
             }
+                       
+            var hashSenha = _passwordHasher.HashPassword(request.Password);
 
-            if (request.password != request.ConfirmacaoSenha) throw new DomainException(DomainMessages.UserPasswordConfirmationMismatch);
-
-            var hashSenha = _passwordHasher.HashPassword(request.password);
-
-            var novaSenhaCriptografa = new Password(request.password,hashSenha);
+            var novaSenhaCriptografa = new Password(request.Password,hashSenha);
 
             var novoUserVO = new Name(request.Name);
 

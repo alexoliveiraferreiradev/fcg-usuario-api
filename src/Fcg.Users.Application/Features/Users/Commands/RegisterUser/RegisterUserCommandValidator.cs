@@ -25,7 +25,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
                 .MaximumLength(60).WithMessage(DomainMessages.PasswordLengthInvalid);
 
             
-            RuleFor(x => x.ConfirmacaoSenha)
+            RuleFor(x => x.ConfirmPassword)
                 .NotEmpty().WithMessage(DomainMessages.UserPasswordConfirmationRequired)
                 .Equal(x => x.Password).WithMessage(DomainMessages.UserPasswordConfirmationMismatch);
         }

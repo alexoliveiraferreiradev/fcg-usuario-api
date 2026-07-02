@@ -37,11 +37,11 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DeactiveUser
                 throw new DomainException(DomainMessages.UserNotFound);
             }
 
-            UserDesativar.Deactivate(request.MotivoDelecao);
+            UserDesativar.Deactivate(request.ReasonDeactivation);
 
             await _unitOfWork.CommitAsync();
 
-            _logger.LogWarning("[UserAPI] Usuário desativado com sucesso pelo operador. UserId: {UserId}, OperadorId: {OperadorId}, reason: {reason}", request.Id, request.IdOperador, request.MotivoDelecao);
+            _logger.LogWarning("[UserAPI] Usuário desativado com sucesso pelo operador. UserId: {UserId}, OperadorId: {OperadorId}, reason: {reason}", request.Id, request.IdOperador, request.ReasonDeactivation);
         }
     }
 }

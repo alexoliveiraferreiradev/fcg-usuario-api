@@ -7,6 +7,6 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
         string Name,
         string Email,
         string Password,
-        string ConfirmacaoSenha
+        string ConfirmPassword
     ) : IRequest<Guid>;
 }
