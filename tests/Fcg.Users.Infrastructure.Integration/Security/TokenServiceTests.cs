@@ -22,9 +22,9 @@ namespace Fcg.Users.Infrastructure.Integration.Security
             _jwtSettings = new JwtSettings
             {
                 Secret = "esta_eh_uma_chave_secreta_super_segura_de_32_caracteres_minimos!",
-                ExpiracaoHoras = 2,
-                Emissor = "FcgApp",
-                ValidoEm = "FcgAppClients"
+                ExpirationHours = 2,
+                Issuer = "FcgApp",
+                Audience = "FcgAppClients"
             };
 
             var optionsMock = Options.Create(_jwtSettings);
@@ -109,7 +109,7 @@ namespace Fcg.Users.Infrastructure.Integration.Security
             // Assert
             result.Should().NotBeNull();
             result.AccessToken.Should().NotBeNullOrWhiteSpace();
-            result.ExpiresIn.Should().Be(_jwtSettings.ExpiracaoHoras * 3600);
+            result.ExpiresIn.Should().Be(_jwtSettings.ExpirationHours * 3600);
             
             // Verifica se os claims mapeados voltaram no objeto ClaimResponse corretamente
             result.Claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == "AdminRole");

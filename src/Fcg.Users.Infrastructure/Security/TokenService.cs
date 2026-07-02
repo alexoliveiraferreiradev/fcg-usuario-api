@@ -25,7 +25,7 @@ namespace Fcg.Users.Infrastructure.Security
             return new TokenResult
             {
                 AccessToken = acessToken,
-                ExpiresIn = _jwtSettings.ExpiracaoHoras * 3600,
+                ExpiresIn = _jwtSettings.ExpirationHours * 3600,
                 Claims = claims.Select(c => new ClaimResponse { Type = c.Type, Value = c.Value })
             };
         }
@@ -59,10 +59,10 @@ namespace Fcg.Users.Infrastructure.Security
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
             var tokenDescriptor = tokenHandler.CreateToken(new SecurityTokenDescriptor
             {
-                Issuer = _jwtSettings.Emissor,
-                Audience = _jwtSettings.ValidoEm,
+                Issuer = _jwtSettings.Issuer,
+                Audience = _jwtSettings.Audience,
                 Subject = identityClaims,
-                Expires = DateTime.UtcNow.AddHours(_jwtSettings.ExpiracaoHoras),
+                Expires = DateTime.UtcNow.AddHours(_jwtSettings.ExpirationHours),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)
             });

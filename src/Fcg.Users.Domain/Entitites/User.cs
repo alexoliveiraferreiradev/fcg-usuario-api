@@ -34,12 +34,12 @@ namespace Fcg.Users.Domain.Entitites
             Ativo = true;
             DataCadastro = DateTime.UtcNow;
             DataAlteracao = DataCadastro;
-            ValidarEntidade();
+            ValidateEntity();
         }
 
 
 
-        protected override void ValidarEntidade()
+        protected override void ValidateEntity()
         {
             AssertionConcern.AssertArgumentNotNull(NomeUser, MensagensDominio.UsuarioNomeObrigatorio);
             AssertionConcern.AssertArgumentNotNull(EmailUser, MensagensDominio.UsuarioEmailObrigatorio);
