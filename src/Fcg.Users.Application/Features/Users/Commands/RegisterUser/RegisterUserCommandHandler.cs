@@ -11,7 +11,7 @@ using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Fcg.Users.Application.Features.Users.Commands.CadastrarUser
+namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
 {
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Guid>
     {

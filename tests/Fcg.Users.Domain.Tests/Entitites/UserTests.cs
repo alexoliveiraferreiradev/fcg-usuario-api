@@ -1,4 +1,4 @@
-﻿using Fcg.Core.Abstractions.Common.Exceptions;
+using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Resources;
 using Fcg.Users.Domain.Entitites;
 using Fcg.Users.Domain.Enum;
@@ -58,7 +58,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
-            var reason = DeactivationReason.Inatividade;
+            var reason = DeactivationReason.Inactivity;
 
             // Act
             User.Deactivate(reason);
@@ -74,10 +74,10 @@ namespace Fcg.Users.Domain.Tests.Entitites
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
-            User.Deactivate(DeactivationReason.SolicitacaoDoUser);
+            User.Deactivate(DeactivationReason.UserRequested);
 
             // Act & Assert
-            var excecao = Assert.Throws<DomainException>(() => User.Deactivate(DeactivationReason.Inatividade));
+            var excecao = Assert.Throws<DomainException>(() => User.Deactivate(DeactivationReason.Inactivity));
             Assert.Equal(DomainMessages.UserAlreadyDeactivated, excecao.Message);
         }
 
@@ -196,7 +196,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
-            User.Deactivate(DeactivationReason.Inatividade);
+            User.Deactivate(DeactivationReason.Inactivity);
 
             // Act
             User.Reactivate();

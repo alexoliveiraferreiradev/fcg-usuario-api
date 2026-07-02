@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Fcg.Core.Abstractions.Resources;
 
-namespace Fcg.Users.Application.Features.Users.Commands.AutenticarUser
+namespace Fcg.Users.Application.Features.Users.Commands.AuthenticateUser
 {
     public class AutenticarUserCommandValidator : AbstractValidator<AuthenticateUserCommand>
     {

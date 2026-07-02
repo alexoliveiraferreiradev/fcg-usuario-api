@@ -1,6 +1,5 @@
 ﻿using Fcg.Users.Infrastructure.Security;
 using FluentAssertions;
-using Xunit;
 
 namespace Fcg.Users.Infrastructure.Integration.Security
 {

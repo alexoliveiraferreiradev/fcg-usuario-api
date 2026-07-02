@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Fcg.Core.Abstractions.Resources;
 
-namespace Fcg.Users.Application.Features.Users.Commands.AtualizarUser
+namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
 {
     public class AtualizarUserCommandValidator : AbstractValidator<UpdateUserCommand>
     {

@@ -4,11 +4,7 @@ using Fcg.Users.Domain.Enum;
 using Fcg.Users.Infrastructure.Security;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
-using System;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Fcg.Users.Infrastructure.Integration.Security
 {

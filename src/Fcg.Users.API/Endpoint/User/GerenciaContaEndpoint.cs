@@ -1,7 +1,5 @@
-﻿using Fcg.Users.Application.Features.Users.Commands.AtualizarUser;
-using Fcg.Users.Application.Features.Users.Commands.AutenticarUser;
-using Fcg.Users.Application.Features.Users.Commands.CadastrarUser;
-using Fcg.Users.Application.Features.Users.Commands.DeactivateAccount;
+﻿using Fcg.Users.Application.Features.Users.Commands.DeactivateAccount;
+using Fcg.Users.Application.Features.Users.Commands.UpdateUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

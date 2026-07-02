@@ -1,16 +1,14 @@
-﻿using Fcg.Core.Abstractions.Common;
-using Fcg.Core.Abstractions.Common.Exceptions;
+﻿using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
-using Fcg.Users.Application.Features.Users.Commands.AutenticarUser;
+using Fcg.Core.Abstractions.Resources;
 using Fcg.Users.Application.Features.Users.Responses;
 using Fcg.Users.Domain.Common.Interfaces;
-using Fcg.Core.Abstractions.Resources;
 using Fcg.Users.Domain.Repositories.Interfaces;
 using Fcg.Users.Domain.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Fcg.Users.Application.Features.Users.Commands.AtualizarUser
+namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
 {
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserResponse>
     {

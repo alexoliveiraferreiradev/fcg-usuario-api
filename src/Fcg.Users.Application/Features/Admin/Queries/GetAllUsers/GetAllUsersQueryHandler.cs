@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Data;
 
-namespace Fcg.Users.Application.Features.Admin.Queries.ObterTodosUsers
+namespace Fcg.Users.Application.Features.Admin.Queries.GetAllUsers
 {
     public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, IEnumerable<UserResponse>>
     {

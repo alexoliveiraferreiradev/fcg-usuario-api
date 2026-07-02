@@ -1,7 +1,5 @@
-﻿using Fcg.Core.Abstractions.Resources;
-using Fcg.Users.Application.Features.Users.Commands.CadastrarUser;
+﻿using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
 using FluentAssertions;
-using Xunit;
 
 namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
 {

@@ -1,7 +1,7 @@
 ﻿using Fcg.Users.Application.Features.Users.Responses;
 using MediatR;
 
-namespace Fcg.Users.Application.Features.Users.Commands.CadastrarUser
+namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
 {
     public record RegisterUserCommand(
         string Name,

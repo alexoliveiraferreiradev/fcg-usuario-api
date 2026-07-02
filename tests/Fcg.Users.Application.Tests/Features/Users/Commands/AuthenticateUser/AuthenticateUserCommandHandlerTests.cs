@@ -1,7 +1,6 @@
-﻿using Bogus;
-using Fcg.Core.Abstractions.Common.Exceptions;
+﻿using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Users.Application.Common.Interfaces;
-using Fcg.Users.Application.Features.Users.Commands.AutenticarUser;
+using Fcg.Users.Application.Features.Users.Commands.AuthenticateUser;
 using Fcg.Users.Application.Features.Users.Responses;
 using Fcg.Users.Application.Features.Users.Responses.Token;
 using Fcg.Users.Domain.Common.Interfaces;
@@ -12,11 +11,6 @@ using FluentAssertions;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
 {

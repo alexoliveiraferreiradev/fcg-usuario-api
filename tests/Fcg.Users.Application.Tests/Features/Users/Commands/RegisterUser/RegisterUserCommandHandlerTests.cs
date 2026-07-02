@@ -1,20 +1,16 @@
 ﻿using Bogus;
+using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Core.Abstractions.MessageContracts;
-using Fcg.Core.Abstractions.Common.Exceptions;
-using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Application.Common.Interfaces;
-using Fcg.Users.Application.Features.Users.Commands.CadastrarUser;
+using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
+using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Domain.Entitites;
 using Fcg.Users.Domain.Repositories.Interfaces;
 using FluentAssertions;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
 {

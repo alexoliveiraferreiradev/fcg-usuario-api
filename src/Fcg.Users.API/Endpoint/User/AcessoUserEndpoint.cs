@@ -1,5 +1,5 @@
-﻿using Fcg.Users.Application.Features.Users.Commands.AutenticarUser;
-using Fcg.Users.Application.Features.Users.Commands.CadastrarUser;
+﻿using Fcg.Users.Application.Features.Users.Commands.AuthenticateUser;
+using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
 using Fcg.Users.Application.Features.Users.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

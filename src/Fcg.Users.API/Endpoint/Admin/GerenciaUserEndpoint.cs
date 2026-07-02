@@ -1,9 +1,9 @@
-﻿using Fcg.Users.Application.Features.Admin.Commands.DesativarUser;
-using Fcg.Users.Application.Features.Admin.Commands.PromoverUserParaAdmin;
-using Fcg.Users.Application.Features.Admin.Commands.ReativarConta;
-using Fcg.Users.Application.Features.Admin.Commands.RebaixarUserParaJogador;
-using Fcg.Users.Application.Features.Admin.Queries.ObterTodosUsers;
-using Fcg.Users.Application.Features.Admin.Queries.ObterUserPorId;
+﻿using Fcg.Users.Application.Features.Admin.Commands.DeactiveUser;
+using Fcg.Users.Application.Features.Admin.Commands.DemoteUserToPlayer;
+using Fcg.Users.Application.Features.Admin.Commands.PromoteUserToAdmin;
+using Fcg.Users.Application.Features.Admin.Commands.ReactiveAccount;
+using Fcg.Users.Application.Features.Admin.Queries.GetAllUsers;
+using Fcg.Users.Application.Features.Admin.Queries.GetUserById;
 using Fcg.Users.Application.Features.Users.Responses;
 using Fcg.Users.Domain.Enum;
 using MediatR;
@@ -62,9 +62,9 @@ namespace Fcg.User.API.Endpoint.Admin
 
             var currentUserId = Guid.Parse(currentUserIdClaim);
 
-            var DeactivateUserCommand = new DeactivateUserCommand(id, currentUserId, DeactivationReason);
+            var deactivateUserCommand = new DeactivateUserCommand(id, currentUserId, DeactivationReason);
 
-            await sender.Send(DeactivateUserCommand, cancellationToken);
+            await sender.Send(deactivateUserCommand, cancellationToken);
 
             return Results.NoContent();
         }

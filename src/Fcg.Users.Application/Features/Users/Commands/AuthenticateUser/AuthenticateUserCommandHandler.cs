@@ -8,7 +8,7 @@ using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Fcg.Users.Application.Features.Users.Commands.AutenticarUser
+namespace Fcg.Users.Application.Features.Users.Commands.AuthenticateUser
 {
     public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCommand, LoginResponse>
     {

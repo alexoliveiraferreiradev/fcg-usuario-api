@@ -7,7 +7,7 @@ using Fcg.Users.Domain.Repositories.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Fcg.Users.Application.Features.Admin.Commands.PromoverUserParaAdmin
+namespace Fcg.Users.Application.Features.Admin.Commands.PromoteUserToAdmin
 {
     public class PromoteUserToAdminCommandHandler : IRequestHandler<PromoteUserToAdminCommand, UserResponse>
     {

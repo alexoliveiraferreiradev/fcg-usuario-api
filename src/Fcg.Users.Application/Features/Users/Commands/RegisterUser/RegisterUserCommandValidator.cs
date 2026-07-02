@@ -1,7 +1,7 @@
 ﻿using Fcg.Core.Abstractions.Resources;
 using FluentValidation;
 
-namespace Fcg.Users.Application.Features.Users.Commands.CadastrarUser
+namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
 {
     public class CadastrarUserCommandValidator : AbstractValidator<RegisterUserCommand>
     {

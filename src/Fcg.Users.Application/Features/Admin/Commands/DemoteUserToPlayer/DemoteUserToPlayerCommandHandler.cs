@@ -7,7 +7,7 @@ using Fcg.Users.Domain.Repositories.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Fcg.Users.Application.Features.Admin.Commands.RebaixarUserParaJogador
+namespace Fcg.Users.Application.Features.Admin.Commands.DemoteUserToPlayer
 {
     public class DemoteUserToPlayerCommandHandler : IRequestHandler<DemoteUserToPlayerCommand, UserResponse>
     {
