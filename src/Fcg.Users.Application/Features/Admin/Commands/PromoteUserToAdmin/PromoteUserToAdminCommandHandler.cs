@@ -9,20 +9,20 @@ using Microsoft.Extensions.Logging;
 
 namespace Fcg.Users.Application.Features.Admin.Commands.PromoverUserParaAdmin
 {
-    public class PromoverUserParaAdminCommandHandler : IRequestHandler<PromoverUserParaAdminCommand, UserResponse>
+    public class PromoteUserToAdminCommandHandler : IRequestHandler<PromoteUserToAdminCommand, UserResponse>
     {
         private readonly IUserRepository _UserRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<PromoverUserParaAdminCommandHandler> _logger;
+        private readonly ILogger<PromoteUserToAdminCommandHandler> _logger;
 
-        public PromoverUserParaAdminCommandHandler(IUserRepository UserRepository, IUnitOfWork unitOfWork, ILogger<PromoverUserParaAdminCommandHandler> logger)
+        public PromoteUserToAdminCommandHandler(IUserRepository UserRepository, IUnitOfWork unitOfWork, ILogger<PromoteUserToAdminCommandHandler> logger)
         {
             _UserRepository = UserRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
-        public async Task<UserResponse> Handle(PromoverUserParaAdminCommand request, CancellationToken cancellationToken)
+        public async Task<UserResponse> Handle(PromoteUserToAdminCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("[UserAPI] Iniciando processo de promoção de usuário para Admin. UserId: {UserId}", request.Id);
 

@@ -7,19 +7,19 @@ using Microsoft.Extensions.Logging;
 
 namespace Fcg.Users.Application.Features.Admin.Commands.ReativarConta
 {
-    public class ReativarContaCommandHandler : IRequestHandler<ReativarContaCommand>
+    public class ReactivateAccountCommandHandler : IRequestHandler<ReactivateAccountCommand>
     {
         private readonly IUserRepository _UserRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<ReativarContaCommandHandler> _logger;
+        private readonly ILogger<ReactivateAccountCommandHandler> _logger;
 
-        public ReativarContaCommandHandler(IUserRepository UserRepository, IUnitOfWork unitOfWork, ILogger<ReativarContaCommandHandler> logger)
+        public ReactivateAccountCommandHandler(IUserRepository UserRepository, IUnitOfWork unitOfWork, ILogger<ReactivateAccountCommandHandler> logger)
         {
             _UserRepository = UserRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
-        public async Task Handle(ReativarContaCommand request, CancellationToken cancellationToken)
+        public async Task Handle(ReactivateAccountCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("[UserAPI] Iniciando processo de reativação de conta. UserId: {UserId}", request.UserId);
 

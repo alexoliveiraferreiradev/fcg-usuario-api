@@ -2,5 +2,5 @@
 
 namespace Fcg.Users.Application.Features.Admin.Commands.ReativarConta
 {
-    public record ReativarContaCommand(Guid UserId) : IRequest;
+    public record ReactivateAccountCommand(Guid UserId) : IRequest;
 }

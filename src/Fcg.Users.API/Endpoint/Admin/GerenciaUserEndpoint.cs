@@ -62,9 +62,9 @@ namespace Fcg.User.API.Endpoint.Admin
 
             var currentUserId = Guid.Parse(currentUserIdClaim);
 
-            var desativarUserCommand = new DesativarUserCommand(id, currentUserId, DeactivationReason);
+            var DeactivateUserCommand = new DeactivateUserCommand(id, currentUserId, DeactivationReason);
 
-            await sender.Send(desativarUserCommand, cancellationToken);
+            await sender.Send(DeactivateUserCommand, cancellationToken);
 
             return Results.NoContent();
         }
@@ -84,7 +84,7 @@ namespace Fcg.User.API.Endpoint.Admin
 
             var adminId = Guid.Parse(currentUserIdClaim);
 
-            var UserAPromover = new PromoverUserParaAdminCommand(id, adminId);
+            var UserAPromover = new PromoteUserToAdminCommand(id, adminId);
 
             var response = await sender.Send(UserAPromover, cancellationToken);
 
@@ -104,7 +104,7 @@ namespace Fcg.User.API.Endpoint.Admin
             {
                 return Results.Unauthorized();
             }
-            var reativarJogadorCommand = new ReativarContaCommand(id);
+            var reativarJogadorCommand = new ReactivateAccountCommand(id);
 
             await sender.Send(reativarJogadorCommand, cancellationToken);
 

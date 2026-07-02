@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Fcg.Users.Application.Features.Admin.Commands.PromoverUserParaAdmin
 {
-    public record PromoverUserParaAdminCommand(Guid Id,Guid IdOperador) : IRequest<UserResponse>;
+    public record PromoteUserToAdminCommand(Guid Id,Guid IdOperador) : IRequest<UserResponse>;
 }

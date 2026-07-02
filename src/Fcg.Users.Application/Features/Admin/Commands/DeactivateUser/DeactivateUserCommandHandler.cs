@@ -7,19 +7,19 @@ using Microsoft.Extensions.Logging;
 
 namespace Fcg.Users.Application.Features.Admin.Commands.DesativarUser
 {
-    public class DesativarUserCommandHandler : IRequestHandler<DesativarUserCommand>
+    public class DeactivateUserCommandHandler : IRequestHandler<DeactivateUserCommand>
     {
         private readonly IUserRepository _UserRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<DesativarUserCommandHandler> _logger;
+        private readonly ILogger<DeactivateUserCommandHandler> _logger;
 
-        public DesativarUserCommandHandler(IUserRepository UserRepository, IUnitOfWork unitOfWork, ILogger<DesativarUserCommandHandler> logger)
+        public DeactivateUserCommandHandler(IUserRepository UserRepository, IUnitOfWork unitOfWork, ILogger<DeactivateUserCommandHandler> logger)
         {
             _UserRepository = UserRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
-        public async Task Handle(DesativarUserCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeactivateUserCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("[UserAPI] Iniciando processo de desativação de usuário por um operador. UserId: {UserId}, OperadorId: {OperadorId}", request.Id, request.IdOperador);
 

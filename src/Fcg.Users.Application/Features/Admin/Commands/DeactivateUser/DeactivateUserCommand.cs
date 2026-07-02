@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Fcg.Users.Application.Features.Admin.Commands.DesativarUser
 {
-    public record DesativarUserCommand(
+    public record DeactivateUserCommand(
         Guid Id,
         Guid IdOperador,
         DeactivationReason MotivoDelecao
