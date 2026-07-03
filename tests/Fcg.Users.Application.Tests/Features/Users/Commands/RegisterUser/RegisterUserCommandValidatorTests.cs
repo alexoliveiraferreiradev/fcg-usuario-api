@@ -87,7 +87,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
 
             // Assert
             result.IsValid.Should().BeFalse();
-            result.Errors.Should().Contain(e => e.PropertyName == "ConfirmacaoSenha");
+            result.Errors.Should().Contain(e => e.PropertyName == "ConfirmPassword");
         }
     }
 }

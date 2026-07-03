@@ -52,7 +52,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
                 Name: faker.Person.UserName,
                 Email: faker.Person.Email,
                 Password: "Password123!",
-                ConfirmacaoSenha: "Password123!"
+                ConfirmPassword: "Password123!"
             );
 
             _UserRepositoryMock
