@@ -6,7 +6,7 @@ using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
 using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Domain.Repositories.Interfaces;
 using Fcg.Users.Infrastructure.DapperHandlers;
-using Fcg.Users.Infrastructure.Persistance;
+using Fcg.Users.Infrastructure.Persistence;
 using Fcg.Users.Infrastructure.Repository;
 using Fcg.Users.Infrastructure.Security;
 using FluentValidation;
@@ -14,6 +14,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Data;
 using System.Text;
 
@@ -23,7 +24,8 @@ namespace Fcg.User.API.Extensions
     {
         public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder)
         {
-            builder.AddSwaggerService()
+            builder.AddSerilogExtension()
+                .AddSwaggerService()
                 .AddDbContextExtension()
                 .AddMassTransitExtension()
                 .AddCQRSExtension()
@@ -39,7 +41,16 @@ namespace Fcg.User.API.Extensions
 
             return builder;
         }
+        private static WebApplicationBuilder AddSerilogExtension(this WebApplicationBuilder builder)
+        {
+            builder.Logging.ClearProviders();
+            builder.Host.UseSerilog((context, configuration) =>
+            {
+                configuration.ReadFrom.Configuration(context.Configuration);
+            });
 
+            return builder;
+        }
         private static WebApplicationBuilder AddDbContextExtension(this WebApplicationBuilder builder)
         {
             var connectionString = builder.Configuration.GetConnectionString("UserConnection");

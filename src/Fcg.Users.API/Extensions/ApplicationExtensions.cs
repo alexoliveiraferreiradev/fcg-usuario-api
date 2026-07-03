@@ -1,6 +1,7 @@
 ﻿using Fcg.Core.WebApi.Middleware;
 using Fcg.User.API.Endpoint.Admin;
 using Fcg.User.API.Endpoint.User;
+using Serilog;
 
 namespace Fcg.User.API.Extensions
 {
@@ -8,19 +9,18 @@ namespace Fcg.User.API.Extensions
     {
         public static WebApplication AddAplicationExtension(this WebApplication app)
         {
+            app.UseSerilogRequestLogging();
             app.UseMiddleware<ExceptionMiddleware>();
-
-            app.ConfigureEndpoints();
-            
+            app.ConfigureEndpoints();            
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
             }
+            app.UseRouting();
             app.UseSwaggerExtension();  
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
             return app;
 
         }
