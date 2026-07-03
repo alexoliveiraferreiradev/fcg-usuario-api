@@ -62,7 +62,7 @@ namespace Fcg.Users.Infrastructure.Integration.Security
             var claims = await _tokenService.GetClaims(User);
 
             // Assert
-            claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == "JogadorRole");
+            claims.Should().Contain(c => c.Type == ClaimTypes.Role && c.Value == "PlayerRole");
         }
 
         [Fact]
