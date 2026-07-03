@@ -1,0 +1,27 @@
+﻿using FluentValidation;
+using Fcg.Core.Abstractions.Resources;
+
+namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
+{
+    public class AtualizarUserCommandValidator : AbstractValidator<UpdateUserCommand>
+    {
+        public AtualizarUserCommandValidator()
+        {
+            
+            RuleFor(x => x.Name)
+                .NotEmpty().WithMessage(DomainMessages.UserNameRequired)
+                .Length(3, 50).WithMessage(DomainMessages.UserNameLengthInvalid);
+
+            
+            RuleFor(x => x.Password)
+                .NotEmpty().WithMessage(DomainMessages.UserPasswordRequired)
+                .MinimumLength(8).WithMessage(DomainMessages.PasswordLengthInvalid)
+                .MaximumLength(60).WithMessage(DomainMessages.PasswordLengthInvalid);
+
+            
+            RuleFor(x => x.ConfirmPassword)
+                .NotEmpty().WithMessage(DomainMessages.UserPasswordConfirmationRequired)
+                .Equal(x => x.Password).WithMessage(DomainMessages.UserPasswordConfirmationMismatch);
+        }
+    }
+}
