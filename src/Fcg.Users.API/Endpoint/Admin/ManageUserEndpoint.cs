@@ -12,9 +12,9 @@ using System.Security.Claims;
 
 namespace Fcg.User.API.Endpoint.Admin
 {
-    public static class GerenciaUserEndpoint
+    public static class ManageUserEndpoint
     {
-        public static void MapGerenciaUserEndpoints(this IEndpointRouteBuilder app)
+        public static void MapManageUserEndpoints(this IEndpointRouteBuilder app)
         {
             var group = app.MapGroup("api/admin/users")
                 .WithTags("Admin - Gerenciamento de Usuários").RequireAuthorization("AdminOnly");
