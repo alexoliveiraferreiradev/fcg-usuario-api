@@ -12,14 +12,14 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
 {
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserResponse>
     {
-        private readonly IUserRepository _UserRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ILogger<UpdateUserCommandHandler> _logger;
-        public UpdateUserCommandHandler(IUserRepository UserRepository, IPasswordHasher passwordHasher, 
+        public UpdateUserCommandHandler(IUserRepository userRepository, IPasswordHasher passwordHasher, 
             IUnitOfWork unitOfWork,ILogger<UpdateUserCommandHandler> logger)
         {
-            _UserRepository = UserRepository; 
+            _userRepository = userRepository; 
             _passwordHasher = passwordHasher;
             _unitOfWork = unitOfWork;
             _logger = logger;
@@ -28,14 +28,14 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
         {
             _logger.LogInformation("[UserAPI] Iniciando processo de atualização de usuário. UserId: {UserId}", request.UserId);
 
-            var User = await _UserRepository.GetByIdAsync(request.UserId);
+            var User = await _userRepository.GetByIdAsync(request.UserId);
             if (User == null) 
             {
                 _logger.LogWarning("[UserAPI] Falha na atualização. Usuário não encontrado no banco de dados. UserId: {UserId}", request.UserId);
                 throw new DomainException(DomainMessages.UserNotFound);
             }
 
-            if (await _UserRepository.CheckNameInUseAsync(request.UserId, request.Name))
+            if (await _userRepository.CheckNameInUseAsync(request.UserId, request.Name))
             {                
                 _logger.LogWarning("[UserAPI] Falha na atualização. O Name de usuário '{Name}' já está em uso por outra conta. UserId: {UserId}", request.Name, request.UserId);
                 throw new DomainException(DomainMessages.UserNameAlreadyRegistered);
@@ -43,13 +43,13 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
                        
             var hashSenha = _passwordHasher.HashPassword(request.Password);
 
-            var novaSenhaCriptografa = new Password(request.Password,hashSenha);
+            var novaSenhaCriptografa = new Password(hashSenha);
 
             var novoUserVO = new Name(request.Name);
 
             User.Update(novoUserVO, novaSenhaCriptografa);
 
-            _UserRepository.Update(User);
+            _userRepository.Update(User);
 
             await _unitOfWork.CommitAsync();
 

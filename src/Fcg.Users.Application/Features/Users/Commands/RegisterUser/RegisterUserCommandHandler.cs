@@ -15,17 +15,17 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
 {
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, Guid>
     {
-        private readonly IUserRepository _UserRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ITokenService _tokenService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<RegisterUserCommandHandler> _logger;
-        public RegisterUserCommandHandler(IUserRepository UserRepository,
+        public RegisterUserCommandHandler(IUserRepository userRepository,
             IPasswordHasher passwordHasher, ITokenService tokenService,IUnitOfWork unitOfWork,
             IPublishEndpoint publishEndpoint, ILogger<RegisterUserCommandHandler> logger)
         {
-            _UserRepository = UserRepository;
+            _userRepository = userRepository;
             _passwordHasher = passwordHasher;   
             _tokenService = tokenService;   
             _unitOfWork= unitOfWork;    
@@ -37,18 +37,18 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
             _logger.LogInformation("[UserAPI] Iniciando tentativa de cadastro de novo usuário. Email: {Email}", request.Email);
             var nomeValueObject = new Name(request.Name);
             var emailValueObject = new Email(request.Email);
-            var indisponivel = await _UserRepository.CheckAvailabilityAsync(request.Email, request.Name);
+            var indisponivel = await _userRepository.CheckAvailabilityAsync(request.Email, request.Name);
             
             if (indisponivel.EmailUsado) throw new DomainException(DomainMessages.EmailAlreadyRegistered);
             if (indisponivel.NomeUsado) throw new DomainException(DomainMessages.UserNameAlreadyRegistered);
             
             var hashSenha = _passwordHasher.HashPassword(request.Password);
 
-            var senhaCriptografada = new Password(request.Password,hashSenha);
+            var senhaCriptografada = new Password(hashSenha);
 
             var User = new User(nomeValueObject,emailValueObject,senhaCriptografada);
 
-            _UserRepository.Add(User);
+            _userRepository.Add(User);
 
             await _publishEndpoint.Publish(new UserCreatedEvent(User.Id, 
                 User.Name.Valor, User.Email.Valor));
