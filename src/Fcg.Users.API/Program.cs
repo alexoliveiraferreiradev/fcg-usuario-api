@@ -4,7 +4,7 @@ using Fcg.Core.WebApi.Security;
 using Fcg.User.API.Endpoint.Admin;
 using Fcg.User.API.Endpoint.User;
 using Fcg.Users.Application.Common.Interfaces;
-using Fcg.Users.Application.Features.Users.Commands.CadastrarUser;
+using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
 using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Domain.Repositories.Interfaces;
 using Fcg.Users.Infrastructure.DapperHandlers;
