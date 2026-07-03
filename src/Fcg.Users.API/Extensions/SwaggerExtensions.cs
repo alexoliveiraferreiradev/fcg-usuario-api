@@ -1,4 +1,4 @@
-﻿using Fcg.User.API.Filter;
+using Fcg.User.API.Filter;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -36,6 +36,7 @@ namespace Fcg.User.API.Extensions
                 }
 
                 options.SchemaFilter<EnumSchemaFilter>();
+                options.DocumentFilter<OrderTagsDocumentFilter>();
 
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
