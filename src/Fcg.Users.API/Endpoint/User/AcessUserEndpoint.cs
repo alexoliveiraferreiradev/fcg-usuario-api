@@ -3,6 +3,7 @@ using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
 using Fcg.Users.Application.Features.Users.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Fcg.User.API.Filters;
 
 namespace Fcg.User.API.Endpoint.User
 {
@@ -13,8 +14,9 @@ namespace Fcg.User.API.Endpoint.User
             var group = app.MapGroup("/api/user").WithTags("Autenticação do Usuário").AllowAnonymous();
 
             group.MapPost("/sign-in", AuthenticateUser)
+                .AddEndpointFilter<ValidationFilter<AuthenticateUserCommand>>()
                 .Produces<LoginResponse>(StatusCodes.Status200OK)
-                .Produces(StatusCodes.Status400BadRequest)
+                .ProducesValidationProblem()
                 .Produces(StatusCodes.Status401Unauthorized)
                 .WithSummary("Autentica um usuário e gera um token de acesso.")
                 .WithDescription("""
@@ -33,8 +35,9 @@ namespace Fcg.User.API.Endpoint.User
                 .WithName("Autheticate New User");
 
             group.MapPost("/register", RegisterUser)
+                .AddEndpointFilter<ValidationFilter<RegisterUserCommand>>()
                 .Produces(StatusCodes.Status201Created)
-                .Produces(StatusCodes.Status400BadRequest)
+                .ProducesValidationProblem()
                 .Produces(StatusCodes.Status409Conflict)
                 .WithSummary("Registra um novo usuário no sistema.")
                 .WithDescription("""
