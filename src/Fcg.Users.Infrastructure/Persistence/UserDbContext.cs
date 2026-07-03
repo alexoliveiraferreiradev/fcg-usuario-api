@@ -2,7 +2,7 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fcg.Users.Infrastructure.Persistance
+namespace Fcg.Users.Infrastructure.Persistence
 {
     public class UserDbContext : DbContext
     {
