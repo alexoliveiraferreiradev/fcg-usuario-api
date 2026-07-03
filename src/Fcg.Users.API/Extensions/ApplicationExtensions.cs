@@ -33,7 +33,7 @@ namespace Fcg.User.API.Extensions
             #endregion
 
             #region Admin - Gerenciamento de Usuários
-            app.MapGerenciaUserEndpoints();
+            app.MapManageUserEndpoints();
             #endregion
             return app;
         }
