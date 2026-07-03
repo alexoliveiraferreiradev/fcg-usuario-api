@@ -17,17 +17,15 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
-        private readonly ITokenService _tokenService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<RegisterUserCommandHandler> _logger;
         public RegisterUserCommandHandler(IUserRepository userRepository,
-            IPasswordHasher passwordHasher, ITokenService tokenService,IUnitOfWork unitOfWork,
+            IPasswordHasher passwordHasher, IUnitOfWork unitOfWork,
             IPublishEndpoint publishEndpoint, ILogger<RegisterUserCommandHandler> logger)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;   
-            _tokenService = tokenService;   
             _unitOfWork= unitOfWork;    
             _publishEndpoint = publishEndpoint;
             _logger = logger;
@@ -41,7 +39,9 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
             
             if (indisponivel.EmailUsado) throw new DomainException(DomainMessages.EmailAlreadyRegistered);
             if (indisponivel.NomeUsado) throw new DomainException(DomainMessages.UserNameAlreadyRegistered);
-            
+
+            var senha = new Password(request.Password);
+
             var hashSenha = _passwordHasher.HashPassword(request.Password);
 
             var senhaCriptografada = new Password(hashSenha);

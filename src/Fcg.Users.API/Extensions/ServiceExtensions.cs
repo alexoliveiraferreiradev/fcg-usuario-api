@@ -86,6 +86,7 @@ namespace Fcg.User.API.Extensions
             builder.Services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(typeof(RegisterUserCommand).Assembly);
+
             });
 
 

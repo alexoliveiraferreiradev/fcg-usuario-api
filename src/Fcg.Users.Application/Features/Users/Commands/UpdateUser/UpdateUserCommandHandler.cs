@@ -27,9 +27,9 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
         public async Task<UserResponse> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("[UserAPI] Iniciando processo de atualização de usuário. UserId: {UserId}", request.UserId);
-
-            var User = await _userRepository.GetByIdAsync(request.UserId);
-            if (User == null) 
+            var nomeValueObject = new Name(request.Name);
+            var user = await _userRepository.GetByIdAsync(request.UserId);
+            if (user == null) 
             {
                 _logger.LogWarning("[UserAPI] Falha na atualização. Usuário não encontrado no banco de dados. UserId: {UserId}", request.UserId);
                 throw new DomainException(DomainMessages.UserNotFound);
@@ -40,6 +40,8 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
                 _logger.LogWarning("[UserAPI] Falha na atualização. O Name de usuário '{Name}' já está em uso por outra conta. UserId: {UserId}", request.Name, request.UserId);
                 throw new DomainException(DomainMessages.UserNameAlreadyRegistered);
             }
+
+            var senha = new Password(request.Password);
                        
             var hashSenha = _passwordHasher.HashPassword(request.Password);
 
@@ -47,9 +49,9 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
 
             var novoUserVO = new Name(request.Name);
 
-            User.Update(novoUserVO, novaSenhaCriptografa);
+            user.Update(novoUserVO, novaSenhaCriptografa);
 
-            _userRepository.Update(User);
+            _userRepository.Update(user);
 
             await _unitOfWork.CommitAsync();
 
@@ -57,9 +59,9 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
 
             return new UserResponse
             {
-                Name = User.Name.Valor,
-                Email = User.Email.Valor,
-                PerfilUser = User.Role
+                Name = user.Name.Valor,
+                Email = user.Email.Valor,
+                PerfilUser = user.Role
             };
         }
     }

@@ -9,6 +9,7 @@ namespace Fcg.Users.Domain.ValueObjects
 
         public Password(string hash)
         {            
+            AssertionConcern.AssertArgumentPasswordStrenght(hash, DomainMessages.UserNewPasswordWeak); 
             AssertionConcern.AssertArgumentEmpty(hash, DomainMessages.UserPasswordRequired);
             Hash = hash;
         }
