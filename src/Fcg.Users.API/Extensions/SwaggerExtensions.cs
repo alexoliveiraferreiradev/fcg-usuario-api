@@ -1,4 +1,4 @@
-using Fcg.User.API.Filter;
+using Fcg.User.API.Filters;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 

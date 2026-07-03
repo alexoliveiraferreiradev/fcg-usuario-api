@@ -1,7 +1,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Fcg.User.API.Filter
+namespace Fcg.User.API.Filters
 {
     public class OrderTagsDocumentFilter : IDocumentFilter
     {
