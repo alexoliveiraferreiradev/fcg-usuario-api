@@ -53,9 +53,9 @@ namespace Fcg.User.API.Endpoint.User
                 return Results.Unauthorized();
             }
 
-            var UserId = Guid.Parse(currentId);
+            var userId = Guid.Parse(currentId);
 
-            var atualizarCommand = command with { UserId = UserId };
+            var atualizarCommand = command with { UserId = userId };
 
             var response = await mediator.Send(atualizarCommand, cancellationToken);
 
@@ -78,9 +78,9 @@ namespace Fcg.User.API.Endpoint.User
                 return Results.Unauthorized();
             }
 
-            var UserId = Guid.Parse(currentId);
+            var userId = Guid.Parse(currentId);
 
-            var desativarContaCommand = command with { Id = UserId };
+            var desativarContaCommand = command with { Id = userId };
 
             await mediator.Send(desativarContaCommand);
 
