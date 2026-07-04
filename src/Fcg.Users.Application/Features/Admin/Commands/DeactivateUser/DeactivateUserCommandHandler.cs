@@ -41,7 +41,7 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DeactiveUser
 
             await _unitOfWork.CommitAsync();
 
-            _logger.LogWarning("[UserAPI] Usuário desativado com sucesso pelo operador. UserId: {UserId}, OperadorId: {OperadorId}, reason: {reason}", request.Id, request.IdOperador, request.ReasonDeactivation);
+            _logger.LogWarning("[UserAPI] Usuário desativado com sucesso pelo operador. UserId: {UserId}, OperadorId: {OperadorId}, motivo: {reason}", request.Id, request.IdOperador, request.ReasonDeactivation);
         }
     }
 }
