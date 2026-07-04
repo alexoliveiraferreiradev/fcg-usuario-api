@@ -3,9 +3,9 @@ using Fcg.Core.Abstractions.Resources;
 
 namespace Fcg.Users.Application.Features.Users.Commands.AuthenticateUser
 {
-    public class AutenticarUserCommandValidator : AbstractValidator<AuthenticateUserCommand>
+    public class AuthenticateUserCommandValidator : AbstractValidator<AuthenticateUserCommand>
     {
-        public AutenticarUserCommandValidator()
+        public AuthenticateUserCommandValidator()
         {
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage(DomainMessages.UserEmailRequired)

@@ -3,9 +3,9 @@ using Fcg.Core.Abstractions.Resources;
 
 namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
 {
-    public class AtualizarUserCommandValidator : AbstractValidator<UpdateUserCommand>
+    public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     {
-        public AtualizarUserCommandValidator()
+        public UpdateUserCommandValidator()
         {
             
             RuleFor(x => x.Name)
@@ -17,10 +17,10 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
                 .NotEmpty().WithMessage(DomainMessages.UserPasswordRequired)
                 .MinimumLength(8).WithMessage(DomainMessages.PasswordLengthInvalid)
                 .MaximumLength(60).WithMessage(DomainMessages.PasswordLengthInvalid)
-                .Matches(@"[A-Z]+").WithMessage("Sua senha deve conter pelo menos uma letra maiúscula.")
-                .Matches(@"[a-z]+").WithMessage("Sua senha deve conter pelo menos uma letra minúscula.")
-                .Matches(@"[0-9]+").WithMessage("Sua senha deve conter pelo menos um número.")
-                .Matches(@"[\!\?\*\.\@]+").WithMessage("Sua senha deve conter pelo menos um caractere especial (!? *.@).");
+                .Matches(@"[A-Z]+").WithMessage(DomainMessages.PasswordMustContainUppercase)
+                .Matches(@"[a-z]+").WithMessage(DomainMessages.PasswordMustContainLowercase)
+                .Matches(@"[0-9]+").WithMessage(DomainMessages.PasswordMustContainNumber)
+                .Matches(@"[\!\?\*\.\@]+").WithMessage(DomainMessages.PasswordMustContainSpecialCharacter);
 
 
             RuleFor(x => x.ConfirmPassword)
