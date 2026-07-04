@@ -16,7 +16,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
 {
     public class CadastrarUserCommandHandlerTests
     {
-        private readonly Mock<IUserRepository> _UserRepositoryMock;
+        private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IPasswordHasher> _passwordHasherMock;
         private readonly Mock<ITokenService> _tokenServiceMock;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
@@ -26,17 +26,15 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
 
         public CadastrarUserCommandHandlerTests()
         {
-            _UserRepositoryMock = new Mock<IUserRepository>();
+            _userRepositoryMock = new Mock<IUserRepository>();
             _passwordHasherMock = new Mock<IPasswordHasher>();
-            _tokenServiceMock = new Mock<ITokenService>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _publishEndpointMock = new Mock<IPublishEndpoint>();
             _loggerMock = new Mock<ILogger<RegisterUserCommandHandler>>();
 
             _handler = new RegisterUserCommandHandler(
-                _UserRepositoryMock.Object,
+                _userRepositoryMock.Object,
                 _passwordHasherMock.Object,
-                _tokenServiceMock.Object,
                 _unitOfWorkMock.Object,
                 _publishEndpointMock.Object,
                 _loggerMock.Object
@@ -55,7 +53,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
                 ConfirmPassword: "Password123!"
             );
 
-            _UserRepositoryMock
+            _userRepositoryMock
                 .Setup(repo => repo.CheckAvailabilityAsync(command.Email, command.Name))
                 .ReturnsAsync((EmailUsado: false, NomeUsado: false));
 
@@ -69,7 +67,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
             // Assert
             resultId.Should().NotBeEmpty();
 
-            _UserRepositoryMock.Verify(repo => repo.Add(It.Is<User>(u => 
+            _userRepositoryMock.Verify(repo => repo.Add(It.Is<User>(u => 
                 u.Email.Valor == command.Email && 
                 u.Name.Valor == command.Name)), Times.Once);
 
@@ -86,7 +84,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
             // Arrange
             var command = new RegisterUserCommand("Teste", "teste@teste.com", "Senha123", "Senha123");
 
-            _UserRepositoryMock
+            _userRepositoryMock
                 .Setup(repo => repo.CheckAvailabilityAsync(command.Email, command.Name))
                 .ReturnsAsync((EmailUsado: true, NomeUsado: false));
 
@@ -103,7 +101,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
             // Arrange
             var command = new RegisterUserCommand("Teste", "teste@teste.com", "Senha123", "Senha123");
 
-            _UserRepositoryMock
+            _userRepositoryMock
                 .Setup(repo => repo.CheckAvailabilityAsync(command.Email, command.Name))
                 .ReturnsAsync((EmailUsado: false, NomeUsado: true));
 
