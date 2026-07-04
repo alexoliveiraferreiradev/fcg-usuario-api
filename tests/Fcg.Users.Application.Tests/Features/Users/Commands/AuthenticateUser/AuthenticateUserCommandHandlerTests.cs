@@ -44,12 +44,12 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
         public async Task Handle_DeveRetornarToken_QuandoCredenciaisForemValidas()
         {
             // Arrange
-            var command = new AuthenticateUserCommand("teste@teste.com", "SenhaForte123");
+            var command = new AuthenticateUserCommand("teste@teste.com", "SenhaForte123@");
             
             var User = new User(
                 new Name("User Teste"), 
                 new Email("teste@teste.com"), 
-                new Password("SenhaForte123", "hashed_password")
+                new Password("SenhaForte123@")
             );
 
             _UserRepositoryMock
@@ -100,12 +100,12 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
         public async Task Handle_DeveLancarDomainException_QuandoUserEstiverInativo()
         {
             // Arrange
-            var command = new AuthenticateUserCommand("teste@teste.com", "Senha123");
+            var command = new AuthenticateUserCommand("teste@teste.com", "SenhaForte123@");
             
             var User = new User(
                 new Name("User Teste"), 
                 new Email("teste@teste.com"), 
-                new Password("SenhaForte123", "hashed_password")
+                new Password("SenhaForte123@")
             );
             User.DeactivateAccount();
 
@@ -129,7 +129,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
             var User = new User(
                 new Name("User Teste"), 
                 new Email("teste@teste.com"), 
-                new Password("SenhaForte123", "hashed_password")
+                new Password("hashed_password")
             );
 
             _UserRepositoryMock

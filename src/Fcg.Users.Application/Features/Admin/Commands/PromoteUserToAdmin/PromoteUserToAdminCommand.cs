@@ -1,7 +1,12 @@
-﻿using Fcg.Users.Application.Features.Users.Responses;
+using Fcg.Users.Application.Features.Users.Responses;
 using MediatR;
 
 namespace Fcg.Users.Application.Features.Admin.Commands.PromoteUserToAdmin
 {
-    public record PromoteUserToAdminCommand(Guid Id,Guid IdOperador) : IRequest<UserResponse>;
+    /// <summary>
+    /// Comando enviado por um administrador para promover um usuário para a função de Administrador.
+    /// </summary>
+    /// <param name="Id">Identificador único (GUID) do usuário a ser promovido.</param>
+    /// <param name="IdOperador">Identificador único (GUID) do administrador operador realizando a ação.</param>
+    public record PromoteUserToAdminCommand(Guid Id, Guid IdOperador) : IRequest<UserResponse>;
 }

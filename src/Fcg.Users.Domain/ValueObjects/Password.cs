@@ -8,13 +8,8 @@ namespace Fcg.Users.Domain.ValueObjects
         public string Hash { get; }
 
         public Password(string hash)
-        {
-            AssertionConcern.AssertArgumentEmpty(hash, DomainMessages.UserPasswordRequired);
-            Hash = hash;
-        }
-        public Password(string Password,string hash)
-        {          
-            AssertionConcern.AssertArgumentLength(Password, 8, 60, DomainMessages.PasswordLengthInvalid);          
+        {            
+            AssertionConcern.AssertArgumentPasswordStrenght(hash, DomainMessages.UserNewPasswordWeak); 
             AssertionConcern.AssertArgumentEmpty(hash, DomainMessages.UserPasswordRequired);
             Hash = hash;
         }

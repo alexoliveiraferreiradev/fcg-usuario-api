@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Fcg.Users.Domain.Entitites;
 using Fcg.Users.Domain.Repositories.Interfaces;
-using Fcg.Users.Infrastructure.Persistance;
+using Fcg.Users.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fcg.Users.Infrastructure.Repository
