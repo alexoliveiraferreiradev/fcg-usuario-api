@@ -1,4 +1,4 @@
-﻿using Fcg.Core.Abstractions.Common.Exceptions;
+using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Core.Abstractions.Resources;
 using Fcg.Users.Domain.Repositories.Interfaces;
@@ -9,13 +9,13 @@ namespace Fcg.Users.Application.Features.Admin.Commands.ReactiveAccount
 {
     public class ReactivateAccountCommandHandler : IRequestHandler<ReactivateAccountCommand>
     {
-        private readonly IUserRepository _UserRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<ReactivateAccountCommandHandler> _logger;
 
-        public ReactivateAccountCommandHandler(IUserRepository UserRepository, IUnitOfWork unitOfWork, ILogger<ReactivateAccountCommandHandler> logger)
+        public ReactivateAccountCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<ReactivateAccountCommandHandler> logger)
         {
-            _UserRepository = UserRepository;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
@@ -23,15 +23,15 @@ namespace Fcg.Users.Application.Features.Admin.Commands.ReactiveAccount
         {
             _logger.LogInformation("[UserAPI] Iniciando processo de reativação de conta. UserId: {UserId}", request.UserId);
 
-            var User = await _UserRepository.GetByIdAsync(request.UserId);
-            if (User == null)
+            var user = await _userRepository.GetByIdAsync(request.UserId);
+            if (user == null)
             {                
                 _logger.LogWarning("[UserAPI] Falha na reativação. Usuário não encontrado no banco de dados. UserId: {UserId}", request.UserId);
                 throw new DomainException(DomainMessages.UserNotFound);
             }
-            User.Reactivate();
+            user.Reactivate();
 
-            _UserRepository.Update(User);
+            _userRepository.Update(user);
 
             await _unitOfWork.CommitAsync();
 

@@ -71,7 +71,7 @@ namespace Fcg.User.API.Endpoint.User
              [FromServices] ISender sender,
              CancellationToken cancellationToken)
         {
-            var UserId = await sender.Send(command, cancellationToken);
+            var userId = await sender.Send(command, cancellationToken);
 
             return Results.Created();
         }

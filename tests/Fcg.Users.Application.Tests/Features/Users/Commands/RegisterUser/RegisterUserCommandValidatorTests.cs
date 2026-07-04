@@ -5,11 +5,11 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
 {
     public class CadastrarUserCommandValidatorTests
     {
-        private readonly CadastrarUserCommandValidator _validator;
+        private readonly RegisterUserCommandValidator _validator;
 
         public CadastrarUserCommandValidatorTests()
         {
-            _validator = new CadastrarUserCommandValidator();
+            _validator = new RegisterUserCommandValidator();
         }
 
         [Fact]

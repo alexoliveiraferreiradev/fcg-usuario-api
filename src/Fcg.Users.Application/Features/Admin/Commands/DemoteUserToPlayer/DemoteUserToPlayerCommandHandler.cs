@@ -11,13 +11,13 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DemoteUserToPlayer
 {
     public class DemoteUserToPlayerCommandHandler : IRequestHandler<DemoteUserToPlayerCommand, UserResponse>
     {
-        private readonly IUserRepository _UserRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<DemoteUserToPlayerCommandHandler> _logger;
 
-        public DemoteUserToPlayerCommandHandler(IUserRepository UserRepository, IUnitOfWork unitOfWork, ILogger<DemoteUserToPlayerCommandHandler> logger)
+        public DemoteUserToPlayerCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<DemoteUserToPlayerCommandHandler> logger)
         {
-            _UserRepository = UserRepository;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
@@ -31,29 +31,29 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DemoteUserToPlayer
                 throw new DomainException(DomainMessages.InvalidDemoteOperation);
             }
 
-            var User = await _UserRepository.GetByIdAsync(request.Id);
+            var user = await _userRepository.GetByIdAsync(request.Id);
 
-            if (User == null)
+            if (user == null)
             {
                 _logger.LogWarning("[UserAPI] Falha no rebaixamento. Usuário alvo não encontrado. UserId: {UserId}", request.Id);
                 throw new DomainException(DomainMessages.UserNotFound);
             }
 
-            if (!User.IsActive)
+            if (!user.IsActive)
             {
                 _logger.LogWarning("[UserAPI] Falha no rebaixamento. Usuário está inativo. UserId: {UserId}", request.Id);
                 throw new DomainException(DomainMessages.UserMustBeActive);
             }
 
-            if (User.Role.Equals(UserRole.Player))
+            if (user.Role.Equals(UserRole.Player))
             {                
                 _logger.LogWarning("[UserAPI] Falha no rebaixamento. O usuário alvo já é um Player. UserId: {UserId}", request.Id);
                 throw new DomainException(DomainMessages.UserProfileDemoteInvalid);
             }
 
-            User.DemoteRole();
+            user.DemoteRole();
 
-            _UserRepository.Update(User);
+            _userRepository.Update(user);
 
             await _unitOfWork.CommitAsync();
 
@@ -61,10 +61,10 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DemoteUserToPlayer
 
             return new UserResponse
             {
-                Id = User.Id,
-                Name = User.Name.Valor,
-                Email = User.Email.Valor,
-                PerfilUser = User.Role
+                Id = user.Id,
+                Name = user.Name.Valor,
+                Email = user.Email.Valor,
+                PerfilUser = user.Role
             };
         }
     }

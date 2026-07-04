@@ -16,7 +16,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
 {
     public class AutenticarUserCommandHandlerTests
     {
-        private readonly Mock<IUserRepository> _UserRepositoryMock;
+        private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IPasswordHasher> _passwordHasherMock;
         private readonly Mock<ITokenService> _tokenServiceMock;
         private readonly Mock<IPublishEndpoint> _publishEndpointMock;
@@ -25,17 +25,15 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
 
         public AutenticarUserCommandHandlerTests()
         {
-            _UserRepositoryMock = new Mock<IUserRepository>();
+            _userRepositoryMock = new Mock<IUserRepository>();
             _passwordHasherMock = new Mock<IPasswordHasher>();
             _tokenServiceMock = new Mock<ITokenService>();
-            _publishEndpointMock = new Mock<IPublishEndpoint>();
             _loggerMock = new Mock<ILogger<AuthenticateUserCommandHandler>>();
 
             _handler = new AuthenticateUserCommandHandler(
-                _UserRepositoryMock.Object,
+                _userRepositoryMock.Object,
                 _passwordHasherMock.Object,
                 _tokenServiceMock.Object,
-                _publishEndpointMock.Object,
                 _loggerMock.Object
             );
         }
@@ -52,7 +50,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
                 new Password("SenhaForte123@")
             );
 
-            _UserRepositoryMock
+            _userRepositoryMock
                 .Setup(repo => repo.GetByEmailAsync(command.Email))
                 .ReturnsAsync(User);
 
@@ -85,7 +83,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
             // Arrange
             var command = new AuthenticateUserCommand("teste@teste.com", "Senha123");
 
-            _UserRepositoryMock
+            _userRepositoryMock
                 .Setup(repo => repo.GetByEmailAsync(command.Email))
                 .ReturnsAsync((User?)null);
 
@@ -109,7 +107,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
             );
             User.DeactivateAccount();
 
-            _UserRepositoryMock
+            _userRepositoryMock
                 .Setup(repo => repo.GetByEmailAsync(command.Email))
                 .ReturnsAsync(User);
 
@@ -132,7 +130,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
                 new Password("hashed_password")
             );
 
-            _UserRepositoryMock
+            _userRepositoryMock
                 .Setup(repo => repo.GetByEmailAsync(command.Email))
                 .ReturnsAsync(User);
 

@@ -33,9 +33,9 @@ namespace Fcg.Users.Application.Features.Admin.Queries.GetAllUsers
                     FROM Users 
                     ORDER BY CreatedAt DESC";
 
-            var Users = await _dbConnection.QueryAsync<UserResponse>(sql);
+            var users = await _dbConnection.QueryAsync<UserResponse>(sql);
 
-            var resultado = Users.ToList();
+            var resultado = users.ToList();
 
             if(!resultado.Any())
             {
