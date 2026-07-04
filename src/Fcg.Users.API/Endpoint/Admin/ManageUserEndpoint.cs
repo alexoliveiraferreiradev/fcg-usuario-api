@@ -94,7 +94,7 @@ namespace Fcg.User.API.Endpoint.Admin
         private static async Task<IResult> DeactivateUser(
            [FromRoute] Guid id,
            [FromServices] ISender sender,
-           [FromBody] DeactivationReason DeactivationReason,
+           [FromBody] DeactivationReason deactivationReason,
            ClaimsPrincipal user,
            CancellationToken cancellationToken)
         {
@@ -106,7 +106,7 @@ namespace Fcg.User.API.Endpoint.Admin
 
             var currentUserId = Guid.Parse(currentUserIdClaim);
 
-            var deactivateUserCommand = new DeactivateUserCommand(id, currentUserId, DeactivationReason);
+            var deactivateUserCommand = new DeactivateUserCommand(id, currentUserId, deactivationReason);
 
             await sender.Send(deactivateUserCommand, cancellationToken);
 
@@ -128,9 +128,9 @@ namespace Fcg.User.API.Endpoint.Admin
 
             var adminId = Guid.Parse(currentUserIdClaim);
 
-            var UserAPromover = new PromoteUserToAdminCommand(id, adminId);
+            var userAPromover = new PromoteUserToAdminCommand(id, adminId);
 
-            var response = await sender.Send(UserAPromover, cancellationToken);
+            var response = await sender.Send(userAPromover, cancellationToken);
 
             return Results.NoContent();
         }
@@ -180,28 +180,28 @@ namespace Fcg.User.API.Endpoint.Admin
 
         private static async Task<IResult> GetAllUsers(
             [FromServices] ISender sender,
-             CancellationToken CancellationToken)
+             CancellationToken cancellationToken)
         {
             var query = new GetAllUsersQuery();
-            var Users = await sender.Send(query, CancellationToken);
+            var users = await sender.Send(query, cancellationToken);
 
-            if (Users == null || !Users.Any())
+            if (users == null || !users.Any())
                 return Results.Ok(Enumerable.Empty<UserResponse>);
 
-            return Results.Ok(Users);
+            return Results.Ok(users);
         }
 
         private static async Task<IResult> GetUserById(
             [FromRoute] Guid id,
             [FromServices] ISender sender,
-            CancellationToken CancellationToken)
+            CancellationToken cancellationToken)
         {
             var query = new GetUserByIdQuery(id);
-            var User = await sender.Send(query, CancellationToken);
-            if (User == null)
+            var user = await sender.Send(query, cancellationToken);
+            if (user == null)
                 return Results.Ok(Enumerable.Empty<UserResponse>());
             
-            return Results.Ok(User);
+            return Results.Ok(user);
         }
     }
 }
