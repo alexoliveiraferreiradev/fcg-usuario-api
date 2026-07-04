@@ -15,6 +15,6 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
         [property: DefaultValue("nome do usuário")] string Name,
         [property: DefaultValue("email do usuário")] string Email,
         [property: DefaultValue("senha do usuário")] string Password,
-        [property: DefaultValue("senha do usuário")] string ConfirmPassword
+        [property: DefaultValue("confirmação da senha do usuário")] string ConfirmPassword
     ) : IRequest<Guid>;
 }

@@ -10,7 +10,8 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
             
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage(DomainMessages.UserNameRequired)
-                .Length(3, 50).WithMessage(DomainMessages.UserNameLengthInvalid);
+                .Length(3, 50).WithMessage(DomainMessages.UserNameLengthInvalid)
+                .NotEqual("nome do usuário").WithMessage(DomainMessages.NameNotReal);
 
             
             RuleFor(x => x.Email)

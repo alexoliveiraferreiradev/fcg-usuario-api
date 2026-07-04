@@ -64,5 +64,6 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
                 PerfilUser = user.Role
             };
         }
+
     }
 }

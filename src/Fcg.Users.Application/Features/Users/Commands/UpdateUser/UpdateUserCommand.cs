@@ -11,9 +11,9 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
     /// <param name="Password">Nova senha a ser cadastrada.</param>
     /// <param name="ConfirmPassword">Confirmação idêntica da nova senha.</param>
     public record UpdateUserCommand(
-        [property: DefaultValue("00000000-0000-0000-0000-000000000000")] Guid UserId,
-        [property: DefaultValue("nome do usuário")] string Name,
-        [property: DefaultValue("senha do usuário")] string Password,
-        [property: DefaultValue("senha do usuário")] string ConfirmPassword
+        Guid UserId,
+        string Name,
+        string Password,
+        string ConfirmPassword
     ) : IRequest<UserResponse>;
 }

@@ -11,8 +11,8 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DeactiveUser
     /// <param name="IdOperador">Identificador único (GUID) do administrador operador realizando a ação.</param>
     /// <param name="ReasonDeactivation">Motivo detalhado para a desativação da conta do usuário.</param>
     public record DeactivateUserCommand(
-        [property: DefaultValue("00000000-0000-0000-0000-000000000000")] Guid Id,
-        [property: DefaultValue("00000000-0000-0000-0000-000000000000")] Guid IdOperador,
-        [property: DefaultValue(DeactivationReason.Other)] DeactivationReason ReasonDeactivation
+        Guid Id,
+        Guid IdOperador,
+        DeactivationReason ReasonDeactivation
     ) : IRequest;
 }

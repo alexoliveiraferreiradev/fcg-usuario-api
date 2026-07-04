@@ -10,7 +10,7 @@ namespace Fcg.Users.Application.Features.Admin.Commands.PromoteUserToAdmin
     /// <param name="Id">Identificador único (GUID) do usuário a ser promovido.</param>
     /// <param name="IdOperador">Identificador único (GUID) do administrador operador realizando a ação.</param>
     public record PromoteUserToAdminCommand(
-        [property: DefaultValue("00000000-0000-0000-0000-000000000000")] Guid Id,
-        [property: DefaultValue("00000000-0000-0000-0000-000000000000")] Guid IdOperador
+        Guid Id,
+        Guid IdOperador
     ) : IRequest<UserResponse>;
 }
