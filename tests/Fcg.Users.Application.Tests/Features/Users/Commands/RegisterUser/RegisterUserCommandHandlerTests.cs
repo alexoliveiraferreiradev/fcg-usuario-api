@@ -1,4 +1,4 @@
-﻿using Bogus;
+using Bogus;
 using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Core.Abstractions.MessageContracts;
@@ -18,7 +18,6 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
     {
         private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IPasswordHasher> _passwordHasherMock;
-        private readonly Mock<ITokenService> _tokenServiceMock;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IPublishEndpoint> _publishEndpointMock;
         private readonly Mock<ILogger<RegisterUserCommandHandler>> _loggerMock;
