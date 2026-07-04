@@ -1,4 +1,4 @@
-﻿using Fcg.Core.Abstractions.Common.Exceptions;
+using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Resources;
 using Fcg.Users.Application.Common.Interfaces;
 using Fcg.Users.Application.Features.Users.Responses;
@@ -46,7 +46,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.AuthenticateUser
             bool senhaValida = _passwordHasher.VerifyPassword(request.Password, user.Password.Hash);
             if (!senhaValida)
             {
-                _logger.LogWarning("[UserAPI] Falha de autenticação: Password inválida fornecida para o e-mail {Email} (ID: {UserId}).", request.Email, user.Id);
+                _logger.LogWarning("[UserAPI] Falha de autenticação: Senha inválida fornecida para o e-mail {Email} (ID: {UserId}).", request.Email, user.Id);
                 throw new DomainException(DomainMessages.InvalidCredentials);
             }
 
