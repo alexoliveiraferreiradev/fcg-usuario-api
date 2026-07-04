@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using Fcg.Users.Domain.Entitites;
 using Fcg.Users.Domain.Repositories.Interfaces;
 using Fcg.Users.Infrastructure.Persistence;
@@ -13,14 +13,14 @@ namespace Fcg.Users.Infrastructure.Repository
         {
             _dbContext = dbContext; 
         }
-        public void Add(User User)
+        public void Add(User user)
         {
-            _dbContext.Users.Add(User);   
+            _dbContext.Users.Add(user);   
         }
 
-        public void Update(User User)
+        public void Update(User user)
         {
-             _dbContext.Users.Update(User);
+             _dbContext.Users.Update(user);
         }
 
         public async Task<User?> GetByEmailAsync(string email)
@@ -47,7 +47,7 @@ namespace Fcg.Users.Infrastructure.Repository
         }
             
 
-        public async Task<(bool EmailUsado, bool NomeUsado)> CheckAvailabilityAsync(string email, string Name)
+        public async Task<(bool EmailUsado, bool NomeUsado)> CheckAvailabilityAsync(string email, string name)
         {
             var connection = _dbContext.Database.GetDbConnection();
 
@@ -55,7 +55,7 @@ namespace Fcg.Users.Infrastructure.Repository
             CAST(CASE WHEN EXISTS (SELECT 1 FROM Users WHERE Email = @Email) THEN 1 ELSE 0 END AS BIT) AS EmailUsado,
             CAST(CASE WHEN EXISTS (SELECT 1 FROM Users WHERE Name = @Name) THEN 1 ELSE 0 END AS BIT) AS NomeUsado";
                         
-            return await connection.QueryFirstOrDefaultAsync<(bool EmailUsado, bool NomeUsado)>(query, new { Email = email, Name = Name });
+            return await connection.QueryFirstOrDefaultAsync<(bool EmailUsado, bool NomeUsado)>(query, new { Email = email, Name = name });
         }
 
         public async Task<bool> HasMultipleAdminsAsync()
@@ -68,13 +68,13 @@ namespace Fcg.Users.Infrastructure.Repository
         }
 
        
-        public async Task<bool> CheckNameInUseAsync(Guid UserId, string nomeCadastrado)
+        public async Task<bool> CheckNameInUseAsync(Guid userId, string nomeCadastrado)
         {
             var connection = _dbContext.Database.GetDbConnection();
 
             var query = "SELECT CAST(CASE WHEN EXISTS (SELECT 1 FROM Users WHERE Name = @Name and Id!= @IdUser) THEN 1 ELSE 0 END AS BIT) AS NomeUsado";
 
-            return await connection.QueryFirstOrDefaultAsync<bool>(query, new { Name = nomeCadastrado, IdUser = UserId }); 
+            return await connection.QueryFirstOrDefaultAsync<bool>(query, new { Name = nomeCadastrado, IdUser = userId }); 
         }
 
         
