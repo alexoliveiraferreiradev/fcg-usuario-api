@@ -9,13 +9,13 @@ namespace Fcg.Users.Application.Features.Admin.Commands.ReactiveAccount
 {
     public class ReactivateAccountCommandHandler : IRequestHandler<ReactivateAccountCommand>
     {
-        private readonly IUserRepository _UserRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<ReactivateAccountCommandHandler> _logger;
 
         public ReactivateAccountCommandHandler(IUserRepository UserRepository, IUnitOfWork unitOfWork, ILogger<ReactivateAccountCommandHandler> logger)
         {
-            _UserRepository = UserRepository;
+            _userRepository = UserRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
@@ -23,7 +23,7 @@ namespace Fcg.Users.Application.Features.Admin.Commands.ReactiveAccount
         {
             _logger.LogInformation("[UserAPI] Iniciando processo de reativação de conta. UserId: {UserId}", request.UserId);
 
-            var User = await _UserRepository.GetByIdAsync(request.UserId);
+            var User = await _userRepository.GetByIdAsync(request.UserId);
             if (User == null)
             {                
                 _logger.LogWarning("[UserAPI] Falha na reativação. Usuário não encontrado no banco de dados. UserId: {UserId}", request.UserId);
@@ -31,7 +31,7 @@ namespace Fcg.Users.Application.Features.Admin.Commands.ReactiveAccount
             }
             User.Reactivate();
 
-            _UserRepository.Update(User);
+            _userRepository.Update(User);
 
             await _unitOfWork.CommitAsync();
 

@@ -46,20 +46,20 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
 
             var senhaCriptografada = new Password(hashSenha);
 
-            var User = new User(nomeValueObject,emailValueObject,senhaCriptografada);
+            var user = new User(nomeValueObject,emailValueObject,senhaCriptografada);
 
-            _userRepository.Add(User);
+            _userRepository.Add(user);
 
-            await _publishEndpoint.Publish(new UserCreatedEvent(User.Id, 
-                User.Name.Valor, User.Email.Valor));
+            await _publishEndpoint.Publish(new UserCreatedEvent(user.Id, 
+                user.Name.Valor, user.Email.Valor));
 
             await _unitOfWork.CommitAsync();
 
-            _logger.LogInformation("[UserAPI] Usuário {UserId} cadastrado com sucesso no banco de dados com o Role base.", User.Id);
+            _logger.LogInformation("[UserAPI] Usuário {UserId} cadastrado com sucesso no banco de dados com o Role base.", user.Id);
 
-            _logger.LogInformation("[UserAPI] Processo de cadastro finalizado. Usuário {UserId} pronto para login.", User.Id);
+            _logger.LogInformation("[UserAPI] Processo de cadastro finalizado. Usuário {UserId} pronto para login.", user.Id);
 
-            return User.Id;
+            return user.Id;
         }
     }
 }

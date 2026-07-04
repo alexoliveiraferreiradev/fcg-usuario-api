@@ -10,13 +10,13 @@ namespace Fcg.Users.Application.Features.Users.Commands.DeactivateAccount
 {
     public class DesativarContaCommandHandler : IRequestHandler<DesativarContaCommand>
     {
-        private readonly IUserRepository _UserRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<DesativarContaCommandHandler> _logger;
 
-        public DesativarContaCommandHandler(IUserRepository UserRepository, IUnitOfWork unitOfWork, ILogger<DesativarContaCommandHandler> logger)
+        public DesativarContaCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<DesativarContaCommandHandler> logger)
         {
-            _UserRepository = UserRepository;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
@@ -24,26 +24,26 @@ namespace Fcg.Users.Application.Features.Users.Commands.DeactivateAccount
         {
             _logger.LogInformation("[UserAPI] Iniciando processo de desativação de conta. UserId: {UserId}", request.Id);
 
-            var User = await _UserRepository.GetByIdAsync(request.Id);
+            var user = await _userRepository.GetByIdAsync(request.Id);
 
-            if (User == null)
+            if (user == null)
             {                
                 _logger.LogWarning("[UserAPI] Falha na desativação. Usuário não encontrado no banco de dados. UserId: {UserId}", request.Id);
                 throw new DomainException(DomainMessages.UserNotFound);
             }
 
-            if (User.Role == UserRole.Admin)
+            if (user.Role == UserRole.Admin)
             {             
-                var existeOutroAdmin = await _UserRepository.HasMultipleAdminsAsync();
+                var existeOutroAdmin = await _userRepository.HasMultipleAdminsAsync();
                 if (!existeOutroAdmin)
                 {             
                     _logger.LogWarning("[UserAPI] Falha na desativação. Não é possível Deactivate o único Admin cadastrado. UserId: {UserId}", request.Id);
                     throw new DomainException(DomainMessages.InvalidDeactivateAdminOperation);
                 }
             }
-            User.DeactivateAccount();
+            user.DeactivateAccount();
 
-            _UserRepository.Update(User);
+            _userRepository.Update(user);
 
             await _unitOfWork.CommitAsync();
 

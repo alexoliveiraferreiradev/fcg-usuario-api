@@ -27,8 +27,8 @@ namespace Fcg.Users.Application.Features.Admin.Queries.GetUserById
                                  FROM Users 
                                  where Id = @IdUser";
 
-            var User = await _dbConnection.QueryFirstOrDefaultAsync<UserResponse>(sql, new { IdUser = request.Id });
-            return User;
+            var user = await _dbConnection.QueryFirstOrDefaultAsync<UserResponse>(sql, new { IdUser = request.Id });
+            return user;
         }
     }
 }

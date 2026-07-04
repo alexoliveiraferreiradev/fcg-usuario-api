@@ -11,13 +11,13 @@ namespace Fcg.Users.Application.Features.Admin.Commands.PromoteUserToAdmin
 {
     public class PromoteUserToAdminCommandHandler : IRequestHandler<PromoteUserToAdminCommand, UserResponse>
     {
-        private readonly IUserRepository _UserRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<PromoteUserToAdminCommandHandler> _logger;
 
-        public PromoteUserToAdminCommandHandler(IUserRepository UserRepository, IUnitOfWork unitOfWork, ILogger<PromoteUserToAdminCommandHandler> logger)
+        public PromoteUserToAdminCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<PromoteUserToAdminCommandHandler> logger)
         {
-            _UserRepository = UserRepository;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
@@ -26,8 +26,8 @@ namespace Fcg.Users.Application.Features.Admin.Commands.PromoteUserToAdmin
         {
             _logger.LogInformation("[UserAPI] Iniciando processo de promoção de usuário para Admin. UserId: {UserId}", request.Id);
 
-            var User = await _UserRepository.GetByIdAsync(request.Id);
-            if (User == null)
+            var user = await _userRepository.GetByIdAsync(request.Id);
+            if (user == null)
             {
                 _logger.LogWarning("[UserAPI] Falha na promoção. Usuário não encontrado. UserId: {UserId}", request.Id);
                 throw new DomainException(DomainMessages.UserNotFound);
@@ -39,21 +39,21 @@ namespace Fcg.Users.Application.Features.Admin.Commands.PromoteUserToAdmin
                 throw new DomainException("Um Admin não pode promover a si próprio.");
             }
 
-            if (!User.IsActive)
+            if (!user.IsActive)
             {
                 _logger.LogWarning("[UserAPI] Falha na promoção. Usuário está inativo. UserId: {UserId}", request.Id);
                 throw new DomainException(DomainMessages.UserMustBeActive);
             }
 
-            if (User.Role.Equals(UserRole.Admin))
+            if (user.Role.Equals(UserRole.Admin))
             {
                 _logger.LogWarning("[UserAPI] Falha na promoção. O usuário já é um Admin. UserId: {UserId}", request.Id);
                 throw new DomainException(DomainMessages.UserProfileDemoteInvalid);
             }
 
-            User.PromoteRole();
+            user.PromoteRole();
 
-            _UserRepository.Update(User);
+            _userRepository.Update(user);
 
             await _unitOfWork.CommitAsync();
 
@@ -61,10 +61,10 @@ namespace Fcg.Users.Application.Features.Admin.Commands.PromoteUserToAdmin
 
             return new UserResponse
             {
-                Id = User.Id,
-                Email = User.Email.Valor,
-                Name = User.Name.Valor,
-                PerfilUser = User.Role
+                Id = user.Id,
+                Email = user.Email.Valor,
+                Name = user.Name.Valor,
+                PerfilUser = user.Role
             };
         }
     }

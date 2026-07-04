@@ -12,65 +12,63 @@ namespace Fcg.Users.Application.Features.Users.Commands.AuthenticateUser
 {
     public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCommand, LoginResponse>
     {
-        private readonly IUserRepository _UserRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ITokenService _tokenService;
-        private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<AuthenticateUserCommandHandler> _logger;
 
-        public AuthenticateUserCommandHandler(IUserRepository UserRepository, IPasswordHasher passwordHasher,
-            ITokenService tokenService, IPublishEndpoint publishEndpoint, ILogger<AuthenticateUserCommandHandler> logger)
+        public AuthenticateUserCommandHandler(IUserRepository userRepository, IPasswordHasher passwordHasher,
+            ITokenService tokenService,  ILogger<AuthenticateUserCommandHandler> logger)
         {
-            _UserRepository = UserRepository;
+            _userRepository = userRepository;
             _passwordHasher = passwordHasher;
             _tokenService = tokenService;
-            _publishEndpoint = publishEndpoint;
             _logger = logger;
         }
         public async Task<LoginResponse> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("[UserAPI] Iniciando tentativa de autenticação para o e-mail {Email}.", request.Email);
 
-            var User = await _UserRepository.GetByEmailAsync(request.Email);
-            if (User == null)
+            var user = await _userRepository.GetByEmailAsync(request.Email);
+            if (user == null)
             {
                 _logger.LogWarning("[UserAPI] Falha de autenticação: E-mail {Email} não encontrado no banco de dados.", request.Email);
 
                 throw new DomainException(DomainMessages.InvalidCredentials);
             }
 
-            if (!User.IsActive)
+            if (!user.IsActive)
             {
-                _logger.LogWarning("[UserAPI] Falha de autenticação: A conta vinculada ao e-mail {Email} (ID: {UserId}) encontra-se inativa.", request.Email, User.Id);
+                _logger.LogWarning("[UserAPI] Falha de autenticação: A conta vinculada ao e-mail {Email} (ID: {UserId}) encontra-se inativa.", request.Email, user.Id);
                 throw new DomainException(DomainMessages.UserMustBeActive);
             }
 
-            bool senhaValida = _passwordHasher.VerifyPassword(request.Password, User.Password.Hash);
+            bool senhaValida = _passwordHasher.VerifyPassword(request.Password, user.Password.Hash);
             if (!senhaValida)
             {
-                _logger.LogWarning("[UserAPI] Falha de autenticação: Password inválida fornecida para o e-mail {Email} (ID: {UserId}).", request.Email, User.Id);
+                _logger.LogWarning("[UserAPI] Falha de autenticação: Password inválida fornecida para o e-mail {Email} (ID: {UserId}).", request.Email, user.Id);
                 throw new DomainException(DomainMessages.InvalidCredentials);
             }
 
-            var UserResponse = new UserResponse
+            var userResponse = new UserResponse
             {
-                Id = User.Id,
-                Name = User.Name.Valor,
-                Email = User.Email.Valor,
-                PerfilUser = User.Role
+                Id = user.Id,
+                Name = user.Name.Valor,
+                Email = user.Email.Valor,
+                PerfilUser = user.Role
             };
 
-            var tokenResult = await _tokenService.GenerateToken(UserResponse);
+            var tokenResult = await _tokenService.GenerateToken(userResponse);
 
-            _logger.LogInformation("[UserAPI] Login realizado com sucesso. UserId: {UserId}, Email: {Email}", User.Id, User.Email.Valor);
+            _logger.LogInformation("[UserAPI] Login realizado com sucesso. UserId: {UserId}, Email: {Email}", user.Id, user.Email.Valor);
 
             return new LoginResponse
             {
                 AcessToken = tokenResult.AccessToken,
                 ExpiresIn = tokenResult.ExpiresIn,
-                Id = User.Id.ToString(),
-                Email = User.Email.Valor,
-                PerfilUser = User.Role,
+                Id = user.Id.ToString(),
+                Email = user.Email.Valor,
+                PerfilUser = user.Role,
                 Claims = tokenResult.Claims
             };
         }
