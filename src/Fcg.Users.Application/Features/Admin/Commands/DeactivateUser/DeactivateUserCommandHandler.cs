@@ -1,4 +1,4 @@
-﻿using Fcg.Core.Abstractions.Common.Exceptions;
+using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Core.Abstractions.Resources;
 using Fcg.Users.Domain.Repositories.Interfaces;
@@ -13,9 +13,9 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DeactiveUser
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<DeactivateUserCommandHandler> _logger;
 
-        public DeactivateUserCommandHandler(IUserRepository UserRepository, IUnitOfWork unitOfWork, ILogger<DeactivateUserCommandHandler> logger)
+        public DeactivateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<DeactivateUserCommandHandler> logger)
         {
-            _userRepository = UserRepository;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
