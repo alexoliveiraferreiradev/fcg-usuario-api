@@ -1,4 +1,4 @@
-﻿using Fcg.Core.Abstractions.Common.Exceptions;
+using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Core.Abstractions.Resources;
 using Fcg.Users.Application.Features.Users.Responses;
@@ -37,7 +37,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
 
             if (await _userRepository.CheckNameInUseAsync(request.UserId, request.Name))
             {                
-                _logger.LogWarning("[UserAPI] Falha na atualização. O Name de usuário '{Name}' já está em uso por outra conta. UserId: {UserId}", request.Name, request.UserId);
+                _logger.LogWarning("[UserAPI] Falha na atualização. O nome de usuário '{Name}' já está em uso por outra conta. UserId: {UserId}", request.Name, request.UserId);
                 throw new DomainException(DomainMessages.UserNameAlreadyRegistered);
             }
 
