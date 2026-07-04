@@ -1,4 +1,4 @@
-﻿using Fcg.Core.Abstractions.Common.Exceptions;
+using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Core.Abstractions.Resources;
 using Fcg.Users.Domain.Enum;
@@ -37,7 +37,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.DeactivateAccount
                 var existeOutroAdmin = await _userRepository.HasMultipleAdminsAsync();
                 if (!existeOutroAdmin)
                 {             
-                    _logger.LogWarning("[UserAPI] Falha na desativação. Não é possível Deactivate o único Admin cadastrado. UserId: {UserId}", request.Id);
+                    _logger.LogWarning("[UserAPI] Falha na desativação. Não é possível desativar o único Admin cadastrado. UserId: {UserId}", request.Id);
                     throw new DomainException(DomainMessages.InvalidDeactivateAdminOperation);
                 }
             }
