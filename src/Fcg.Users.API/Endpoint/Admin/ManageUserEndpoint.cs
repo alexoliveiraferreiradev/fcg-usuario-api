@@ -93,8 +93,8 @@ namespace Fcg.User.API.Endpoint.Admin
 
         private static async Task<IResult> DeactivateUser(
            [FromRoute] Guid id,
+           [FromQuery] DeactivationReason deactivationReason,
            [FromServices] ISender sender,
-           [FromBody] DeactivationReason deactivationReason,
            ClaimsPrincipal user,
            CancellationToken cancellationToken)
         {
@@ -128,9 +128,9 @@ namespace Fcg.User.API.Endpoint.Admin
 
             var adminId = Guid.Parse(currentUserIdClaim);
 
-            var userAPromover = new PromoteUserToAdminCommand(id, adminId);
+            var userToPromote = new PromoteUserToAdminCommand(id, adminId);
 
-            var response = await sender.Send(userAPromover, cancellationToken);
+            var response = await sender.Send(userToPromote, cancellationToken);
 
             return Results.NoContent();
         }
@@ -148,9 +148,9 @@ namespace Fcg.User.API.Endpoint.Admin
             {
                 return Results.Unauthorized();
             }
-            var reativarJogadorCommand = new ReactivateAccountCommand(id);
+            var reactivePlayer = new ReactivateAccountCommand(id);
 
-            await sender.Send(reativarJogadorCommand, cancellationToken);
+            await sender.Send(reactivePlayer, cancellationToken);
 
             return Results.NoContent();
         }
@@ -171,9 +171,9 @@ namespace Fcg.User.API.Endpoint.Admin
                 return Results.BadRequest("Você não possui permissão para rebaixar a própria conta enquanto logado");
             }
 
-            var rebaixarJogadorCommand = new DemoteUserToPlayerCommand(id, currentUserId);
+            var demotePlayer = new DemoteUserToPlayerCommand(id, currentUserId);
 
-            await sender.Send(rebaixarJogadorCommand, cancellationToken);
+            await sender.Send(demotePlayer, cancellationToken);
 
             return Results.NoContent();
         }
