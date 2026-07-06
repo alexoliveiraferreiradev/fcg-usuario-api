@@ -2,7 +2,7 @@
 using Fcg.Users.Domain.ValueObjects;
 using System.Data;
 
-namespace Fcg.Users.Infrastructure.DapperHandlers
+namespace Fcg.Users.Infrastructure.Queries.DapperHandlers
 {
     public class NameTypeHandler : SqlMapper.TypeHandler<Name>
     {
