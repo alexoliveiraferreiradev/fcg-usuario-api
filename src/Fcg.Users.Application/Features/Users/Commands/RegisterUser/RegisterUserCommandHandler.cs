@@ -35,10 +35,10 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
             _logger.LogInformation("[UserAPI] Iniciando tentativa de cadastro de novo usuário. Email: {Email}", request.Email);
             var nomeValueObject = new Name(request.Name);
             var emailValueObject = new Email(request.Email);
-            var indisponivel = await _userRepository.CheckAvailabilityAsync(request.Email, request.Name);
+            var unavailable = await _userRepository.CheckAvailabilityAsync(request.Email, request.Name);
             
-            if (indisponivel.EmailUsado) throw new DomainException(DomainMessages.EmailAlreadyRegistered);
-            if (indisponivel.NomeUsado) throw new DomainException(DomainMessages.UserNameAlreadyRegistered);
+            if (unavailable.EmailUsado) throw new DomainException(DomainMessages.EmailAlreadyRegistered);
+            if (unavailable.NomeUsado) throw new DomainException(DomainMessages.UserNameAlreadyRegistered);
 
             var senha = new Password(request.Password);
 
