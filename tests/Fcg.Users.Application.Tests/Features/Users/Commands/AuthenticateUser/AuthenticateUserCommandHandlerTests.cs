@@ -126,7 +126,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
             var User = new User(
                 new Name("User Teste"), 
                 new Email("teste@teste.com"), 
-                new Password("hashed_password")
+                new Password("HashedPassword@123")
             );
 
             _userRepositoryMock
