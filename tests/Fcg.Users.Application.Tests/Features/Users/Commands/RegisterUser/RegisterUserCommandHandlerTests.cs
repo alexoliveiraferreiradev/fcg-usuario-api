@@ -1,4 +1,4 @@
-﻿using Bogus;
+using Bogus;
 using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Core.Abstractions.MessageContracts;
@@ -18,7 +18,6 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
     {
         private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IPasswordHasher> _passwordHasherMock;
-        private readonly Mock<ITokenService> _tokenServiceMock;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IPublishEndpoint> _publishEndpointMock;
         private readonly Mock<ILogger<RegisterUserCommandHandler>> _loggerMock;
@@ -59,7 +58,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
 
             _passwordHasherMock
                 .Setup(hasher => hasher.HashPassword(command.Password))
-                .Returns("hashed_password");
+                .Returns("HashedPassword@123");
 
             // Act
             var resultId = await _handler.Handle(command, CancellationToken.None);
@@ -82,7 +81,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         public async Task Handle_DeveLancarDomainException_QuandoEmailJaEstiverEmUso()
         {
             // Arrange
-            var command = new RegisterUserCommand("Teste", "teste@teste.com", "Senha123", "Senha123");
+            var command = new RegisterUserCommand("Teste", "teste@teste.com", "SenhaForte@123", "SenhaForte@123");
 
             _userRepositoryMock
                 .Setup(repo => repo.CheckAvailabilityAsync(command.Email, command.Name))
@@ -99,7 +98,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         public async Task Handle_DeveLancarDomainException_QuandoNomeJaEstiverEmUso()
         {
             // Arrange
-            var command = new RegisterUserCommand("Teste", "teste@teste.com", "Senha123", "Senha123");
+            var command = new RegisterUserCommand("Teste", "teste@teste.com", "SenhaForte@123", "SenhaForte@123");
 
             _userRepositoryMock
                 .Setup(repo => repo.CheckAvailabilityAsync(command.Email, command.Name))

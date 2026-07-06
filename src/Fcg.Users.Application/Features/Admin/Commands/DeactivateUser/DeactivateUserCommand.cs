@@ -1,5 +1,6 @@
 using Fcg.Users.Domain.Enum;
 using MediatR;
+using System.ComponentModel;
 
 namespace Fcg.Users.Application.Features.Admin.Commands.DeactiveUser
 {

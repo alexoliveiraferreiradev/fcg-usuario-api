@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Fcg.Users.Application.Common.Interfaces;
 using Fcg.Users.Application.Features.Users.Responses;
 using MediatR;
 using System.Data;
@@ -7,28 +8,16 @@ namespace Fcg.Users.Application.Features.Admin.Queries.GetUserById
 {
     public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserResponse?>
     {
-        private readonly IDbConnection _dbConnection;
+        private readonly IAdminQueryRepository _adminQueryRepository;
 
-        public GetUserByIdQueryHandler(IDbConnection dbConnection)
+        public GetUserByIdQueryHandler(IAdminQueryRepository adminQueryRepository)
         {
-            _dbConnection = dbConnection;
+            _adminQueryRepository = adminQueryRepository;
         }
 
         public async Task<UserResponse?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            const string sql = @"SELECT 
-                                 Id,
-                                 Name as Name,
-                                 Email as Email,
-                                 IsActive,
-                                 Role as PerfilUser,
-                                 UpdatedAt,
-                                 DeactivationReason   
-                                 FROM Users 
-                                 where Id = @IdUser";
-
-            var user = await _dbConnection.QueryFirstOrDefaultAsync<UserResponse>(sql, new { IdUser = request.Id });
-            return user;
+            return await _adminQueryRepository.GetUserByIdAsync(request.Id,cancellationToken);    
         }
     }
 }

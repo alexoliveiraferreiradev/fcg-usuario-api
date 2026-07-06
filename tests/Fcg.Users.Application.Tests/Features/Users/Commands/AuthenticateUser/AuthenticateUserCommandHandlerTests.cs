@@ -1,4 +1,4 @@
-﻿using Fcg.Core.Abstractions.Common.Exceptions;
+using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Users.Application.Common.Interfaces;
 using Fcg.Users.Application.Features.Users.Commands.AuthenticateUser;
 using Fcg.Users.Application.Features.Users.Responses;
@@ -19,7 +19,6 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
         private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IPasswordHasher> _passwordHasherMock;
         private readonly Mock<ITokenService> _tokenServiceMock;
-        private readonly Mock<IPublishEndpoint> _publishEndpointMock;
         private readonly Mock<ILogger<AuthenticateUserCommandHandler>> _loggerMock;
         private readonly AuthenticateUserCommandHandler _handler;
 
@@ -127,7 +126,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
             var User = new User(
                 new Name("User Teste"), 
                 new Email("teste@teste.com"), 
-                new Password("hashed_password")
+                new Password("HashedPassword@123")
             );
 
             _userRepositoryMock

@@ -1,5 +1,6 @@
 using Fcg.Users.Application.Features.Users.Responses;
 using MediatR;
+using System.ComponentModel;
 
 namespace Fcg.Users.Application.Features.Admin.Commands.DemoteUserToPlayer
 {

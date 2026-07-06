@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Fcg.Users.Application.Features.Users.Commands.DeactivateAccount
 {
-    public class DesativarContaCommandHandler : IRequestHandler<DesativarContaCommand>
+    public class DesativarContaCommandHandler : IRequestHandler<DeactiveAccountCommand>
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -20,7 +20,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.DeactivateAccount
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
-        public async Task Handle(DesativarContaCommand request, CancellationToken cancellationToken)
+        public async Task Handle(DeactiveAccountCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("[UserAPI] Iniciando processo de desativação de conta. UserId: {UserId}", request.Id);
 

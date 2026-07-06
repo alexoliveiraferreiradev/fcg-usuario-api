@@ -1,5 +1,6 @@
 using Fcg.Users.Application.Features.Users.Responses;
 using MediatR;
+using System.ComponentModel;
 
 namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
 {
@@ -11,9 +12,9 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
     /// <param name="Password">Senha desejada para a conta.</param>
     /// <param name="ConfirmPassword">Confirmação idêntica da senha digitada.</param>
     public record RegisterUserCommand(
-        string Name,
-        string Email,
-        string Password,
-        string ConfirmPassword
+        [property: DefaultValue("nome do usuário")] string Name,
+        [property: DefaultValue("email do usuário")] string Email,
+        [property: DefaultValue("senha do usuário")] string Password,
+        [property: DefaultValue("confirmação da senha do usuário")] string ConfirmPassword
     ) : IRequest<Guid>;
 }

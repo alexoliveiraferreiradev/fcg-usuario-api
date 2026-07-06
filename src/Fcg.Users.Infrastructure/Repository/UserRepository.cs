@@ -1,5 +1,6 @@
 using Dapper;
 using Fcg.Users.Domain.Entitites;
+using Fcg.Users.Domain.Enum;
 using Fcg.Users.Domain.Repositories.Interfaces;
 using Fcg.Users.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -24,22 +25,10 @@ namespace Fcg.Users.Infrastructure.Repository
         }
 
         public async Task<User?> GetByEmailAsync(string email)
-        {
-            var connection = _dbContext.Database.GetDbConnection();
-            const string sql = @"SELECT 
-                                Id, 
-                                Name as Name,
-                                Email as Email,
-                                Password,
-                                Role,
-                                IsActive,
-                                CreatedAt,
-                                UpdatedAt,DeactivationReason
-                                from Users where Email = @Email";
-
-
-            return await connection.QueryFirstOrDefaultAsync<User>(sql,new {Email =  email});  
+        {            
+            return await _dbContext.Users.Where(x=>x.Email.Valor == email).FirstOrDefaultAsync();
         }
+        
 
         public async Task<User?> GetByIdAsync(Guid id)
         {
@@ -49,32 +38,24 @@ namespace Fcg.Users.Infrastructure.Repository
 
         public async Task<(bool EmailUsado, bool NomeUsado)> CheckAvailabilityAsync(string email, string name)
         {
-            var connection = _dbContext.Database.GetDbConnection();
-
-            var query = @" SELECT 
-            CAST(CASE WHEN EXISTS (SELECT 1 FROM Users WHERE Email = @Email) THEN 1 ELSE 0 END AS BIT) AS EmailUsado,
-            CAST(CASE WHEN EXISTS (SELECT 1 FROM Users WHERE Name = @Name) THEN 1 ELSE 0 END AS BIT) AS NomeUsado";
-                        
-            return await connection.QueryFirstOrDefaultAsync<(bool EmailUsado, bool NomeUsado)>(query, new { Email = email, Name = name });
+            return await _dbContext.Users.AsNoTracking()
+                .Where(u => u.Email.Valor == email || u.Name.Valor == name)
+                .Select(u => new { EmailUsado = u.Email.Valor == email, NomeUsado = u.Name.Valor == name })
+                .FirstOrDefaultAsync() is { } result
+                ? (result.EmailUsado, result.NomeUsado)
+                : (false, false);
         }
 
         public async Task<bool> HasMultipleAdminsAsync()
         {
-            var connection = _dbContext.Database.GetDbConnection();
-
-            var query = @"SELECT CAST(CASE WHEN (SELECT COUNT(1) FROM Users WHERE Role = 1) > 1 THEN 1 ELSE 0 END AS BIT)";
-
-            return await connection.QueryFirstOrDefaultAsync<bool>(query);
+            return await _dbContext.Users.AsNoTracking()
+            .CountAsync(x => x.Role == UserRole.Admin && x.IsActive) > 1;
         }
 
        
         public async Task<bool> CheckNameInUseAsync(Guid userId, string nomeCadastrado)
         {
-            var connection = _dbContext.Database.GetDbConnection();
-
-            var query = "SELECT CAST(CASE WHEN EXISTS (SELECT 1 FROM Users WHERE Name = @Name and Id!= @IdUser) THEN 1 ELSE 0 END AS BIT) AS NomeUsado";
-
-            return await connection.QueryFirstOrDefaultAsync<bool>(query, new { Name = nomeCadastrado, IdUser = userId }); 
+            return await _dbContext.Users.AsNoTracking().AnyAsync(x => x.Name.Valor.ToLower() == nomeCadastrado.ToLower() && x.Id != userId);
         }
 
         

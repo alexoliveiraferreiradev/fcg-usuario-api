@@ -1,5 +1,6 @@
 using Fcg.Users.Application.Features.Users.Responses;
 using MediatR;
+using System.ComponentModel;
 
 namespace Fcg.Users.Application.Features.Users.Commands.AuthenticateUser
 {
@@ -9,7 +10,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.AuthenticateUser
     /// <param name="Email">Endereço de e-mail de acesso cadastrado.</param>
     /// <param name="Password">Senha correspondente cadastrada.</param>
     public record AuthenticateUserCommand(
-        string Email,
-        string Password
+        [property: DefaultValue("Email do usuário")] string Email,
+        [property: DefaultValue("Senha do usuário")] string Password
     ) : IRequest<LoginResponse>;
 }

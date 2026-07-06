@@ -1,11 +1,12 @@
-﻿using Dapper;
+using Dapper;
 using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Core.WebApi.Security;
 using Fcg.Users.Application.Common.Interfaces;
 using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
 using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Domain.Repositories.Interfaces;
-using Fcg.Users.Infrastructure.DapperHandlers;
+using Fcg.Users.Infrastructure.Queries.DapperHandlers;
+using Fcg.Users.Infrastructure.Queries;
 using Fcg.Users.Infrastructure.Persistence;
 using Fcg.Users.Infrastructure.Repository;
 using Fcg.Users.Infrastructure.Security;
@@ -135,6 +136,7 @@ namespace Fcg.User.API.Extensions
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IAdminQueryRepository, AdminQueryRepository>();
             return builder;
         }
     }

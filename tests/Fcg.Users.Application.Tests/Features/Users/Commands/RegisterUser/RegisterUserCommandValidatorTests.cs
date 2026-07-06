@@ -1,4 +1,4 @@
-﻿using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
+using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
 using FluentAssertions;
 
 namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
@@ -16,7 +16,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         public void Validate_DeveRetornarValido_QuandoComandoEstiverCorreto()
         {
             // Arrange
-            var command = new RegisterUserCommand("User Teste", "teste@teste.com", "SenhaForte123", "SenhaForte123");
+            var command = new RegisterUserCommand("User Teste", "teste@teste.com", "SenhaForte@123", "SenhaForte@123");
 
             // Act
             var result = _validator.Validate(command);
@@ -33,7 +33,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         public void Validate_DeveFalhar_QuandoNomeForInvalido(string nomeInvalido)
         {
             // Arrange
-            var command = new RegisterUserCommand(nomeInvalido, "teste@teste.com", "SenhaForte123", "SenhaForte123");
+            var command = new RegisterUserCommand(nomeInvalido, "teste@teste.com", "SenhaForte@123", "SenhaForte@123");
 
             // Act
             var result = _validator.Validate(command);
@@ -50,7 +50,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         public void Validate_DeveFalhar_QuandoEmailForInvalido(string EmailInvalid)
         {
             // Arrange
-            var command = new RegisterUserCommand("User Teste", EmailInvalid, "SenhaForte123", "SenhaForte123");
+            var command = new RegisterUserCommand("User Teste", EmailInvalid, "SenhaForte@123", "SenhaForte@123");
 
             // Act
             var result = _validator.Validate(command);
@@ -80,7 +80,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         public void Validate_DeveFalhar_QuandoConfirmacaoSenhaNaoForIgualASenha()
         {
             // Arrange
-            var command = new RegisterUserCommand("User Teste", "teste@teste.com", "SenhaForte123", "SenhaDiferente123");
+            var command = new RegisterUserCommand("User Teste", "teste@teste.com", "SenhaForte@123", "SenhaDiferente123");
 
             // Act
             var result = _validator.Validate(command);

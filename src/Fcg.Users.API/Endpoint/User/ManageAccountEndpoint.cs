@@ -1,3 +1,4 @@
+using Fcg.User.API.Dto;
 using Fcg.Users.Application.Features.Users.Commands.DeactivateAccount;
 using Fcg.Users.Application.Features.Users.Commands.UpdateUser;
 using MediatR;
@@ -41,7 +42,7 @@ namespace Fcg.User.API.Endpoint.User
 
         }
         private static async Task<IResult> UpdateAccount(
-           [FromBody] UpdateUserCommand command,
+           [FromBody] UpdateUserRequest updateUserRequest,
            [FromServices] ISender mediator,
            CancellationToken cancellationToken,
            ClaimsPrincipal user)
@@ -52,21 +53,23 @@ namespace Fcg.User.API.Endpoint.User
             {
                 return Results.Unauthorized();
             }
-
             var userId = Guid.Parse(currentId);
 
-            var atualizarCommand = command with { UserId = userId };
+            var command = new UpdateUserCommand(
+                UserId: userId,
+                Name: updateUserRequest.Name,
+                Password: updateUserRequest.Password,
+                ConfirmPassword: updateUserRequest.ConfirmPassword
+            );
 
-            var response = await mediator.Send(atualizarCommand, cancellationToken);
+            var response = await mediator.Send(command, cancellationToken);
 
-            if (response == null)
-                return Results.NotFound(new { Mensagem = "Usuário não encontrado." });
+            var updateUserResponse = new UpdateUserResponse(response.Name, response.Email);
 
-            return Results.Ok(response);
+            return Results.Ok(updateUserResponse);
         }
 
         private static async Task<IResult> DeactivateAccount(
-            [FromBody] DesativarContaCommand command,
             [FromServices] ISender mediator,
             CancellationToken cancellationToken,
             ClaimsPrincipal user)
@@ -80,9 +83,9 @@ namespace Fcg.User.API.Endpoint.User
 
             var userId = Guid.Parse(currentId);
 
-            var desativarContaCommand = command with { Id = userId };
+            var deactiveAccount = new DeactiveAccountCommand(userId);
 
-            await mediator.Send(desativarContaCommand);
+            await mediator.Send(deactiveAccount);
 
             return Results.NoContent();
 
