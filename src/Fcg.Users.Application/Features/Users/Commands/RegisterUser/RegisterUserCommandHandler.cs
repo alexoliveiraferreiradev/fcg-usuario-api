@@ -42,7 +42,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
 
             var senha = new Password(request.Password);
 
-            var hashSenha = _passwordHasher.HashPassword(request.Password);
+            var hashSenha = _passwordHasher.HashPassword(senha.Hash);
 
             var senhaCriptografada = new Password(hashSenha);
 
