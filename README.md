@@ -4,6 +4,20 @@ Este microsserviço é responsável por toda a **gestão de identidade, autentic
 
 ---
 
+## 🔐 Credenciais de Teste (Admin)
+
+Para facilitar a avaliação das funcionalidades administrativas (como a criação de jogos, jogadores e promoções), utilize o usuário pré-configurado:
+
+*   E-mail: admin@fiapcloudgames.com.br
+
+*   Senha: SenhaAdmin@123
+
+Nota: Realize o login no endpoint /login para obter o Token JWT e utilize o botão Authorize do Swagger para enviar o cabeçalho de autorização.
+
+---
+
+---
+
 ## 🛠️ Tecnologias e Bibliotecas
 
 A API faz uso das seguintes tecnologias e pacotes:
