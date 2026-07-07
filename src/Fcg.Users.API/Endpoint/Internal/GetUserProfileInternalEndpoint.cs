@@ -32,7 +32,7 @@ namespace Fcg.User.API.Endpoint.Internal
                     new
                     {
                         UserId = id,
-                        Name = user.NomeUsuario,
+                        UserName = user.NomeUsuario,
                         Email = user.EmailUsuario,
                     });
 
