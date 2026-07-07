@@ -1,5 +1,6 @@
 ﻿using Fcg.Core.WebApi.Middleware;
 using Fcg.User.API.Endpoint.Admin;
+using Fcg.User.API.Endpoint.Internal;
 using Fcg.User.API.Endpoint.User;
 using Serilog;
 
@@ -34,6 +35,10 @@ namespace Fcg.User.API.Extensions
 
             #region Admin - Gerenciamento de Usuários
             app.MapManageUserEndpoints();
+            #endregion
+
+            #region Internal
+            app.MapGetUserProfileInternal();
             #endregion
             return app;
         }

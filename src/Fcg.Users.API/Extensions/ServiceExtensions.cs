@@ -137,6 +137,7 @@ namespace Fcg.User.API.Extensions
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAdminQueryRepository, AdminQueryRepository>();
+            builder.Services.AddScoped<IUserQueryRepository, UserQueryRepository>();
             return builder;
         }
     }
