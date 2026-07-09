@@ -14,7 +14,7 @@ namespace Fcg.Users.Infrastructure.Queries.DapperHandlers
 
         public override void SetValue(IDbDataParameter parameter, Name? value)
         {
-            parameter.Value = value?.Valor ?? (object)DBNull.Value;
+            parameter.Value = value?.Value ?? (object)DBNull.Value;
         }
     }
 }

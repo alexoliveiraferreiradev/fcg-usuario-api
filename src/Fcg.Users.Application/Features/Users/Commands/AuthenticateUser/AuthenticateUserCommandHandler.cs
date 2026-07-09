@@ -53,21 +53,21 @@ namespace Fcg.Users.Application.Features.Users.Commands.AuthenticateUser
             var userResponse = new UserResponse
             {
                 Id = user.Id,
-                Name = user.Name.Valor,
-                Email = user.Email.Valor,
+                Name = user.Name.Value,
+                Email = user.Email.Value,
                 PerfilUser = user.Role
             };
 
             var tokenResult = await _tokenService.GenerateToken(userResponse);
 
-            _logger.LogInformation("[UserAPI] Login realizado com sucesso. UserId: {UserId}, Email: {Email}", user.Id, user.Email.Valor);
+            _logger.LogInformation("[UserAPI] Login realizado com sucesso. UserId: {UserId}, Email: {Email}", user.Id, user.Email.Value);
 
             return new LoginResponse
             {
                 AcessToken = tokenResult.AccessToken,
                 ExpiresIn = tokenResult.ExpiresIn,
                 Id = user.Id.ToString(),
-                Email = user.Email.Valor,
+                Email = user.Email.Value,
                 PerfilUser = user.Role,
                 Claims = tokenResult.Claims
             };

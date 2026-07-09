@@ -51,7 +51,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
             _userRepository.Add(user);
 
             await _publishEndpoint.Publish(new UserCreatedEvent(user.Id, 
-                user.Name.Valor, user.Email.Valor));
+                user.Name.Value, user.Email.Value));
 
             await _unitOfWork.CommitAsync();
 

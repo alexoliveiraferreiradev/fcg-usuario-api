@@ -62,8 +62,8 @@ namespace Fcg.Users.Application.Features.Admin.Commands.PromoteUserToAdmin
             return new UserResponse
             {
                 Id = user.Id,
-                Email = user.Email.Valor,
-                Name = user.Name.Valor,
+                Email = user.Email.Value,
+                Name = user.Name.Value,
                 PerfilUser = user.Role
             };
         }

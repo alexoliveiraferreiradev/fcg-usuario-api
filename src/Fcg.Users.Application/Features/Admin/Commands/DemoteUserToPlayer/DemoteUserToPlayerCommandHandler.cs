@@ -62,8 +62,8 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DemoteUserToPlayer
             return new UserResponse
             {
                 Id = user.Id,
-                Name = user.Name.Valor,
-                Email = user.Email.Valor,
+                Name = user.Name.Value,
+                Email = user.Email.Value,
                 PerfilUser = user.Role
             };
         }

@@ -59,8 +59,8 @@ namespace Fcg.Users.Application.Features.Users.Commands.UpdateUser
 
             return new UserResponse
             {
-                Name = user.Name.Valor,
-                Email = user.Email.Valor,
+                Name = user.Name.Value,
+                Email = user.Email.Value,
                 PerfilUser = user.Role
             };
         }
