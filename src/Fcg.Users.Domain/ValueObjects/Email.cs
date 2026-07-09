@@ -5,7 +5,7 @@ namespace Fcg.Users.Domain.ValueObjects
 {
     public class Email : ValueObject<Email>
     {
-        public string Valor { get; }
+        public string Value { get; }
 
         public Email(string valor)
         {
@@ -13,17 +13,17 @@ namespace Fcg.Users.Domain.ValueObjects
             AssertionConcern.AssertArgumentEmpty(valor, DomainMessages.UserEmailRequired);
             AssertionConcern.AssertArgumentEmailFormat(valor, DomainMessages.EmailInvalid);
             AssertionConcern.AssertArgumentLength(valor, 7, 100, DomainMessages.EmailLengthInvalid);
-            Valor = valor;
+            Value = valor;
         }
 
         protected override bool EqualsCore(Email other)
         {
-            return Valor == other.Valor;
+            return Value == other.Value;
         }
 
         protected override int GetHashCodeCore()
         {
-            return Valor.GetHashCode();
+            return Value.GetHashCode();
         }
     }
 }

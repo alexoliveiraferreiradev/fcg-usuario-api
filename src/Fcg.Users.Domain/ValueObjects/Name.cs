@@ -5,23 +5,23 @@ namespace Fcg.Users.Domain.ValueObjects
 {
     public class Name : ValueObject<Name>
     {
-        public string Valor { get; }
+        public string Value { get; }
         public Name(string valor)
         {
             AssertionConcern.AssertArgumentRealValues(valor, DomainMessages.NameNotReal);
             AssertionConcern.AssertArgumentEmpty(valor, DomainMessages.UserNameRequired);
             AssertionConcern.AssertArgumentLength(valor, 3, 50, DomainMessages.UserNameLengthInvalid);
-            Valor = valor;
+            Value = valor;
         }
 
         protected override bool EqualsCore(Name other)
         {
-            return Valor == other.Valor;
+            return Value == other.Value;
         }
 
         protected override int GetHashCodeCore()
         {
-            return Valor.GetHashCode();
+            return Value.GetHashCode();
         }
     }
 }
