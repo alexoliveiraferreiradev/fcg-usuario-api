@@ -46,16 +46,6 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("aea0b4f3-d220-4c8d-aba8-d868be7ca593"),
-                            CreatedAt = new DateTime(2026, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActive = true,
-                            Role = 1,
-                            UpdatedAt = new DateTime(2026, 5, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.InboxState", b =>
@@ -235,7 +225,7 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Valor")
+                            b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)")
@@ -247,13 +237,6 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    UserId = new Guid("aea0b4f3-d220-4c8d-aba8-d868be7ca593"),
-                                    Valor = "admin@fiapcloudgames.com.br"
-                                });
                         });
 
                     b.OwnsOne("Fcg.Users.Domain.ValueObjects.Name", "Name", b1 =>
@@ -261,7 +244,7 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<string>("Valor")
+                            b1.Property<string>("Value")
                                 .IsRequired()
                                 .HasMaxLength(50)
                                 .HasColumnType("nvarchar(50)")
@@ -273,13 +256,6 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    UserId = new Guid("aea0b4f3-d220-4c8d-aba8-d868be7ca593"),
-                                    Valor = "Admin Sistema"
-                                });
                         });
 
                     b.OwnsOne("Fcg.Users.Domain.ValueObjects.Password", "Password", b1 =>
@@ -299,13 +275,6 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    UserId = new Guid("aea0b4f3-d220-4c8d-aba8-d868be7ca593"),
-                                    Hash = "$2a$11$Soy4TsNUDtuazT6CJulPleFnp82cF5BkICiOmF9sk19x0X6pMAic."
-                                });
                         });
 
                     b.Navigation("Email")
