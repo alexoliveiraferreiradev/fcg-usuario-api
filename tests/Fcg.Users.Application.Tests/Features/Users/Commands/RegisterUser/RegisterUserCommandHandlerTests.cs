@@ -67,8 +67,8 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
             resultId.Should().NotBeEmpty();
 
             _userRepositoryMock.Verify(repo => repo.Add(It.Is<User>(u => 
-                u.Email.Valor == command.Email && 
-                u.Name.Valor == command.Name)), Times.Once);
+                u.Email.Value == command.Email && 
+                u.Name.Value == command.Name)), Times.Once);
 
             _publishEndpointMock.Verify(bus => bus.Publish(It.Is<UserCreatedEvent>(e => 
                 e.Email == command.Email && 
