@@ -1,24 +1,26 @@
 ﻿using Fcg.Core.WebApi.Middleware;
 using Fcg.User.API.Endpoint.Admin;
-using Fcg.User.API.Endpoint.Internal;
 using Fcg.User.API.Endpoint.User;
+using Fcg.Users.Domain.Common.Interfaces;
+using Fcg.Users.Domain.Entitites;
 using Serilog;
 
 namespace Fcg.User.API.Extensions
 {
     public static class ApplicationExtensions
     {
-        public static WebApplication AddAplicationExtension(this WebApplication app)
+        public static async Task<WebApplication> AddAplicationExtension(this WebApplication app)
         {
+            await app.SeedAdminAccount();
             app.UseSerilogRequestLogging();
             app.UseMiddleware<ExceptionMiddleware>();
-            app.ConfigureEndpoints();            
+            app.ConfigureEndpoints();
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
             }
             app.UseRouting();
-            app.UseSwaggerExtension();  
+            app.UseSwaggerExtension();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -26,7 +28,17 @@ namespace Fcg.User.API.Extensions
 
         }
 
-        public static WebApplication ConfigureEndpoints(this WebApplication app)
+        private async static Task<WebApplication> SeedAdminAccount(this WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var seeder = scope.ServiceProvider.GetRequiredService<ISeedAdminAccount>();
+                await seeder.SeedAsync();
+                return app;
+            }
+        }
+
+        private static WebApplication ConfigureEndpoints(this WebApplication app)
         {
             #region Conta - Player/Admin
             app.MapAcessUserEndpoint();
@@ -37,9 +49,6 @@ namespace Fcg.User.API.Extensions
             app.MapManageUserEndpoints();
             #endregion
 
-            #region Internal
-            app.MapGetUserProfileInternal();
-            #endregion
             return app;
         }
     }
