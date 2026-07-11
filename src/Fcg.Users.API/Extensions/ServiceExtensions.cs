@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Data;
 using System.Text;
+using RabbitMQ.Client;
 
 namespace Fcg.User.API.Extensions
 {
@@ -58,9 +59,16 @@ namespace Fcg.User.API.Extensions
         private static WebApplicationBuilder HealthCheckExtension(this WebApplicationBuilder builder)
         {
             var sqlConnection = builder.Configuration.GetConnectionString("UserConnection");
+            var rabbitMqConnectionString = builder.Configuration.GetConnectionString("RabbitMq")!;
+
+            builder.Services.AddSingleton<IConnectionFactory>(_ =>
+                new ConnectionFactory { Uri = new Uri(rabbitMqConnectionString) });
 
             builder.Services.AddHealthChecks()
-                .AddSqlServer(sqlConnection!);
+                .AddSqlServer(sqlConnection!)
+                .AddRabbitMQ(
+                    sp => sp.GetRequiredService<IConnectionFactory>().CreateConnectionAsync(),
+                    name: "rabbitmq-healthcheck");
 
             return builder;
         }
