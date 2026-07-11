@@ -60,15 +60,9 @@ namespace Fcg.User.API.Extensions
         {
             var sqlConnection = builder.Configuration.GetConnectionString("UserConnection");
             var rabbitMqConnectionString = builder.Configuration.GetConnectionString("RabbitMq")!;
-
-            builder.Services.AddSingleton<IConnectionFactory>(_ =>
-                new ConnectionFactory { Uri = new Uri(rabbitMqConnectionString) });
-
+                        
             builder.Services.AddHealthChecks()
-                .AddSqlServer(sqlConnection!)
-                .AddRabbitMQ(
-                    sp => sp.GetRequiredService<IConnectionFactory>().CreateConnectionAsync(),
-                    name: "rabbitmq-healthcheck");
+                .AddSqlServer(sqlConnection!);
 
             return builder;
         }
