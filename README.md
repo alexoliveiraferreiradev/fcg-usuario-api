@@ -1,4 +1,4 @@
-﻿# Fiap Cloud Games (FCG) - Usuário API
+# Fiap Cloud Games (FCG) - Usuário API
 
 Este microsserviço é responsável por toda a **gestão de identidade, autenticação e autorização** da plataforma **Fiap Cloud Games (FCG)**. Desenvolvido com **.NET 9** e estruturado seguindo os princípios de **Clean Architecture** e **Domain-Driven Design (DDD)**, o projeto garante robustez, segurança e manutenibilidade para as operações de cadastro de usuários, autenticação via tokens JWT e controle de perfis.
 
@@ -24,9 +24,10 @@ A API faz uso das seguintes tecnologias e pacotes:
 - **.NET 9.0**: Plataforma de desenvolvimento principal.
 - **Entity Framework Core 9.0**: ORM para persistência dos dados no **SQL Server**.
 - **MediatR (v14)**: Implementação do padrão Mediator para suporte a **CQRS** (Command Query Responsibility Segregation).
-- **AutoMapper (v12)**: Mapeamento de objetos entre Entidades de Domínio e DTOs.
+- **Dapper**: Micro-ORM de alta performance utilizado na camada de leitura (Queries) para otimização de consultas complexas.
 - **BCrypt.Net-Next**: Hashing seguro e criptografia de senhas dos usuários.
 - **System.IdentityModel.Tokens.Jwt**: Criação e manipulação de JSON Web Tokens (JWT) para autenticação.
+- **MassTransit**: Biblioteca/Framework de mensageria para simplificar a comunicação assíncrona com RabbitMQ.
 - **xUnit**: Framework para execução de testes de unidade e integração.
 
 ---
@@ -49,7 +50,6 @@ src/
 Contém o coração da regra de negócio, livre de dependências de frameworks externos:
 - **Entidades**: O agregado raiz `User`, que encapsula o comportamento do usuário e do ciclo de vida da conta.
 - **Objetos de Valor (Value Objects)**: `Nome`, `Email` e `Senha`, com auto-validação das suas respectivas regras no construtor.
-- **Validações**: `AssertionConcern` para validar dados de entrada de forma consistente.
 - **Repositórios**: A interface `IUserRepository`, que define os contratos de banco de dados a serem implementados pela infraestrutura.
 - **Enums**: Definição de perfis (`Administrador`, `Jogador`) e motivos de desativação (`MotivoDesativacao`).
 
@@ -57,12 +57,12 @@ Contém o coração da regra de negócio, livre de dependências de frameworks e
 Orquestra os fluxos de dados e implementa os casos de uso usando **CQRS**:
 - **Commands & Queries**: Separados por escopo (ex.: `CadastrarUserCommand`, `ObterUserPorIdQuery`), convertidos em **C# records** para imutabilidade.
 - **Handlers**: Processam os comandos e consultas via `IRequestHandler` do MediatR.
-- **DTOs**: Estruturas de requisição e resposta expostas externamente (ex.: `CriaUserRequest`, `UserResponse`).
 - **Interfaces**: Definição de serviços utilitários como `ITokenService`.
 
 #### 3. `Fcg.Users.Infrastructure` (Infraestrutura)
 Lida com preocupações transversais, frameworks e infraestrutura técnica:
 - **Persistência**: Implementação do `UserDbContext` configurado via EF Core, utilizando mapeamento fluente (`UserConfiguration`).
+- **Padrão Outbox Transacional (Outbox Pattern)**: Configuração do Outbox transacional via EF Core e MassTransit (`AddEntityFrameworkOutbox`). Isso assegura que a publicação de mensagens no RabbitMQ (como o evento `UserCreatedEvent`) seja transacionada atomicamente junto às alterações do banco de dados, garantindo consistência eventual e confiabilidade mesmo em momentos de indisponibilidade parcial da rede ou broker.
 - **Segurança**:
   - `PasswordHasher`: Responsável por gerar hashes seguros usando BCrypt e comparar senhas.
   - `TokenService`: Gera tokens JWT com claims de identidade e perfis (`AdminRole`, `JogadorRole`).
@@ -93,51 +93,19 @@ O microsserviço gerencia todo o ciclo de vida do usuário:
 
 ---
 
-## 📐 Fluxo de Integração (Tech Challenge)
+## ⚙️ Configuração e Variáveis de Ambiente
 
-Conforme os requisitos do **Tech Challenge**, o fluxo de cadastro de novos usuários é orientado a eventos e se integra de forma assíncrona com o serviço de notificações:
+Para o funcionamento correto do microsserviço de Usuários, certas variáveis de ambiente de banco de dados, mensageria e autenticação devem ser fornecidas dependendo do ambiente de execução.
 
-```mermaid
-sequenceDiagram
-    autonumber
-    actor Cliente as "Usuário / Cliente"
-    participant API as "Fcg.Users.API (UsersAPI)"
-    participant DB as "SQL Server (Fcg_Users)"
-    participant Broker as "RabbitMQ (Message Broker)"
-    participant Notif as "Fcg.Notifications (NotificationsAPI)"
-
-    Cliente->>API: HTTP POST /api/novaconta/cadastrar (Dados do Usuário)
-    activate API
-    Note over API: Valida dados (Nome, Email, Senha)<br/>Criptografa a Senha (hash)
-    API->>DB: Salva Usuário no Banco (DbContext)
-    DB-->>API: Confirmação de Persistência (Commit)
-    
-    API->>Broker: Publica UserCreatedEvent (UserId, Nome, Email) via MassTransit
-    API-->>Cliente: Retorna HTTP 201 Created (Confirmação)
-    deactivate API
-
-    %% Comunicação Assíncrona
-    Broker->>Notif: Consome UserCreatedEvent
-    activate Notif
-    Note over Notif: Envia (Simula no console) e-mail de Boas-Vindas
-    deactivate Notif
-```
-
----
-
-## ⚙️ Configuração e Execução
-
-### Pré-requisitos
-- SDK do [.NET 9.0](https://dotnet.microsoft.com/download/dotnet/9.0) instalado.
-- Banco de dados SQL Server acessível.
-
-### Configuração
-No arquivo `appsettings.json` (ou `appsettings.Development.json`) do projeto `Fcg.Users.API`, certifique-se de configurar a connection string e os parâmetros de segurança do token JWT:
+### 1. Execução Local Standalone (Desenvolvimento)
+Quando executada diretamente pela IDE ou linha de comando `dotnet run`, a API consome as configurações definidas no arquivo [appsettings.json](src/Fcg.Users.API/appsettings.json) ou `appsettings.Development.json`:
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=SEU_SERVIDOR;Database=FcgUsersDb;Trusted_Connection=True;TrustServerCertificate=True;"
+    "UserConnection": "Server=localhost;Database=Fcg_Users;User Id=sa;Password=SuaSenhaSegura;TrustServerCertificate=True;",
+    "RabbitMq": "amqp://guest:guest@localhost:5672",
+    "Redis": "localhost:6379"
   },
   "JwtSettings": {
     "Secret": "SUA_CHAVE_SUPER_SECRETA_E_LONGA_DE_EXEMPLO",
@@ -148,38 +116,120 @@ No arquivo `appsettings.json` (ou `appsettings.Development.json`) do projeto `Fc
 }
 ```
 
-### Comandos Úteis
+---
 
-#### Restaurar dependências e compilar a solução:
-```bash
-dotnet restore
-dotnet build
-```
+### 2. Execução via Docker Compose
+Ao rodar através do contêiner Docker configurado no repositório de orquestração (`fcg-infrastructure`), as seguintes variáveis de ambiente são injetadas no contêiner:
 
-#### Aplicar migrações do Entity Framework Core:
-```bash
-# Executar a partir da raiz do repositório
-dotnet ef database update --project src/Fcg.Users.Infrastructure/ --startup-project src/Fcg.Users.API/
-```
-
-#### Executar a API localmente:
-```bash
-dotnet run --project src/Fcg.Users.API/
-```
-
-Após iniciar, acesse os endpoints de documentação do Swagger/OpenAPI configurados no ambiente de desenvolvimento.
+| Variável | Valor Padrão/Exemplo | Descrição |
+| :--- | :--- | :--- |
+| `ASPNETCORE_ENVIRONMENT` | `Development` | Define o ambiente de execução da aplicação. |
+| `ConnectionStrings__UserConnection` | `Server=fcg-db-central;Database=Fcg_Users;...` | String de conexão para o banco SQL Server centralizado. |
+| `ConnectionStrings__RabbitMq` | `rabbitmq` | Host do RabbitMQ para publicação do `UserCreatedEvent`. |
+| `ConnectionStrings__Redis` | `redis:6379` | Host do cache Redis (usado para token blacklist ou sessões). |
+| `JwtSettings__Secret` | `${JWT_SECRET}` | Chave de assinatura dos tokens JWT injetada do `.env`. |
 
 ---
 
-## 🧪 Testes
+### 3. Execução no Kubernetes (ConfigMaps e Secrets)
+No Kubernetes, as configurações são abstraídas em manifestos separados ConfigMaps e Secrets:
 
-O projeto contém suítes de testes automatizados organizadas na pasta `/tests`:
+#### **ConfigMap: `user-config`**
+Armazena dados não sensíveis configurados no arquivo [configmap.yaml](k8s/configmap.yaml):
+- `DB_SERVER`: Nome do serviço DNS do banco de dados no cluster.
+- `DB_PORT`: Porta TCP do SQL Server.
+- `DB_NAME`: Nome lógico do banco de dados.
+- `DB_TRUST_CERT`: Permitir certificados autoassinados.
+- `RABBITMQ_SERVER`: Nome do serviço DNS do RabbitMQ no cluster.
+- `RABBITMQ_PORT`: Porta TCP do RabbitMQ.
+- `ENVIRONMENT`: Variável `ASPNETCORE_ENVIRONMENT`.
 
-- **Testes de Domínio (`Fcg.Users.Domain.Tests`)**: Validações de invariantes de negócio na entidade `User` e nos Value Objects.
-- **Testes de Aplicação (`Fcg.Users.Application.Tests`)**: Testes de lógica de negócio e comportamento dos handlers de comandos/consultas.
-- **Testes de Integração (`Fcg.Users.Infrastructure.Integration`)**: Integração de fluxos com o banco de dados real ou in-memory e serviços de segurança.
+#### **Secret: `user-opaque`**
+Armazena credenciais confidenciais codificadas em Base64 configuradas no arquivo [secrets.yaml](k8s/secrets.yaml):
+- `DB_USER`: Usuário de acesso ao banco.
+- `DB_PASS`: Senha do banco.
+- `JWT_SECRET`: Chave simétrica do token.
+- `RABBITMQ_USER`: Usuário do RabbitMQ.
+- `RABBITMQ_PASS`: Senha do RabbitMQ.
 
-Para rodar todos os testes da solução, execute:
+---
+
+## 🚀 Como Executar Localmente (Standalone)
+
+### Pré-requisitos
+- SDK do [.NET 9.0](https://dotnet.microsoft.com/download/dotnet/9.0) instalado.
+- Banco de dados SQL Server e RabbitMQ acessíveis.
+
+### Comandos de Terminal
+
+1. **Restaurar Dependências e Compilar:**
+   ```bash
+   dotnet restore
+   dotnet build
+   ```
+
+2. **Aplicar Migrações do Banco de Dados (EF Core):**
+   Certifique-se de que a Connection String do SQL Server esteja acessível no seu `appsettings.json` local e execute:
+   ```bash
+   dotnet ef database update --project src/Fcg.Users.Infrastructure/ --startup-project src/Fcg.Users.API/
+   ```
+
+3. **Executar a API:**
+   ```bash
+   dotnet run --project src/Fcg.Users.API/
+   ```
+   A API ficará acessível localmente e o painel de documentação Swagger poderá ser acessado em: `http://localhost:8081/swagger` (ou a porta definida no seu arquivo de perfil `launchSettings.json`).
+
+---
+
+## 🐳 Construção da Imagem Docker
+
+Para validar e construir a imagem Docker do microsserviço de forma isolada, provando o funcionamento de sua otimização de múltiplos estágios (multi-stage build) e injetando as credenciais do GitHub Packages para restauração de pacotes, execute o seguinte comando a partir da raiz deste repositório:
+
+```bash
+docker build --secret id=github_token,env=GITHUB_TOKEN -t fcg-users-api .
+```
+
+---
+
+## ☸️ Como Implantar no Kubernetes (k8s)
+
+Os manifestos na pasta `/k8s` estão prontos para implantação local. Para aplicar todas as configurações, serviços de rede e deployments do microsserviço de usuários no cluster local configurado, execute:
+
+```bash
+kubectl apply -f k8s/
+```
+
+### Validação dos Recursos
+Para validar se a implantação foi bem-sucedida, você pode executar:
+```bash
+# Verificar status dos pods (deve constar como Running)
+kubectl get pods
+
+# Verificar serviços expostos e a porta do NodePort
+kubectl get services
+```
+
+*Nota: Por padrão, o serviço `svc-fcg-users-api` é do tipo **NodePort**, expondo a API fisicamente no localhost na porta **`30000`** para fácil acesso do avaliador.*
+
+### 🏥 Resiliência e Probes de Saúde (Health Checks)
+
+A API possui suporte nativo para verificação de integridade operacional através dos seguintes endpoints expostos:
+- **Liveness Probe (`/health/liveness`)**: Utilizada pelo Kubernetes para detectar se a aplicação travou ou precisa ser reiniciada.
+- **Readiness Probe (`/health/readiness`)**: Utilizada pelo Kubernetes para verificar se todas as conexões de infraestrutura necessárias (Banco de Dados SQL Server e RabbitMQ) estão ativas e prontas para receber requisições antes de direcionar tráfego de rede para os pods.
+
+Esses endpoints estão totalmente integrados nos manifestos do Kubernetes (`k8s/deployment.yaml`), elevando o nível de resiliência e estabilidade do cluster.
+
+---
+
+## 🧪 Testes Automatizados
+
+O repositório conta com suítes de testes robustas organizadas na pasta `/tests`:
+- **Fcg.Users.Domain.Tests:** Testes unitários focados nas entidades e Value Objects.
+- **Fcg.Users.Application.Tests:** Testes unitários para casos de uso, validando comandos, consultas e handlers com mocks.
+- **Fcg.Users.Infrastructure.Integration:** Testes de integração cobrindo persistência de dados.
+
+Para executar todos os testes da solução, rode o comando a partir do diretório raiz:
 ```bash
 dotnet test
 ```
