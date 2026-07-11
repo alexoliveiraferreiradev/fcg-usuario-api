@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: fcg-users-api-deployment
+  labels:
+    app: fcg-users-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fcg-users-api
+  template:
+    metadata:
+      labels: 
+        app: fcg-users-api
+      annotations:
+        autor: Alex O Ferreira
+        description: "Deployment do microsservico de Usuarios API do Fiap Cloud Games"
+    spec:
+      initContainers:
+      - name: users-db-migration
+        image: alexoliverdev/fcg-usuario-api:latest        
+      containers:
+      - name: fcg-users-api
+        image: alexoliverdev/fcg-usuario-api:latest
+        ports:
+        - containerPort: 8080
