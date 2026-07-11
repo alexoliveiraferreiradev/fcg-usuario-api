@@ -25,7 +25,9 @@ namespace Fcg.User.API.Extensions
     {
         public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder)
         {
-            builder.AddSerilogExtension()
+            builder
+                .HealthCheckExtension()
+                .AddSerilogExtension()
                 .AddSwaggerService()
                 .AddDbContextExtension()
                 .AddMassTransitExtension()
@@ -52,6 +54,17 @@ namespace Fcg.User.API.Extensions
 
             return builder;
         }
+
+        private static WebApplicationBuilder HealthCheckExtension(this WebApplicationBuilder builder)
+        {
+            var sqlConnection = builder.Configuration.GetConnectionString("UserConnection");
+
+            builder.Services.AddHealthChecks()
+                .AddSqlServer(sqlConnection!);
+
+            return builder;
+        }
+
         private static WebApplicationBuilder AddDbContextExtension(this WebApplicationBuilder builder)
         {
             var connectionString = builder.Configuration.GetConnectionString("UserConnection");
