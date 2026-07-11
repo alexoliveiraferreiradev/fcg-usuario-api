@@ -58,6 +58,8 @@ spec:
             valueFrom: { configMapKeyRef: {name: user-config,key: DB_PORT }}
           - name: K8S_DB_TRUST_CERT
             valueFrom: { configMapKeyRef: {name: user-config,key: DB_TRUST_CERT }}
+          - name: K8S_ENVIRONMENT
+            valueFrom: {configMapKeyRef: {name: user-config,key: ENVIRONMENT}}
           - name: K8S_DB_USER
             valueFrom: { secretKeyRef: {name: user-opaque,key: DB_USER }}
           - name: K8S_DB_PASS
@@ -70,6 +72,8 @@ spec:
             value: "Server=$(K8S_DB_SERVER),$(K8S_DB_PORT);Database=$(K8S_DB_NAME);User Id=$(K8S_DB_USER);Password=$(K8S_DB_PASS);TrustServerCertificate=$(K8S_DB_TRUST_CERT);"
           - name: "JwtSettings__Secret"
             value: "$(K8S_JWT_SECRET)"
+          - name: "ASPNETCORE_ENVIRONMENT"
+            value: "$(K8S_ENVIRONMENT)"
         livenessProbe:
           httpGet:
             path: /health/liveness

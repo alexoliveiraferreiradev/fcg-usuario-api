@@ -9,3 +9,4 @@ data:
   DB_TRUST_CERT: "True"
   RABBITMQ_SERVER: rabbitmq-service
   RABBITMQ_PORT: "5672"
+  ENVIRONMENT: "Development"
