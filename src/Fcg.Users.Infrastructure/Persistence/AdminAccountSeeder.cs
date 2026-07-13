@@ -1,9 +1,8 @@
-﻿using Fcg.Core.Abstractions.MessageContracts;
+﻿using Fcg.Core.SharedContracts.MessageContracts;
 using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Domain.Entitites;
 using Fcg.Users.Domain.ValueObjects;
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
 
 namespace Fcg.Users.Infrastructure.Persistence
 {

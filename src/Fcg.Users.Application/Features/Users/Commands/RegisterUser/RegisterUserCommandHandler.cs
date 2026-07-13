@@ -1,9 +1,8 @@
 ﻿using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
-using Fcg.Core.Abstractions.MessageContracts;
-using Fcg.Users.Application.Common.Interfaces;
-using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Core.Abstractions.Resources;
+using Fcg.Core.SharedContracts.MessageContracts;
+using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Domain.Entitites;
 using Fcg.Users.Domain.Repositories.Interfaces;
 using Fcg.Users.Domain.ValueObjects;
