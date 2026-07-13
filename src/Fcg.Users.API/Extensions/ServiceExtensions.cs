@@ -5,20 +5,23 @@ using Fcg.Users.Application.Common.Interfaces;
 using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
 using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Domain.Repositories.Interfaces;
-using Fcg.Users.Infrastructure.Queries.DapperHandlers;
-using Fcg.Users.Infrastructure.Queries;
+using Fcg.Users.Infrastructure.MessageBroker;
 using Fcg.Users.Infrastructure.Persistence;
+using Fcg.Users.Infrastructure.Queries;
+using Fcg.Users.Infrastructure.Queries.DapperHandlers;
 using Fcg.Users.Infrastructure.Repository;
 using Fcg.Users.Infrastructure.Security;
 using FluentValidation;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using RabbitMQ.Client;
 using Serilog;
 using System.Data;
 using System.Text;
-using RabbitMQ.Client;
 
 namespace Fcg.User.API.Extensions
 {
@@ -68,17 +71,35 @@ namespace Fcg.User.API.Extensions
 
         private static WebApplicationBuilder AddDbContextExtension(this WebApplicationBuilder builder)
         {
-            var connectionString = builder.Configuration.GetConnectionString("UserConnection");
+            var dbConfig = builder.Configuration.GetSection(DatabaseSettings.DatabaseSettingsSection).Get<DatabaseSettings>();
+            ArgumentNullException.ThrowIfNull(dbConfig, nameof(DatabaseSettings));
+
+            var connectionStringBuilder = new SqlConnectionStringBuilder
+            {
+                DataSource = $"{dbConfig.Host},{dbConfig.Port}",
+                InitialCatalog = dbConfig.DatabaseName,
+                UserID = dbConfig.Username,
+                Password = dbConfig.Password,
+                TrustServerCertificate = true,
+                Encrypt = false
+            };
 
             builder.Services.AddDbContext<UserDbContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(connectionStringBuilder.ConnectionString, sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 3,
+                        maxRetryDelay: TimeSpan.FromSeconds(10),
+                        errorNumbersToAdd: null);
+                });
             });
             return builder;
         }
 
         private static WebApplicationBuilder AddMassTransitExtension(this WebApplicationBuilder builder)
         {
+            builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection(RabbitMqSettings.SectionName));
             builder.Services.AddMassTransit(x =>
             {
                 x.AddEntityFrameworkOutbox<UserDbContext>(o =>
@@ -89,8 +110,13 @@ namespace Fcg.User.API.Extensions
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
+                    var rabbitMqConfig = context.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
                     cfg.UseMessageRetry(r => r.Interval(3, TimeSpan.FromSeconds(5)));
-                    cfg.Host(builder.Configuration.GetConnectionString("RabbitMq"));
+                    cfg.Host(rabbitMqConfig.Host, rabbitMqConfig.Port, "/", h =>
+                    {
+                        h.Username(rabbitMqConfig.Username);
+                        h.Password(rabbitMqConfig.Password);
+                    });
                     cfg.ConfigureEndpoints(context);
                 });
             });
