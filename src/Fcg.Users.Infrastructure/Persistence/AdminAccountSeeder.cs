@@ -28,11 +28,11 @@ namespace Fcg.Users.Infrastructure.Persistence
                 var adminUser = new User(nameVo, emailVo, password);
                 adminUser.PromoteRole();
                 _dbContext.Users.Add(adminUser);
+                await _dbContext.SaveChangesAsync();
 
                 var userCreatedEvent = new UserCreatedEvent(adminUser.Id, adminUser.Name.Value, adminUser.Email.Value);
                 await _publishEndpoint.Publish(userCreatedEvent);
 
-                await _dbContext.SaveChangesAsync();
             }
 
         }

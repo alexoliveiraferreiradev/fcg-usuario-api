@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -8,9 +8,9 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
-  <ItemGroup>
-	<PackageReference Include="Fcg.Core.SharedContracts" Version="1.0.1" />
-    <PackageReference Include="Dapper" Version="2.1.79" />    
+  <ItemGroup>	
+    <PackageReference Include="Dapper" Version="2.1.79" />	
+    <PackageReference Include="Fcg.Core.SharedContracts" Version="1.0.0" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />   
     <PackageReference Include="MassTransit.Abstractions" Version="8.4.1" />

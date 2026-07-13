@@ -58,11 +58,10 @@ namespace Fcg.User.API.Extensions
 
         private static WebApplicationBuilder HealthCheckExtension(this WebApplicationBuilder builder)
         {
-            var sqlConnection = builder.Configuration.GetConnectionString("UserConnection");
-            var rabbitMqConnectionString = builder.Configuration.GetConnectionString("RabbitMq")!;
-                        
             builder.Services.AddHealthChecks()
-                .AddSqlServer(sqlConnection!);
+                .AddDbContextCheck<UserDbContext>(
+                name: "database-healthcheck",
+                tags: new[] {"ready"});
 
             return builder;
         }

@@ -5,6 +5,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServices();
 var app = builder.Build();
 await app.AddAplicationExtension();
-app.MapHealthChecks("/health/liveness", new HealthCheckOptions { Predicate = _ => false });
-app.MapHealthChecks("/health/readiness", new HealthCheckOptions { Predicate = _ => true });
+app.MapHealthChecks("/health/liveness", new HealthCheckOptions { Predicate = check => check.Tags.Contains("live") });
+app.MapHealthChecks("/health/readiness", new HealthCheckOptions { Predicate = check => check.Tags.Contains("ready") });
 app.Run();
