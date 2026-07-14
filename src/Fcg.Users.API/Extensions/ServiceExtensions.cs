@@ -11,6 +11,7 @@ using Fcg.Users.Infrastructure.Queries;
 using Fcg.Users.Infrastructure.Queries.DapperHandlers;
 using Fcg.Users.Infrastructure.Repository;
 using Fcg.Users.Infrastructure.Security;
+using Fcg.Users.Infrastructure.Worker;
 using FluentValidation;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -176,7 +177,7 @@ namespace Fcg.User.API.Extensions
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<ISeedAdminAccount,AdminAccountSeeder>(); 
+            builder.Services.AddHostedService<AdminAccountSeederBackgroundService>();
             builder.Services.AddScoped<IAdminQueryRepository, AdminQueryRepository>();
             return builder;
         }
