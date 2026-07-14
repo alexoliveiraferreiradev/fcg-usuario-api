@@ -10,8 +10,7 @@ namespace Fcg.User.API.Extensions
     public static class ApplicationExtensions
     {
         public static async Task<WebApplication> AddAplicationExtension(this WebApplication app)
-        {
-            await app.SeedAdminAccount();
+        {            
             app.UseSerilogRequestLogging();
             app.UseMiddleware<ExceptionMiddleware>();
             app.ConfigureEndpoints();
@@ -27,16 +26,7 @@ namespace Fcg.User.API.Extensions
             return app;
 
         }
-
-        private async static Task<WebApplication> SeedAdminAccount(this WebApplication app)
-        {
-            using (var scope = app.Services.CreateScope())
-            {
-                var seeder = scope.ServiceProvider.GetRequiredService<ISeedAdminAccount>();
-                await seeder.SeedAsync();
-                return app;
-            }
-        }
+              
 
         private static WebApplication ConfigureEndpoints(this WebApplication app)
         {
