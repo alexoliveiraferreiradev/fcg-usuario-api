@@ -12,6 +12,7 @@ namespace Fcg.Users.Infrastructure.Worker
     public class AdminAccountSeederBackgroundService : BackgroundService
     {
         private readonly IServiceScopeFactory _scopeFactory;
+
         public AdminAccountSeederBackgroundService(IServiceScopeFactory scopeFactory)
         {
             _scopeFactory = scopeFactory;
@@ -37,11 +38,13 @@ namespace Fcg.Users.Infrastructure.Worker
                 adminUser.PromoteRole();
 
                 dbContext.Users.Add(adminUser);
+
+                var userCreatedEvent = new UserCreatedEvent(adminUser.Id, adminUser.Name.Value, adminUser.Email.Value);
+                await publishEndpoint.Publish(userCreatedEvent, stoppingToken);
+
                 await dbContext.SaveChangesAsync(stoppingToken); 
-            }
-                       
-            var userCreatedEvent = new UserCreatedEvent(adminUser.Id, adminUser.Name.Value, adminUser.Email.Value);
-            await publishEndpoint.Publish(userCreatedEvent, stoppingToken);
+            }                      
+           
         }
     }
 }

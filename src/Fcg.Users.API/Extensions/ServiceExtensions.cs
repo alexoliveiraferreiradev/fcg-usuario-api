@@ -176,8 +176,8 @@ namespace Fcg.User.API.Extensions
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddHostedService<AdminAccountSeederBackgroundService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAdminQueryRepository, AdminQueryRepository>();
             return builder;
         }
