@@ -26,12 +26,7 @@ RUN dotnet build "./Fcg.User.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 RUN dotnet tool install --global dotnet-ef
 ENV PATH="$PATH:/root/.dotnet/tools"
 
-RUN dotnet ef migrations bundle \
-    --self-contained \
-    -r linux-x64 \
-    --project ../Fcg.Users.Infrastructure/Fcg.Users.Infrastructure.csproj \
-    --startup-project ./Fcg.User.API.csproj \
-    -o /app/efbundle
+RUN dotnet ef migrations bundle --self-contained -r linux-x64 -o /app/build/efbundle
 
 FROM build AS publish
 RUN dotnet publish "./Fcg.User.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
@@ -42,7 +37,8 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 USER root
-COPY --from=build /app/efbundle ./efbundle
+
+COPY --from=build /app/build/efbundle ./efbundle
 RUN chmod +x ./efbundle
 USER app
 
