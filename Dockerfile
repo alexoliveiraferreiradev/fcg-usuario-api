@@ -42,4 +42,5 @@ COPY --from=build /app/build/efbundle ./efbundle
 RUN chmod +x ./efbundle
 USER app
 
-ENTRYPOINT ["dotnet", "Fcg.User.API.dll"]
+ENTRYPOINT []
+CMD ["dotnet", "Fcg.User.API.dll"]
