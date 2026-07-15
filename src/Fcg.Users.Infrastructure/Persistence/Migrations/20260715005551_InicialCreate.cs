@@ -111,6 +111,11 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
                         principalColumn: "OutboxId");
                 });
 
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "CreatedAt", "DeactivationReason", "IsActive", "Role", "UpdatedAt", "Email", "Name", "Password" },
+                values: new object[] { new Guid("96a8470a-4712-4eb2-a169-42b7818eb8bb"), new DateTime(2026, 7, 14, 0, 0, 0, 0, DateTimeKind.Utc), null, true, 1, new DateTime(2026, 7, 14, 0, 0, 0, 0, DateTimeKind.Utc), "admin@fiapcloudgames.com.br", "Admin Sistema", "$2a$11$Soy4TsNUDtuazT6CJulPleFnp82cF5BkICiOmF9sk19x0X6pMAic." });
+
             migrationBuilder.CreateIndex(
                 name: "IX_InboxState_Delivered",
                 table: "InboxState",
@@ -144,6 +149,12 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
                 name: "IX_OutboxState_Created",
                 table: "OutboxState",
                 column: "Created");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
         }
 
         /// <inheritdoc />

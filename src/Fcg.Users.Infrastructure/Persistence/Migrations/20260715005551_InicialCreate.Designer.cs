@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fcg.Users.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20260709221839_InicialCreate")]
+    [Migration("20260715005551_InicialCreate")]
     partial class InicialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.15")
+                .HasAnnotation("ProductVersion", "9.0.17")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -49,6 +49,16 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("96a8470a-4712-4eb2-a169-42b7818eb8bb"),
+                            CreatedAt = new DateTime(2026, 7, 14, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
+                            Role = 1,
+                            UpdatedAt = new DateTime(2026, 7, 14, 0, 0, 0, 0, DateTimeKind.Utc)
+                        });
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.InboxState", b =>
@@ -236,10 +246,20 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
 
                             b1.HasKey("UserId");
 
+                            b1.HasIndex("Value")
+                                .IsUnique();
+
                             b1.ToTable("Users");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("96a8470a-4712-4eb2-a169-42b7818eb8bb"),
+                                    Value = "admin@fiapcloudgames.com.br"
+                                });
                         });
 
                     b.OwnsOne("Fcg.Users.Domain.ValueObjects.Name", "Name", b1 =>
@@ -259,6 +279,13 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("96a8470a-4712-4eb2-a169-42b7818eb8bb"),
+                                    Value = "Admin Sistema"
+                                });
                         });
 
                     b.OwnsOne("Fcg.Users.Domain.ValueObjects.Password", "Password", b1 =>
@@ -278,6 +305,13 @@ namespace Fcg.Users.Infrastructure.Persistence.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    UserId = new Guid("96a8470a-4712-4eb2-a169-42b7818eb8bb"),
+                                    Hash = "$2a$11$Soy4TsNUDtuazT6CJulPleFnp82cF5BkICiOmF9sk19x0X6pMAic."
+                                });
                         });
 
                     b.Navigation("Email")
