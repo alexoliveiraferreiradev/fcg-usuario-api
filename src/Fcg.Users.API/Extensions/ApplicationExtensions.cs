@@ -3,6 +3,7 @@ using Fcg.User.API.Endpoint.Admin;
 using Fcg.User.API.Endpoint.User;
 using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Domain.Entitites;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
 namespace Fcg.User.API.Extensions
@@ -37,6 +38,11 @@ namespace Fcg.User.API.Extensions
 
             #region Admin - Gerenciamento de Usuários
             app.MapManageUserEndpoints();
+            #endregion
+
+            #region Health Check
+            app.MapHealthChecks("/health/liveness", new HealthCheckOptions { Predicate = check => check.Tags.Contains("live") });
+            app.MapHealthChecks("/health/readiness", new HealthCheckOptions { Predicate = check => check.Tags.Contains("ready") });
             #endregion
 
             return app;
