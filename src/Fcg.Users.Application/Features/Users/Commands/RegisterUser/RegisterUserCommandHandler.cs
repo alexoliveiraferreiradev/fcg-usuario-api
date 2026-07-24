@@ -24,8 +24,8 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
             IPublishEndpoint publishEndpoint, ILogger<RegisterUserCommandHandler> logger)
         {
             _userRepository = userRepository;
-            _passwordHasher = passwordHasher;   
-            _unitOfWork= unitOfWork;    
+            _passwordHasher = passwordHasher;
+            _unitOfWork = unitOfWork;
             _publishEndpoint = publishEndpoint;
             _logger = logger;
         }
@@ -35,7 +35,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
             var nomeValueObject = new Name(request.Name);
             var emailValueObject = new Email(request.Email);
             var unavailable = await _userRepository.CheckAvailabilityAsync(request.Email, request.Name);
-            
+
             if (unavailable.EmailUsado) throw new DomainException(DomainMessages.EmailAlreadyRegistered);
             if (unavailable.NomeUsado) throw new DomainException(DomainMessages.UserNameAlreadyRegistered);
 
@@ -45,12 +45,16 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
 
             var senhaCriptografada = new Password(hashSenha);
 
-            var user = new User(nomeValueObject,emailValueObject,senhaCriptografada);
+            var user = new User(nomeValueObject, emailValueObject, senhaCriptografada);
 
             _userRepository.Add(user);
 
-            await _publishEndpoint.Publish(new UserCreatedEvent(user.Id, 
-                user.Name.Value, user.Email.Value));
+            await _publishEndpoint.Publish<IUserCreatedIntegrationEvent>(new
+            {
+                UserId = user.Id,
+                Name = user.Name.Value,
+                Email = user.Email.Value,
+            });
 
             await _unitOfWork.CommitAsync();
 
