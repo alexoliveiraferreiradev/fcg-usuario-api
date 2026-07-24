@@ -8,6 +8,7 @@ using Fcg.Users.Domain.Entitites;
 using Fcg.Users.Domain.Repositories.Interfaces;
 using FluentAssertions;
 using MassTransit;
+using MassTransit.Testing;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -43,6 +44,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         public async Task Handle_DeveCriarUserEPublicarEvento_QuandoDadosForemValidosESemDuplicidade()
         {
             // Arrange
+            var harness = new InMemoryTestHarness();
             var faker = new Faker("pt_BR");
             var command = new RegisterUserCommand(
                 Name: faker.Person.UserName,
@@ -51,29 +53,42 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
                 ConfirmPassword: "Password123!"
             );
 
-            _userRepositoryMock
-                .Setup(repo => repo.CheckAvailabilityAsync(command.Email, command.Name))
-                .ReturnsAsync((EmailUsado: false, NomeUsado: false));
+            await harness.Start();
+            try
+            {
 
-            _passwordHasherMock
-                .Setup(hasher => hasher.HashPassword(command.Password))
-                .Returns("HashedPassword@123");
+                _userRepositoryMock
+                    .Setup(repo => repo.CheckAvailabilityAsync(command.Email, command.Name))
+                    .ReturnsAsync((EmailUsado: false, NomeUsado: false));
 
-            // Act
-            var resultId = await _handler.Handle(command, CancellationToken.None);
+                _passwordHasherMock
+                    .Setup(hasher => hasher.HashPassword(command.Password))
+                    .Returns("HashedPassword@123");
 
-            // Assert
-            resultId.Should().NotBeEmpty();
+                // Act
+                var resultId = await _handler.Handle(command, CancellationToken.None);
 
-            _userRepositoryMock.Verify(repo => repo.Add(It.Is<User>(u => 
-                u.Email.Value == command.Email && 
-                u.Name.Value == command.Name)), Times.Once);
+                // Assert
+                resultId.Should().NotBeEmpty();
 
-            _publishEndpointMock.Verify(bus => bus.Publish(It.Is<UserCreatedEvent>(e => 
-                e.Email == command.Email && 
-                e.Name == command.Name), It.IsAny<CancellationToken>()), Times.Once);
+                Assert.True(await harness.Published.Any<IUserCreatedIntegrationEvent>());
 
-            _unitOfWorkMock.Verify(uow => uow.CommitAsync(), Times.Once);
+                var publishedMessage = harness.Published.Select<IUserCreatedIntegrationEvent>()
+                        .First().Context.Message;
+
+                publishedMessage.Email.Should().Be(command.Email);
+                publishedMessage.Name.Should().Be(command.Name);
+
+                _userRepositoryMock.Verify(repo => repo.Add(It.Is<User>(u =>
+                    u.Email.Value == command.Email &&
+                    u.Name.Value == command.Name)), Times.Once);
+
+                _unitOfWorkMock.Verify(uow => uow.CommitAsync(), Times.Once);
+            }
+            catch
+            {
+                await harness.Stop();
+            }
         }
 
         [Fact]
