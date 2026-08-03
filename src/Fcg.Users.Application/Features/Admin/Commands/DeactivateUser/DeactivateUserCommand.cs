@@ -2,7 +2,7 @@ using Fcg.Users.Domain.Enum;
 using MediatR;
 using System.ComponentModel;
 
-namespace Fcg.Users.Application.Features.Admin.Commands.DeactiveUser
+namespace Fcg.Users.Application.Features.Admin.Commands.DeactivateUser
 {
     /// <summary>
     /// Comando enviado por um administrador para desativar a conta de um usuário.

@@ -1,7 +1,7 @@
 using MediatR;
 using System.ComponentModel;
 
-namespace Fcg.Users.Application.Features.Admin.Commands.ReactiveAccount
+namespace Fcg.Users.Application.Features.Admin.Commands.ReactivateAccount
 {
     /// <summary>
     /// Comando enviado por um administrador para reativar uma conta de usuário desativada.
