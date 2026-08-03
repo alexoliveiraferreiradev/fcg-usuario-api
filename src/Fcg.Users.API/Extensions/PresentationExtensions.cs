@@ -4,9 +4,9 @@ using System.Reflection;
 
 namespace Fcg.User.API.Extensions
 {
-    public static class SwaggerExtensions
+    public static class PresentationExtensions
     {
-        public static WebApplicationBuilder AddSwaggerService(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddSwaggerExtension(this WebApplicationBuilder builder)
         {
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen(options =>
