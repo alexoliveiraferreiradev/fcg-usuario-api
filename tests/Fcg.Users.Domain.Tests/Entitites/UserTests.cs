@@ -15,7 +15,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         #region Construtor Tests
 
         [Fact]
-        public void Construtor_ComDadosValidos_DeveCriarUserAtivoComPerfilJogador()
+        public void Constructor_ShouldCreateActiveUserWithPlayerRole_WhenDataIsValid()
         {
             // Arrange
             var Name = ObterNomeValido();
@@ -37,7 +37,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         }
 
         [Fact]
-        public void Construtor_SemNome_DeveLancarDomainException()
+        public void Constructor_ShouldThrowDomainException_WhenNameIsNull()
         {
             // Arrange
             Name nomeNulo = null!;
@@ -54,7 +54,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         #region Deactivate Tests
 
         [Fact]
-        public void Desativar_ComMotivo_DeveDesativarEMarcarMotivo()
+        public void Deactivate_ShouldDeactivateAndSetReason_WhenReasonIsProvided()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
@@ -70,7 +70,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         }
 
         [Fact]
-        public void Desativar_UserJaDesativado_DeveLancarDomainException()
+        public void Deactivate_ShouldThrowDomainException_WhenUserIsAlreadyDeactivated()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
@@ -82,7 +82,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         }
 
         [Fact]
-        public void DesativarConta_UserAtivo_DeveDesativar()
+        public void DeactivateAccount_ShouldDeactivate_WhenUserIsActive()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
@@ -97,7 +97,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         }
 
         [Fact]
-        public void DesativarConta_UserJaDesativado_DeveLancarDomainException()
+        public void DeactivateAccount_ShouldThrowDomainException_WhenUserIsAlreadyDeactivated()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
@@ -113,7 +113,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         #region Update Tests
 
         [Fact]
-        public void Atualizar_ComDadosValidos_DeveAtualizarCampos()
+        public void Update_ShouldUpdateFields_WhenDataIsValid()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
@@ -130,7 +130,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         }
 
         [Fact]
-        public void Atualizar_UserInativo_DeveLancarDomainException()
+        public void Update_ShouldThrowDomainException_WhenUserIsInactive()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
@@ -149,7 +149,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         #region Role Tests
 
         [Fact]
-        public void PromoverPerfil_UserJogador_DeveAlterarPerfilParaAdministrador()
+        public void PromoteRole_ShouldChangeRoleToAdmin_WhenUserIsPlayer()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
@@ -163,7 +163,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         }
 
         [Fact]
-        public void RebaixarPerfil_UserAdministrador_DeveAlterarPerfilParaJogador()
+        public void DemoteRole_ShouldChangeRoleToPlayer_WhenUserIsAdmin()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
@@ -177,7 +177,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         }
 
         [Fact]
-        public void RebaixarPerfil_UserJaJogador_DeveLancarDomainException()
+        public void DemoteRole_ShouldThrowDomainException_WhenUserIsAlreadyPlayer()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
@@ -192,7 +192,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         #region Reactivate Tests
 
         [Fact]
-        public void Reativar_UserInativo_DeveReativarELimparMotivo()
+        public void Reactivate_ShouldReactivateAndClearReason_WhenUserIsInactive()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());
@@ -208,7 +208,7 @@ namespace Fcg.Users.Domain.Tests.Entitites
         }
 
         [Fact]
-        public void Reativar_UserAtivo_DeveLancarDomainException()
+        public void Reactivate_ShouldThrowDomainException_WhenUserIsActive()
         {
             // Arrange
             var User = new User(ObterNomeValido(), ObterEmailValido(), ObterSenhaValida());

@@ -12,9 +12,9 @@ using MassTransit;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
+namespace Fcg.Users.Application.Tests.Features.Users.Commands.AuthenticateUser
 {
-    public class AutenticarUserCommandHandlerTests
+    public class AuthenticateUserCommandHandlerTests
     {
         private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IPasswordHasher> _passwordHasherMock;
@@ -22,7 +22,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
         private readonly Mock<ILogger<AuthenticateUserCommandHandler>> _loggerMock;
         private readonly AuthenticateUserCommandHandler _handler;
 
-        public AutenticarUserCommandHandlerTests()
+        public AuthenticateUserCommandHandlerTests()
         {
             _userRepositoryMock = new Mock<IUserRepository>();
             _passwordHasherMock = new Mock<IPasswordHasher>();
@@ -38,7 +38,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
         }
 
         [Fact]
-        public async Task Handle_DeveRetornarToken_QuandoCredenciaisForemValidas()
+        public async Task Handle_ShouldReturnToken_WhenCredentialsAreValid()
         {
             // Arrange
             var command = new AuthenticateUserCommand("teste@teste.com", "SenhaForte123@");
@@ -77,7 +77,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
         }
 
         [Fact]
-        public async Task Handle_DeveLancarDomainException_QuandoUserNaoEncontrado()
+        public async Task Handle_ShouldThrowDomainException_WhenUserIsNotFound()
         {
             // Arrange
             var command = new AuthenticateUserCommand("teste@teste.com", "Senha123");
@@ -94,7 +94,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
         }
 
         [Fact]
-        public async Task Handle_DeveLancarDomainException_QuandoUserEstiverInativo()
+        public async Task Handle_ShouldThrowDomainException_WhenUserIsInactive()
         {
             // Arrange
             var command = new AuthenticateUserCommand("teste@teste.com", "SenhaForte123@");
@@ -118,7 +118,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.AutenticarUser
         }
 
         [Fact]
-        public async Task Handle_DeveLancarDomainException_QuandoSenhaForInvalida()
+        public async Task Handle_ShouldThrowDomainException_WhenPasswordIsInvalid()
         {
             // Arrange
             var command = new AuthenticateUserCommand("teste@teste.com", "SenhaErrada");

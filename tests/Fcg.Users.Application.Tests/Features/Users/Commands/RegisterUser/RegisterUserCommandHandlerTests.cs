@@ -12,9 +12,9 @@ using MassTransit.Testing;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
+namespace Fcg.Users.Application.Tests.Features.Users.Commands.RegisterUser
 {
-    public class CadastrarUserCommandHandlerTests
+    public class RegisterUserCommandHandlerTests
     {
         private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IPasswordHasher> _passwordHasherMock;
@@ -23,7 +23,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         private readonly Mock<ILogger<RegisterUserCommandHandler>> _loggerMock;
         private readonly RegisterUserCommandHandler _handler;
 
-        public CadastrarUserCommandHandlerTests()
+        public RegisterUserCommandHandlerTests()
         {
             _userRepositoryMock = new Mock<IUserRepository>();
             _passwordHasherMock = new Mock<IPasswordHasher>();
@@ -41,7 +41,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         }
 
         [Fact]
-        public async Task Handle_DeveCriarUserEPublicarEvento_QuandoDadosForemValidosESemDuplicidade()
+        public async Task Handle_ShouldCreateUserAndPublishEvent_WhenDataIsValidAndNotDuplicated()
         {
             // Arrange
             var harness = new InMemoryTestHarness();
@@ -92,7 +92,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         }
 
         [Fact]
-        public async Task Handle_DeveLancarDomainException_QuandoEmailJaEstiverEmUso()
+        public async Task Handle_ShouldThrowDomainException_WhenEmailIsAlreadyInUse()
         {
             // Arrange
             var command = new RegisterUserCommand("Teste", "teste@teste.com", "SenhaForte@123", "SenhaForte@123");
@@ -109,7 +109,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         }
 
         [Fact]
-        public async Task Handle_DeveLancarDomainException_QuandoNomeJaEstiverEmUso()
+        public async Task Handle_ShouldThrowDomainException_WhenNameIsAlreadyInUse()
         {
             // Arrange
             var command = new RegisterUserCommand("Teste", "teste@teste.com", "SenhaForte@123", "SenhaForte@123");

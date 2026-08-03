@@ -1,19 +1,19 @@
 using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
 using FluentAssertions;
 
-namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
+namespace Fcg.Users.Application.Tests.Features.Users.Commands.RegisterUser
 {
-    public class CadastrarUserCommandValidatorTests
+    public class RegisterUserCommandValidatorTests
     {
         private readonly RegisterUserCommandValidator _validator;
 
-        public CadastrarUserCommandValidatorTests()
+        public RegisterUserCommandValidatorTests()
         {
             _validator = new RegisterUserCommandValidator();
         }
 
         [Fact]
-        public void Validate_DeveRetornarValido_QuandoComandoEstiverCorreto()
+        public void Validate_ShouldReturnValid_WhenCommandIsCorrect()
         {
             // Arrange
             var command = new RegisterUserCommand("User Teste", "teste@teste.com", "SenhaForte@123", "SenhaForte@123");
@@ -30,7 +30,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         [InlineData("")]
         [InlineData("ab")] // Menor que 3
         [InlineData("Este Name de User e muito longo e deve falhar na validacao porque tem mais de 50 caracteres!!!")] // Maior que 50
-        public void Validate_DeveFalhar_QuandoNomeForInvalido(string nomeInvalido)
+        public void Validate_ShouldFail_WhenNameIsInvalid(string nomeInvalido)
         {
             // Arrange
             var command = new RegisterUserCommand(nomeInvalido, "teste@teste.com", "SenhaForte@123", "SenhaForte@123");
@@ -47,7 +47,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         [InlineData("")]
         [InlineData("EmailInvalid")]
         [InlineData("a@b.c")] // Menor que 7 caracteres
-        public void Validate_DeveFalhar_QuandoEmailForInvalido(string EmailInvalid)
+        public void Validate_ShouldFail_WhenEmailIsInvalid(string EmailInvalid)
         {
             // Arrange
             var command = new RegisterUserCommand("User Teste", EmailInvalid, "SenhaForte@123", "SenhaForte@123");
@@ -63,7 +63,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         [Theory]
         [InlineData("")]
         [InlineData("1234567")] // Menor que 8
-        public void Validate_DeveFalhar_QuandoSenhaForInvalida(string senhaInvalida)
+        public void Validate_ShouldFail_WhenPasswordIsInvalid(string senhaInvalida)
         {
             // Arrange
             var command = new RegisterUserCommand("User Teste", "teste@teste.com", senhaInvalida, senhaInvalida);
@@ -77,7 +77,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.CadastrarUser
         }
 
         [Fact]
-        public void Validate_DeveFalhar_QuandoConfirmacaoSenhaNaoForIgualASenha()
+        public void Validate_ShouldFail_WhenConfirmPasswordDoesNotMatchPassword()
         {
             // Arrange
             var command = new RegisterUserCommand("User Teste", "teste@teste.com", "SenhaForte@123", "SenhaDiferente123");
