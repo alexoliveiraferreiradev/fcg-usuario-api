@@ -1,7 +1,7 @@
-using Fcg.Users.Application.Features.Admin.Commands.DeactiveUser;
+using Fcg.Users.Application.Features.Admin.Commands.DeactivateUser;
 using Fcg.Users.Application.Features.Admin.Commands.DemoteUserToPlayer;
 using Fcg.Users.Application.Features.Admin.Commands.PromoteUserToAdmin;
-using Fcg.Users.Application.Features.Admin.Commands.ReactiveAccount;
+using Fcg.Users.Application.Features.Admin.Commands.ReactivateAccount;
 using Fcg.Users.Application.Features.Admin.Queries.GetAllUsers;
 using Fcg.Users.Application.Features.Admin.Queries.GetUserById;
 using Fcg.Users.Application.Features.Users.Responses;
