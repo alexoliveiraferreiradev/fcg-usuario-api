@@ -12,7 +12,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: migration-user-runner
-        image: alexoliverdev/fcg-usuario-api:latest
+        image: alexoliverdev/fcg-usuario-api:1.0
         command: ["./efbundle"]
         resources:
           requests:
