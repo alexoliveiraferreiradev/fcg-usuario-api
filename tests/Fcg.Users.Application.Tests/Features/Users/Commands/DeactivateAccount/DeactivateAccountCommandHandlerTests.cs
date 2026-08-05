@@ -1,5 +1,6 @@
 using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
+using Fcg.Core.SharedContracts.Interfaces;
 using Fcg.Users.Application.Features.Users.Commands.DeactivateAccount;
 using Fcg.Users.Domain.Entitites;
 using Fcg.Users.Domain.Repositories.Interfaces;
@@ -14,12 +15,13 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.DeactivateAccount
     {
         private readonly Mock<IUserRepository> _userRepositoryMock = new();
         private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-        private readonly Mock<ILogger<DesativarContaCommandHandler>> _loggerMock = new();
-
-        private DesativarContaCommandHandler CreateHandler() => new(
+        private readonly Mock<ILogger<DeactiveUserCommandHandler>> _loggerMock = new();
+        private readonly Mock<IIntegrationEventPublisher> _integrationEventPublisherMock = new();
+        private DeactiveUserCommandHandler CreateHandler() => new(
             _userRepositoryMock.Object,
             _unitOfWorkMock.Object,
-            _loggerMock.Object);
+            _loggerMock.Object,
+            _integrationEventPublisherMock.Object);
 
         private static User BuildUser(bool asAdmin = false)
         {

@@ -1,6 +1,7 @@
 ﻿using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
 using Fcg.Core.Abstractions.Resources;
+using Fcg.Core.SharedContracts.Interfaces;
 using Fcg.Core.SharedContracts.MessageContracts;
 using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Domain.Entitites;
@@ -17,17 +18,17 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IIntegrationEventPublisher _integrationEventPublisher;
         private readonly ILogger<RegisterUserCommandHandler> _logger;
         public RegisterUserCommandHandler(IUserRepository userRepository,
             IPasswordHasher passwordHasher, IUnitOfWork unitOfWork,
-            IPublishEndpoint publishEndpoint, ILogger<RegisterUserCommandHandler> logger)
+            ILogger<RegisterUserCommandHandler> logger, IIntegrationEventPublisher integrationEventPublisher)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
             _unitOfWork = unitOfWork;
-            _publishEndpoint = publishEndpoint;
             _logger = logger;
+            _integrationEventPublisher = integrationEventPublisher;
         }
         public async Task<Guid> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
@@ -49,7 +50,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
 
             _userRepository.Add(user);
 
-            await _publishEndpoint.Publish<IUserCreatedIntegrationEvent>(new
+            await _integrationEventPublisher.PublishAsync<IUserCreatedIntegrationEvent>(new
             {
                 UserId = user.Id,
                 Name = user.Name.Value,

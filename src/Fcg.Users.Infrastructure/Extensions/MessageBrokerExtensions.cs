@@ -1,4 +1,5 @@
-﻿using Fcg.Users.Infrastructure.MessageBroker;
+﻿using Fcg.Core.SharedContracts.Interfaces;
+using Fcg.Users.Infrastructure.MessageBroker;
 using Fcg.Users.Infrastructure.Persistence;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +13,8 @@ namespace Fcg.Users.Infrastructure.Extensions
         public static IServiceCollection AddMassTransitExtension(this IServiceCollection services,
             IConfiguration configuration)
         {
+            services.AddScoped<IIntegrationEventPublisher, MassTransitIntegrationEventPublisher>();
+
             services.Configure<RabbitMqSettings>(configuration.GetSection(RabbitMqSettings.SectionName));
             services.AddMassTransit(x =>
             {

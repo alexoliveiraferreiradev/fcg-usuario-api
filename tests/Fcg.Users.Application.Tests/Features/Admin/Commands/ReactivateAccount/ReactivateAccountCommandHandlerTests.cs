@@ -1,5 +1,6 @@
 using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
+using Fcg.Core.SharedContracts.Interfaces;
 using Fcg.Users.Application.Features.Admin.Commands.ReactivateAccount;
 using Fcg.Users.Domain.Entitites;
 using Fcg.Users.Domain.Repositories.Interfaces;
@@ -15,11 +16,12 @@ namespace Fcg.Users.Application.Tests.Features.Admin.Commands.ReactivateAccount
         private readonly Mock<IUserRepository> _userRepositoryMock = new();
         private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
         private readonly Mock<ILogger<ReactivateAccountCommandHandler>> _loggerMock = new();
-
+        private readonly Mock<IIntegrationEventPublisher> _integrationEventPublisherMock = new();
         private ReactivateAccountCommandHandler CreateHandler() => new(
             _userRepositoryMock.Object,
             _unitOfWorkMock.Object,
-            _loggerMock.Object);
+            _loggerMock.Object,
+            _integrationEventPublisherMock.Object);
 
         private static User BuildUser() =>
             new(new Name("User Teste"), new Email("teste@teste.com"), new Password("SenhaForte@123"));

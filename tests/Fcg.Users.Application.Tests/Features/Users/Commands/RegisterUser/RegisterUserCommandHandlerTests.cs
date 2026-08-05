@@ -1,13 +1,13 @@
 using Bogus;
 using Fcg.Core.Abstractions.Common.Exceptions;
 using Fcg.Core.Abstractions.Interfaces;
+using Fcg.Core.SharedContracts.Interfaces;
 using Fcg.Core.SharedContracts.MessageContracts;
 using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
 using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Domain.Entitites;
 using Fcg.Users.Domain.Repositories.Interfaces;
 using FluentAssertions;
-using MassTransit;
 using MassTransit.Testing;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -19,7 +19,7 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.RegisterUser
         private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IPasswordHasher> _passwordHasherMock;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<IPublishEndpoint> _publishEndpointMock;
+        private readonly Mock<IIntegrationEventPublisher> _integrationEventPublisherMock;
         private readonly Mock<ILogger<RegisterUserCommandHandler>> _loggerMock;
         private readonly RegisterUserCommandHandler _handler;
 
@@ -28,15 +28,15 @@ namespace Fcg.Users.Application.Tests.Features.Users.Commands.RegisterUser
             _userRepositoryMock = new Mock<IUserRepository>();
             _passwordHasherMock = new Mock<IPasswordHasher>();
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _publishEndpointMock = new Mock<IPublishEndpoint>();
+            _integrationEventPublisherMock = new Mock<IIntegrationEventPublisher>();
             _loggerMock = new Mock<ILogger<RegisterUserCommandHandler>>();
 
             _handler = new RegisterUserCommandHandler(
                 _userRepositoryMock.Object,
                 _passwordHasherMock.Object,
                 _unitOfWorkMock.Object,
-                _publishEndpointMock.Object,
-                _loggerMock.Object
+                _loggerMock.Object,
+                _integrationEventPublisherMock.Object
             );
         }
 
