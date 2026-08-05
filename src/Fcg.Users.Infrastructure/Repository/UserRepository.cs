@@ -1,4 +1,3 @@
-using Dapper;
 using Fcg.Users.Domain.Entitites;
 using Fcg.Users.Domain.Enum;
 using Fcg.Users.Domain.Repositories.Interfaces;

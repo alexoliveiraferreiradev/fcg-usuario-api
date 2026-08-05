@@ -1,9 +1,7 @@
-﻿using Dapper;
-using Fcg.Users.Application.Common.Interfaces;
+﻿using Fcg.Users.Application.Common.Interfaces;
 using Fcg.Users.Application.Features.Users.Responses;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Data;
 
 namespace Fcg.Users.Application.Features.Admin.Queries.GetAllUsers
 {
