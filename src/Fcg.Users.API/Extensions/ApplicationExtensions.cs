@@ -1,4 +1,5 @@
-﻿using Fcg.Core.WebApi.Middleware;
+﻿using Fcg.Core.Abstractions.Common;
+using Fcg.Core.WebApi.Middleware;
 using Fcg.User.API.Endpoint.Admin;
 using Fcg.User.API.Endpoint.User;
 using Fcg.Users.Domain.Common.Interfaces;
@@ -42,10 +43,10 @@ namespace Fcg.User.API.Extensions
             #endregion
 
             #region Health Check
-            app.MapHealthChecks("/health/liveness", new HealthCheckOptions { Predicate = check => check.Tags.Contains("live") });
+            app.MapHealthChecks("/health/liveness", new HealthCheckOptions { Predicate = check => check.Tags.Contains(HealthCheckTags.Live) });
             app.MapHealthChecks("/health/readiness", new HealthCheckOptions
             {
-                Predicate = check => check.Tags.Contains("ready"),
+                Predicate = check => check.Tags.Contains(HealthCheckTags.Ready),
                 ResultStatusCodes =
                 {
                     [HealthStatus.Healthy] = StatusCodes.Status200OK,
