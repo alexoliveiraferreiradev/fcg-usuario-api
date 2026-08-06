@@ -1,6 +1,7 @@
 ﻿using Fcg.Users.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Fcg.Users.Infrastructure.Extensions
 {
@@ -10,6 +11,7 @@ namespace Fcg.Users.Infrastructure.Extensions
             IConfiguration configuration)
         {
             services.AddHealthChecks()
+              .AddCheck("live", () => HealthCheckResult.Healthy(), tags: new[] { "live" })
               .AddDbContextCheck<UserDbContext>(
               name: "database-healthcheck",
               tags: new[] { "ready" });
