@@ -29,7 +29,7 @@ namespace Fcg.User.API.Endpoint.User
                  """)
                 .WithName("UpdateUserAccount");
 
-            group.MapPut("/deactivate-conta", DeactivateAccount)
+            group.MapPut("/deactivate-account", DeactivateAccount)
                 .Produces(StatusCodes.Status401Unauthorized)
                 .Produces(StatusCodes.Status204NoContent)
                 .WithSummary("Desativa a conta do usuário autenticado.")
