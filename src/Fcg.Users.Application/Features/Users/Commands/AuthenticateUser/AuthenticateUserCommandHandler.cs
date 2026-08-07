@@ -4,7 +4,6 @@ using Fcg.Users.Application.Common.Interfaces;
 using Fcg.Users.Application.Features.Users.Responses;
 using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Domain.Repositories.Interfaces;
-using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

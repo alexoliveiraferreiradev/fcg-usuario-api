@@ -7,7 +7,6 @@ using Fcg.Users.Domain.Common.Interfaces;
 using Fcg.Users.Domain.Entitites;
 using Fcg.Users.Domain.Repositories.Interfaces;
 using Fcg.Users.Domain.ValueObjects;
-using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

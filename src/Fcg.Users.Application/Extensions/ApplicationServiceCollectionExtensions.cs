@@ -1,5 +1,7 @@
-﻿using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
+﻿using Fcg.Core.Abstractions.Application;
+using Fcg.Users.Application.Features.Users.Commands.RegisterUser;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fcg.Users.Application.Extensions
@@ -14,6 +16,9 @@ namespace Fcg.Users.Application.Extensions
 
             });
             services.AddValidatorsFromAssembly(typeof(RegisterUserCommand).Assembly);
+            services.AddTransient(
+                typeof(IPipelineBehavior<,>),
+                typeof(ValidationBehavior<,>));
             return services;
         }
     }
