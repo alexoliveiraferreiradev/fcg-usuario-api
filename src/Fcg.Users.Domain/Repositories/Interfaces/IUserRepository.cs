@@ -7,6 +7,7 @@ namespace Fcg.Users.Domain.Repositories.Interfaces
         void Add(User user);
         void Update(User user);
         Task<User?> GetByIdAsync(Guid id);
+        Task<IEnumerable<User>> GetAllAsync();
         Task<User?> GetByEmailAsync(string email);        
         Task<bool> HasMultipleAdminsAsync();
         Task<(bool EmailUsado, bool NomeUsado)> CheckAvailabilityAsync(string email, string name);        

@@ -28,6 +28,10 @@ namespace Fcg.Users.Infrastructure.Repository
             return await _dbContext.Users.Where(x=>x.Email.Value == email).FirstOrDefaultAsync();
         }
         
+        public async Task<IEnumerable<User>> GetAllAsync()
+        {
+            return await _dbContext.Users.AsNoTracking().ToListAsync();
+        }
 
         public async Task<User?> GetByIdAsync(Guid id)
         {
