@@ -44,7 +44,7 @@ namespace Fcg.Users.Application.Features.Admin.Commands.ReactivateAccount
                 await _integrationEventPublisher.PublishAsync<IUserReactivatedIntegrationEvent>(new
                 {
                     EventId = Guid.NewGuid(),
-                    CreatedAt = user.CreatedAt,
+                    CreatedAt = DateTime.UtcNow,
                     UserId = user.Id
                 }, cancellationToken);
 
