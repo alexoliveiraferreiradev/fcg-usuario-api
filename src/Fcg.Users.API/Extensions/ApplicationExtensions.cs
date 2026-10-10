@@ -44,6 +44,7 @@ namespace Fcg.User.API.Extensions
 
             #region Admin - Gerenciamento de Usuários
             app.MapManageUserEndpoints();
+            app.MapRepublishUsersEndpoints();
             #endregion
 
             #region Health Check
