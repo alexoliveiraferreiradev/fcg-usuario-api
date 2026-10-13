@@ -1,9 +1,9 @@
 ﻿using Fcg.Core.SharedContracts.Interfaces;
+using Fcg.Core.SharedContracts.MessageContracts;
 using Fcg.Core.WebApi.MessageBroker;
 using Fcg.Users.Infrastructure.MessageBroker;
 using Fcg.Users.Infrastructure.Persistence;
 using MassTransit;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -15,7 +15,7 @@ namespace Fcg.Users.Infrastructure.Extensions
         {
             services.AddScoped<IIntegrationEventPublisher, MassTransitIntegrationEventPublisher>();
 
-            services.AddOptions<RabbitMqConnectionSettings>().BindConfiguration(RabbitMqConnectionSettings.SectionName)
+            services.AddOptions<AzureServiceBusSettings>().BindConfiguration(AzureServiceBusSettings.SectionName)
            .ValidateDataAnnotations().ValidateOnStart();
                       
             services.AddMassTransit(x =>
@@ -26,17 +26,20 @@ namespace Fcg.Users.Infrastructure.Extensions
                     o.UseBusOutbox();
                 });
 
-                x.UsingRabbitMq((context, cfg) =>
+                x.UsingAzureServiceBus((context, cfg) =>
                 {
-                    var rabbitMqConfig = context.GetRequiredService<IOptions<RabbitMqConnectionSettings>>().Value;
+                    var azureServiceBusConfig = context.GetRequiredService<IOptions<AzureServiceBusSettings>>().Value;
+                    cfg.Host(azureServiceBusConfig.ConnectionString);
                     cfg.UseMessageRetry(r => r.Interval(3, TimeSpan.FromSeconds(5)));
-                    cfg.Host(rabbitMqConfig.Host, rabbitMqConfig.Port, "/", h =>
-                    {
-                        h.Username(rabbitMqConfig.Username);
-                        h.Password(rabbitMqConfig.Password);
-                    });
+
+                    cfg.Message<IUserCreatedIntegrationEvent>(m => m.SetEntityName(ServiceBusTopics.UserCreated));
+                    cfg.Message<IRepublishUserIntegrationEvent>(m => m.SetEntityName(ServiceBusTopics.UserRepublished));
+                    cfg.Message<IUserDeactivatedIntegrationEvent>(m => m.SetEntityName(ServiceBusTopics.UserDeactivated));
+                    cfg.Message<IUserReactivatedIntegrationEvent>(m => m.SetEntityName(ServiceBusTopics.UserReactivated));
+
                     cfg.ConfigureEndpoints(context);
                 });
+
             });
             return services;
         }
