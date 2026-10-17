@@ -26,6 +26,7 @@ namespace Fcg.Users.Infrastructure.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAdminQueryRepository, AdminQueryRepository>();
+            services.AddScoped<IUserQueryRepository, UserQueryRepository>();
             return services;
         }
     }
