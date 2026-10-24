@@ -412,3 +412,4 @@ swagger.json
 # Secrets do Kubernetes
 *secret.yaml
 *secrets.yaml
+/SPEC-my-account-get.md

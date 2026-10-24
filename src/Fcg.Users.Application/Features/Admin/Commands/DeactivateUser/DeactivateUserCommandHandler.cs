@@ -51,7 +51,7 @@ namespace Fcg.Users.Application.Features.Admin.Commands.DeactivateUser
                 await _integrationEventPublisher.PublishAsync<IUserDeactivatedIntegrationEvent>(new
                 {
                     EventId = Guid.NewGuid(),
-                    CreatedAt = user.CreatedAt,
+                    CreatedAt = DateTime.UtcNow,
                     UserId = user.Id
                 }, cancellationToken);
 

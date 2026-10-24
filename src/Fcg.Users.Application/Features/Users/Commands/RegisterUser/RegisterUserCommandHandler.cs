@@ -55,7 +55,7 @@ namespace Fcg.Users.Application.Features.Users.Commands.RegisterUser
                 await _integrationEventPublisher.PublishAsync<IUserCreatedIntegrationEvent>(new
                 {
                     EventId = Guid.NewGuid(),
-                    CreatedAt = user.CreatedAt,
+                    CreatedAt = DateTime.UtcNow,
                     UserId = user.Id,
                     Name = user.Name.Value,
                     Email = user.Email.Value,

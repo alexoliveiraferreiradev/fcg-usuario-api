@@ -1,6 +1,8 @@
 using Fcg.User.API.Dto;
 using Fcg.Users.Application.Features.Users.Commands.DeactivateAccount;
 using Fcg.Users.Application.Features.Users.Commands.UpdateUser;
+using Fcg.Users.Application.Features.Users.Queries.GetMyAccount;
+using Fcg.Users.Application.Features.Users.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -12,6 +14,17 @@ namespace Fcg.User.API.Endpoint.User
         public static void MapManageAccountEndpoints(this IEndpointRouteBuilder app)
         {
             var group = app.MapGroup("api/my-account").WithTags("Minha Conta").RequireAuthorization();
+
+            group.MapGet("/", MyAccount)
+                .Produces<UserAccountResponse>(StatusCodes.Status200OK)
+                .Produces(StatusCodes.Status401Unauthorized)
+                .Produces(StatusCodes.Status404NotFound)
+                .WithSummary("Obtém os dados cadastrais do usuário autenticado.")
+                .WithDescription("""
+                    Retorna as informações do próprio usuário autenticado, incluindo nome e e-mail. 
+                    O identificador do usuário (UserId) é obtido de forma segura diretamente a partir das claims do token JWT.
+                 """)
+                .WithName("GetMyAccount");
 
             group.MapPut("/update", UpdateAccount)
                 .Produces(StatusCodes.Status200OK)
@@ -41,6 +54,22 @@ namespace Fcg.User.API.Endpoint.User
 
 
         }
+
+        private static async Task<IResult> MyAccount(
+            [FromServices] ISender mediator,
+            CancellationToken cancellationToken,
+            ClaimsPrincipal user)
+        {
+            // TryParse: um nameid que não é Guid vira 401, não 500.
+            if (!Guid.TryParse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+            {
+                return Results.Unauthorized();
+            }
+
+            var account = await mediator.Send(new GetMyAccountQuery(userId), cancellationToken);
+            return account is null ? Results.NotFound() : Results.Ok(account);
+        }
+
         private static async Task<IResult> UpdateAccount(
            [FromBody] UpdateUserRequest updateUserRequest,
            [FromServices] ISender mediator,

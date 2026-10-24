@@ -42,7 +42,7 @@ spec:
             memory: "32Mi"
       containers:
       - name: migration-user-runner
-        image: alexoliverdev/fcg-usuario-api:1.7
+        image: acrfiapcloudgames.azurecr.io/fcg-user-api:1.4
         command: ["./efbundle"]
         resources:
           requests:
