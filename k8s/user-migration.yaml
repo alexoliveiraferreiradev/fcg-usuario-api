@@ -43,6 +43,7 @@ spec:
       containers:
       - name: migration-user-runner
         image: acrfiapcloudgames.azurecr.io/fcg-user-api:1.4
+        imagePullPolicy: Always
         command: ["./efbundle"]
         resources:
           requests:
@@ -70,10 +71,21 @@ spec:
           - name: DatabaseSettings__Username
             valueFrom:
               secretKeyRef:
-                name: user-opaque
+                name: fcg-secrets
                 key: DB_USER
           - name: DatabaseSettings__Password
             valueFrom:
               secretKeyRef:
-                name: user-opaque
+                name: fcg-secrets
                 key: DB_PASS
+        volumeMounts:
+          - name: secrets-store
+            mountPath: /mnt/secrets
+            readOnly: true
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: fcg-kv
