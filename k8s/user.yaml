@@ -32,6 +32,7 @@ spec:
       containers:
       - name: c-fcg-users-api
         image: acrfiapcloudgames.azurecr.io/fcg-user-api:1.4
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         resources:
@@ -42,26 +43,11 @@ spec:
             cpu: "300m"
             memory: "256Mi"
         env:
-          - name: RabbitMqSettings__Host
-            valueFrom:
-              configMapKeyRef:
-                name: user-config
-                key: RABBITMQ_SERVER
-          - name: RabbitMqSettings__Port
-            valueFrom:
-              configMapKeyRef:
-                name: user-config
-                key: RABBITMQ_PORT
-          - name: RabbitMqSettings__Username
+          - name: AzureServiceBus__ConnectionString
             valueFrom:
               secretKeyRef:
-                name: user-opaque
-                key: RABBITMQ_USER
-          - name: RabbitMqSettings__Password
-            valueFrom:
-              secretKeyRef:
-                name: user-opaque
-                key: RABBITMQ_PASS
+                name: fcg-secrets
+                key: ServiceBus_Connection
           - name: DatabaseSettings__Host
             valueFrom:
               configMapKeyRef:
@@ -85,12 +71,12 @@ spec:
           - name: DatabaseSettings__Username
             valueFrom:
               secretKeyRef:
-                name: user-opaque
+                name: fcg-secrets
                 key: DB_USER
           - name: DatabaseSettings__Password
             valueFrom:
               secretKeyRef:
-                name: user-opaque
+                name: fcg-secrets
                 key: DB_PASS
           - name: JwtSettings__Issuer
             valueFrom:
@@ -105,8 +91,12 @@ spec:
           - name: JwtSettings__Secret
             valueFrom:
               secretKeyRef:
-                name: user-opaque
-                key: JWT_SECRET         
+                name: fcg-secrets
+                key: JWT_SECRET   
+        volumeMounts:
+          - name: secrets-store
+            mountPath: /mnt/secrets
+            readOnly: true
         livenessProbe:
           httpGet:
             path: /health/liveness
@@ -119,6 +109,14 @@ spec:
             port: 8080
           initialDelaySeconds: 15
           periodSeconds: 5
+      volumes:
+        - name: secrets-store
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: fcg-kv      
+        
 ---
 apiVersion: v1
 kind: Service
