@@ -12,7 +12,20 @@ A **Usuários API** centraliza as regras de segurança e integração inicial de
 
 ### 1. Cadastro e Produção de Eventos
 *   Ao realizar o cadastro de um novo usuário na plataforma, o serviço salva os dados com segurança (hash de senha) e **produz** o evento `UserCreatedEvent`.
-*   Este evento é publicado no **RabbitMQ** e consumido nativamente pela *Notifications-API*, que se encarregará de enviar o e-mail de boas-vindas.
+*   Este evento é publicado no **Azure Service Bus** (tópico `user-created`) e consumido pela *Notification Function*, que se encarrega de enviar o e-mail de boas-vindas, e pela *Order API*, que cria o *snapshot* local do cliente.
+
+### 🚌 Mensageria com Azure Service Bus
+
+A publicação dos eventos usa o **MassTransit** com `UsingAzureServiceBus`. Cada contrato vai para um **tópico com nome fixo** (`SetEntityName` com as constantes da classe `Topics` do `Fcg.Core.SharedContracts`), e cada serviço interessado lê o tópico pela sua própria *subscription*. A Usuários API é **publicadora pura**: não possui *consumers* e, por isso, a configuração exige apenas a connection string do namespace.
+
+| Evento | Tópico | Publicado quando | Consumido por |
+| :--- | :--- | :--- | :--- |
+| `IUserCreatedIntegrationEvent` | `user-created` | Um usuário se cadastra. | Notification Function (e-mail de boas-vindas), Order API (*snapshot* do cliente) |
+| `IUserDeactivatedIntegrationEvent` | `user-deactivated` | Uma conta é desativada (Soft Delete). | User Library API (suspende o acervo) |
+| `IUserReactivatedIntegrationEvent` | `user-reactivated` | Uma conta é reativada. | User Library API (reativa o acervo) |
+| `IRepublishUserIntegrationEvent` | `user-republished` | Um Admin solicita a republicação dos usuários. | Notification Function (sincroniza os dados de contato) |
+
+A publicação passa pelo **Outbox Transacional** do MassTransit (tabelas no SQL Server) e conta com retry de 3 tentativas com intervalo de 5 segundos.
 
 ### 2. Autenticação e Perfis (Roles)
 *   A API é responsável por validar as credenciais e **gerar um Token JWT** customizado de acordo com o perfil (Role) do usuário autenticado (ex: `Jogador`, `Administrador`).
@@ -58,14 +71,14 @@ A API faz uso das seguintes tecnologias e pacotes:
 - **Dapper**: Micro-ORM de alta performance utilizado na camada de leitura (Queries).
 - **BCrypt.Net-Next**: Hashing seguro e criptografia de senhas dos usuários.
 - **System.IdentityModel.Tokens.Jwt**: Criação e manipulação de JSON Web Tokens (JWT) para autenticação.
-- **MassTransit**: Biblioteca de mensageria para simplificar a comunicação assíncrona (envio do `UserCreatedEvent`).
+- **MassTransit & Azure Service Bus**: Mensageria para a publicação assíncrona dos eventos de usuário em tópicos do **Azure Service Bus**, com Outbox Transacional baseado em EF Core.
 - **Prometheus (prometheus-net.AspNetCore)**: Exposição de métricas HTTP e de negócio no formato Prometheus.
 - **xUnit & Moq**: Frameworks para execução de testes de unidade e integração.
 
 ### 📦 Shared Kernels (Pacotes Compartilhados da FCG)
 Projetos criados internamente e utilizados para padronizar e compartilhar recursos base:
 - **Fcg.Core.Abstractions**: Biblioteca de blocos de construção para Domain-Driven Design (DDD) em projetos .NET.
-- **Fcg.Core.SharedContracts**: Contratos de eventos compartilhados para comunicação assíncrona entre os microsserviços da plataforma FCG (ex: RabbitMQ / MassTransit).
+- **Fcg.Core.SharedContracts**: Contratos de eventos compartilhados para comunicação assíncrona entre os microsserviços da plataforma FCG via Azure Service Bus / MassTransit, incluindo a classe `Topics` com os nomes dos tópicos.
 - **Fcg.Core.WebApi**: Utilitários prontos para uso em ASP.NET Core Web APIs, incluindo autenticação JWT e tratamento global de exceções.
 
 ---
@@ -96,7 +109,8 @@ Orquestra os fluxos de dados usando **CQRS**:
 
 #### 3. `Fcg.Users.Infrastructure` (Infraestrutura)
 - **Persistência**: `UserDbContext` com mapeamento fluente.
-- **Padrão Outbox Transacional**: O envio do `UserCreatedEvent` para o RabbitMQ é persistido na mesma transação atômica do Entity Framework (Outbox Pattern nativo do MassTransit). Garante que nenhuma mensagem seja perdida na integração com as Notificações, mesmo se o RabbitMQ cair no momento do cadastro.
+- **Padrão Outbox Transacional**: O envio dos eventos de usuário para o Azure Service Bus é persistido na mesma transação atômica do Entity Framework (Outbox Pattern nativo do MassTransit). Garante que nenhuma mensagem seja perdida na integração com os demais serviços, mesmo se o Azure Service Bus estiver indisponível no momento do cadastro.
+- **Mensageria (`MessageBrokerExtensions`)**: MassTransit com `UsingAzureServiceBus`, mapeamento dos contratos para os tópicos (`SetEntityName(Topics.*)`) e retry. A connection string vem de `AzureServiceBusSettings`, validada na subida (`ValidateOnStart`).
 - **Segurança**: Serviço para gerar JWT e encriptar senhas.
 
 #### 4. `Fcg.Users.API` (Apresentação)
@@ -129,11 +143,8 @@ Para o funcionamento local stand-alone, configure o arquivo `appsettings.json`:
     "Username": "sa",
     "Password": "SuaSenhaSegura"
   },
-  "RabbitMqSettings": {
-    "Host": "localhost",
-    "Port": "5672",
-    "Username": "guest",
-    "Password": "guest"
+  "AzureServiceBus": {
+    "ConnectionString": "Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=<policy>;SharedAccessKey=<chave>"
   },
   "JwtSettings": {
     "Secret": "SUA_CHAVE_SUPER_SECRETA_E_LONGA_DE_EXEMPLO",
@@ -157,13 +168,10 @@ Ao rodar através do contêiner Docker configurado no repositório de orquestra�
 | `DatabaseSettings__Port` | `1433` | Porta TCP do SQL Server. |
 | `DatabaseSettings__Username` | `sa` | Usuário de acesso ao banco de dados. |
 | `DatabaseSettings__Password` | `${DB_PASS}` | Senha do banco injetada. |
-| `RabbitMqSettings__Host` | `rabbitmq` | Host do RabbitMQ para consumo e publicação de eventos. |
-| `RabbitMqSettings__Port` | `5672` | Porta TCP do RabbitMQ. |
-| `RabbitMqSettings__Username` | `guest` | Usuário de acesso ao RabbitMQ. |
-| `RabbitMqSettings__Password` | `${RABBITMQ_PASS}` | Senha do RabbitMQ injetada. |
+| `AzureServiceBus__ConnectionString` | `${SERVICE_BUS_CONNECTION_STRING}` | Connection string do namespace do Azure Service Bus (tier Standard ou superior), usada para publicar os eventos nos tópicos. |
 | `JwtSettings__Secret` | `${JWT_SECRET}` | Chave de assinatura e validação dos tokens JWT injetada do `.env`. |
 
-No **Kubernetes**, estas variáveis são providas via ConfigMaps e Secrets contidos nos manifestos de implantação.
+No **Kubernetes**, estas variáveis são providas via ConfigMap (`k8s/user-configmap.yaml`) e segredos do **Azure Key Vault** (`fcg-secrets`), incluindo `AzureServiceBus__ConnectionString`.
 
 ---
 
@@ -171,7 +179,8 @@ No **Kubernetes**, estas variáveis são providas via ConfigMaps e Secrets conti
 
 ### Pré-requisitos
 - SDK do [.NET 9.0](https://dotnet.microsoft.com/download/dotnet/9.0) instalado.
-- Banco de dados SQL Server e RabbitMQ acessíveis.
+- Banco de dados SQL Server acessível.
+- Um namespace do **Azure Service Bus** (tier Standard ou superior) e a sua connection string.
 
 1. **Restaurar e Compilar:**
    ```bash
@@ -198,7 +207,7 @@ A orquestração está presente no repositório de infraestrutura central, mas o
 
 ### 🏥 Resiliência e Probes de Saúde
 - **Liveness Probe**: Verifica se a aplicação travou (`/health/liveness`).
-- **Readiness Probe**: Verifica conectividade com SQL Server e RabbitMQ antes de aceitar requisições externas e enviar tráfego para os pods (`/health/readiness`).
+- **Readiness Probe**: Verifica conectividade com o SQL Server antes de aceitar requisições externas e enviar tráfego para os pods (`/health/readiness`).
 
 ---
 
